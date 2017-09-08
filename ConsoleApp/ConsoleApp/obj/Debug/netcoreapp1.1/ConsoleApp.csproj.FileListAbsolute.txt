@@ -1,0 +1,11 @@
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\bin\Debug\netcoreapp1.1\ConsoleApp.deps.json
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\bin\Debug\netcoreapp1.1\ConsoleApp.runtimeconfig.json
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\bin\Debug\netcoreapp1.1\ConsoleApp.runtimeconfig.dev.json
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\bin\Debug\netcoreapp1.1\ConsoleApp.dll
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\bin\Debug\netcoreapp1.1\HldMainBoard.dll
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\obj\Debug\netcoreapp1.1\ConsoleApp.csprojResolveAssemblyReference.cache
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\obj\Debug\netcoreapp1.1\ConsoleApp.csproj.CoreCompileInputs.cache
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\obj\Debug\netcoreapp1.1\ConsoleApp.AssemblyInfo.cs
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\bin\Debug\netcoreapp1.1\ConsoleApp.pdb
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\obj\Debug\netcoreapp1.1\ConsoleApp.dll
+C:\Users\duyth\Desktop\p2x\ConsoleApp\ConsoleApp\obj\Debug\netcoreapp1.1\ConsoleApp.pdb
