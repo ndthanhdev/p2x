@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    public class App
+    public class App : IApp
     {
         IHldMainBoard hldMainBoard;
 
@@ -17,17 +17,26 @@ namespace App
             this.hldMainBoard = hldMainBoard;
         }
 
-        public void Run()
+        public void Run(IAppConfig config)
         {
             Console.WriteLine("Welcome");
-            if (File.Exists("config.txt"))
-            {
 
+            // Load and verify config
+            if (config.Load(AppConst.CONFIG_FILE_PATH))
+            {
+                Console.WriteLine("Config file detected.");
+                if (VerifyConfig(config))
+                {
+                    exitMessage();
+                    return;
+                }
+                Console.WriteLine("Config file was invalid.");
             }
             else
             {
-                Console.WriteLine("Config file doesn't exist ");
+                Console.WriteLine("Config file doesn't exist.");
             }
+
             var serialports = SerialPort.GetPortNames();
             if (serialports.Length < 1)
             {
@@ -35,9 +44,9 @@ namespace App
                 exitMessage();
                 return;
             }
-            string choosenPort = inputPort(serialports);
+            config.Port = inputPort(serialports);
             string errMsg = string.Empty;
-            if (!connectBoard(choosenPort, out string iCNo, out string version, ref errMsg))
+            if (!connectBoard(config.Port, out string iCNo, out string version, ref errMsg))
             {
                 printError(errMsg);
                 Console.WriteLine("Please plug board then restart app.");
@@ -48,20 +57,20 @@ namespace App
             {
                 Console.WriteLine(iCNo);
             }
-            var url = InputUrl();
-            if (!TestServerStatus(url))
+            config.ServerUrl = InputUrl();
+            if (!TestServerStatus(config.ServerUrl))
             {
                 printError("Server now down");
                 exitMessage();
                 return;
             }
-            string token = InputSecretKeyAndConnect(url, iCNo, out string secretKey);
-            SaveConfig(url, secretKey);
+            config.Token = InputSecretKeyAndConnect(config.ServerUrl, iCNo);
+            config.Save(AppConst.CONFIG_FILE_PATH);
             exitMessage();
         }
 
 
-        void displayAvailableSerialPorts(string[] ports)
+        public void displayAvailableSerialPorts(string[] ports)
         {
             Console.WriteLine("Current available serial ports:");
             for (int i = 0; i < ports.Length; i++)
@@ -70,13 +79,13 @@ namespace App
             }
         }
 
-        void exitMessage()
+        public void exitMessage()
         {
             Console.WriteLine("Press any key to exit...");
             Console.ReadLine();
         }
 
-        string inputPort(string[] ports)
+        public string inputPort(string[] ports)
         {
             int portNumber;
             bool isParseSuccess;
@@ -89,7 +98,7 @@ namespace App
             return ports[portNumber - 1];
         }
 
-        void printError(params string[] errorMessage)
+        public void printError(params string[] errorMessage)
         {
             foreach (var msg in errorMessage)
             {
@@ -97,7 +106,7 @@ namespace App
             }
         }
 
-        bool connectBoard(string choosenPort, out string iCNo, out string version, ref string errMsg)
+        public bool connectBoard(string choosenPort, out string iCNo, out string version, ref string errMsg)
         {
             iCNo = "";
             version = "";
@@ -127,7 +136,7 @@ namespace App
             }
         }
 
-        string InputUrl()
+        public string InputUrl()
         {
             Uri url;
             bool isParseSuccess = false;
@@ -145,13 +154,13 @@ namespace App
             return url.AbsolutePath;
         }
 
-        bool TestServerStatus(string url)
+        public bool TestServerStatus(string url)
         {
             // implement this
             return true;
         }
 
-        string InputSecretKey()
+        public string InputSecretKey()
         {
             string secretKey = "";
             bool isParseSuccess = false;
@@ -165,15 +174,16 @@ namespace App
             return secretKey;
         }
 
-        bool connectToServer(string url, string iCNo, string secretKey, out string token)
+        public bool connectToServer(string url, string iCNo, string secretKey, out string token)
         {
             token = "";
             return true;
         }
 
-        string InputSecretKeyAndConnect(string url, string IcNo, out string secretKey)
+        public string InputSecretKeyAndConnect(string url, string IcNo)
         {
             bool flag = false;
+            string secretKey = "";
             string token = "";
             do
             {
@@ -189,11 +199,10 @@ namespace App
             return token;
         }
 
-        void SaveConfig(string url, string secret)
+        public bool VerifyConfig(IAppConfig config)
         {
-            File.WriteAllLines(AppConst.CONFIG_FILE_PATH, new string[] { url, secret });
+            return true;
         }
-
 
     }
 }

@@ -45,7 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="AppConfig.cs" />
     <Compile Include="AppConst.cs" />
+    <Compile Include="HldMainBoard.cs" />
+    <Compile Include="IApp.cs" />
+    <Compile Include="IAppConfig.cs" />
     <Compile Include="IHldMainBoard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
