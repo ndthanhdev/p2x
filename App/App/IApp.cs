@@ -11,7 +11,7 @@
         string InputSecretKeyAndConnect(string url, string IcNo);
         string InputUrl();
         void printError(params string[] errorMessage);
-        void Run(IAppConfig config);
+        void Start(IAppConfig config);
         bool TestServerStatus(string url);
         bool VerifyConfig(IAppConfig config);
     }

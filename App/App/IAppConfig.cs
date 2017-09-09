@@ -6,7 +6,7 @@
         string ServerUrl { get; set; }
         string Token { get; set; }
 
-        bool Load(string path);
-        void Save(string path);
+        bool Load();
+        void Save();
     }
 }

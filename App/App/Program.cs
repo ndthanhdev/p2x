@@ -10,11 +10,12 @@ namespace App
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             HldMainBoard hldMainBoard = new HldMainBoard();
-            new App(hldMainBoard).Run(new AppConfig());
+            var app = new App(hldMainBoard);
+            app.Start(new AppConfig(AppConst.CONFIG_FILE_PATH));
+            app.Loop();
         }
 
     }

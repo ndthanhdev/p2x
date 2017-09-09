@@ -16,7 +16,7 @@ namespace App.Tests
         [TestInitialize()]
         public void BeforeEach()
         {
-            appConfig = new AppConfig();
+            appConfig = new AppConfig("path");
         }
 
         [TestMethod()]
@@ -33,7 +33,7 @@ namespace App.Tests
                     return new string[] { "COM1", "htpp://server.com", "token" };
                 };
 
-                Assert.IsTrue(appConfig.Load("path"));
+                Assert.IsTrue(appConfig.Load());
                 Assert.AreEqual(Port, appConfig.Port);
                 Assert.AreEqual(ServerUrl, appConfig.ServerUrl);
                 Assert.AreEqual(Token, appConfig.Token);
@@ -49,7 +49,7 @@ namespace App.Tests
                 {
                     return false;
                 };
-                Assert.IsFalse(appConfig.Load("path"));
+                Assert.IsFalse(appConfig.Load());
             }
         }
 
@@ -69,7 +69,7 @@ namespace App.Tests
                         return new string[] { "COM1", "htpp://server.com" };
                     };
 
-                    Assert.IsFalse(appConfig.Load("path"));
+                    Assert.IsFalse(appConfig.Load());
                 }
             }
         }

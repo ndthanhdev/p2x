@@ -48,6 +48,7 @@
     <Compile Include="App.cs" />
     <Compile Include="AppConfig.cs" />
     <Compile Include="AppConst.cs" />
+    <Compile Include="BoardStatus.cs" />
     <Compile Include="HldMainBoard.cs" />
     <Compile Include="IApp.cs" />
     <Compile Include="IAppConfig.cs" />

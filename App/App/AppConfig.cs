@@ -13,9 +13,15 @@ namespace App
         public string ServerUrl { get; set; }
         public string Token { get; set; }
 
-        public bool Load(string path)
+        private string _path;
+        public AppConfig(string path)
         {
-            if (File.Exists(path))
+            _path = path;
+        }
+
+        public bool Load()
+        {
+            if (File.Exists(_path))
             {
                 var lines = File.ReadAllLines(AppConst.CONFIG_FILE_PATH);
                 if (lines.Length != 3)
@@ -28,9 +34,9 @@ namespace App
             return false;
         }
 
-        public void Save(string path)
+        public void Save()
         {
-            File.WriteAllLines(path, new string[] { Port, ServerUrl, Token });
+            File.WriteAllLines(_path, new string[] { Port, ServerUrl, Token });
         }
     }
 }

@@ -10,20 +10,21 @@ namespace App
 {
     public class App : IApp
     {
-        IHldMainBoard hldMainBoard;
+        IHldMainBoard _HldMainBoard;
 
         public App(IHldMainBoard hldMainBoard)
         {
-            this.hldMainBoard = hldMainBoard;
+            this._HldMainBoard = hldMainBoard;
         }
 
-        public void Run(IAppConfig config)
+        public void Start(IAppConfig config)
         {
             Console.WriteLine("Welcome");
 
             // Load and verify config
-            if (config.Load(AppConst.CONFIG_FILE_PATH))
+            if (config.Load())
             {
+                // test board here
                 Console.WriteLine("Config file detected.");
                 if (VerifyConfig(config))
                 {
@@ -46,6 +47,7 @@ namespace App
             }
             config.Port = inputPort(serialports);
             string errMsg = string.Empty;
+            // testboard
             if (!connectBoard(config.Port, out string iCNo, out string version, ref errMsg))
             {
                 printError(errMsg);
@@ -65,10 +67,14 @@ namespace App
                 return;
             }
             config.Token = InputSecretKeyAndConnect(config.ServerUrl, iCNo);
-            config.Save(AppConst.CONFIG_FILE_PATH);
+            config.Save();
             exitMessage();
         }
 
+        public void Loop()
+        {
+
+        }
 
         public void displayAvailableSerialPorts(string[] ports)
         {
@@ -111,15 +117,15 @@ namespace App
             iCNo = "";
             version = "";
             errMsg = string.Empty;
-            bool isConnected = hldMainBoard.OpenSerialPort(choosenPort, AppConst.BAUD_RATE, ref errMsg);
+            bool isConnected = _HldMainBoard.OpenSerialPort(choosenPort, AppConst.BAUD_RATE, ref errMsg);
             if (!isConnected)
             {
                 return false;
             }
             else
             {
-                iCNo = hldMainBoard.GetICCardData();
-                version = hldMainBoard.GetVersion(ref errMsg);
+                iCNo = _HldMainBoard.GetICCardData();
+                version = _HldMainBoard.GetVersion(ref errMsg);
                 if (string.IsNullOrEmpty(errMsg))
                 {
                     return false;
@@ -204,5 +210,9 @@ namespace App
             return true;
         }
 
+        public bool TestBoard(string port)
+        {
+            return true;
+        }
     }
 }
