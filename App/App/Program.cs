@@ -14,7 +14,7 @@ namespace App
         static void Main(string[] args)
         {
             HldMainBoard hldMainBoard = new HldMainBoard();
-            new App(hldMainBoard).Run();
+            new App(hldMainBoard).Run(new AppConfig());
         }
 
     }
