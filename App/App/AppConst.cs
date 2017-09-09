@@ -10,5 +10,7 @@ namespace App
     {
         // BaudRate of mainboard
         public static readonly int BAUD_RATE = 115200;
+
+        public static readonly string CONFIG_FILE_PATH = "config.txt";
     }
 }
