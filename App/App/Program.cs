@@ -33,9 +33,9 @@ namespace App
                 return;
             }
             string choosenPort = inputPort(serialports);
-            if (!connectBoard(choosenPort, out string icData, out string errMsg))
+            if (!connectBoard(choosenPort, out string icData, out string version))
             {
-                printError(errMsg);
+                Console.WriteLine("Please plug board then restart app.");
                 exitMessage();
                 return;
             }
@@ -77,27 +77,37 @@ namespace App
 
         static void printError(params string[] errorMessage)
         {
-            Console.WriteLine("Error:");
             foreach (var msg in errorMessage)
             {
-                Console.WriteLine("\t {0}", msg);
+                Console.WriteLine("[Error] {0}", msg);
             }
         }
 
-        static bool connectBoard(string choosenPort, out string icData, out string errMsg)
+        static bool connectBoard(string choosenPort, out string iCNo, out string version)
         {
-            icData = "";
+            iCNo = "";
+            version = "";
+            string errMsg = string.Empty;
             bool isConnected = mainBoard.OpenSerialPort(choosenPort, AppConst.BAUD_RATE, ref errMsg);
             if (!isConnected)
             {
+                printError(errMsg);
                 return false;
             }
             else
             {
-                icData = mainBoard.GetICCardData();
-                if (string.IsNullOrEmpty(icData))
+                iCNo = mainBoard.GetICCardData();
+                version = mainBoard.GetVersion(ref errMsg);
+                if (string.IsNullOrEmpty(errMsg))
                 {
-                    errMsg = "ic data is empty";
+                    printError(errMsg);
+                    return false;
+
+                }
+                else if (string.IsNullOrEmpty(iCNo))
+                {
+                    errMsg = "IC No is empty";
+                    printError(errMsg);
                     return false;
                 }
                 else
@@ -106,5 +116,10 @@ namespace App
                 }
             }
         }
+
+        //static string InputUrl()
+        //{
+
+        //}
     }
 }
