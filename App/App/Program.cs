@@ -14,9 +14,20 @@ namespace App
         {
             HldMainBoard hldMainBoard = new HldMainBoard();
             var app = new App(hldMainBoard);
-            app.Start(new AppConfig(AppConst.CONFIG_FILE_PATH));
+            if (!app.Start(new AppConfig(AppConst.CONFIG_FILE_PATH)))
+            {
+                exitMessage();
+            }
             app.Loop();
         }
+
+
+        static void exitMessage()
+        {
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadLine();
+        }
+
 
     }
 }
