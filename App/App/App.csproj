@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{25B4ABE3-66C1-436F-961D-F2D5646FA15F}</ProjectGuid>
+    <ProjectGuid>{FA3E91B6-8B44-4D49-8C4A-54AAF9486176}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>App</RootNamespace>
     <AssemblyName>App</AssemblyName>
@@ -46,16 +46,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="AppConfig.cs" />
     <Compile Include="BoardStatus.cs" />
     <Compile Include="Enums\LockStatus.cs" />
     <Compile Include="Enums\PowerStatus.cs" />
     <Compile Include="Enums\SensorStatus.cs" />
     <Compile Include="Enums\Side.cs" />
     <Compile Include="HldMainBoard.cs" />
-    <Compile Include="IApp.cs" />
-    <Compile Include="IAppConfig.cs" />
     <Compile Include="IHldMainBoard.cs" />
+    <Compile Include="SafeStatus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
