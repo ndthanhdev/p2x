@@ -5,13 +5,15 @@
         bool connectBoard(string choosenPort, out string iCNo, out string version, ref string errMsg);
         bool connectToServer(string url, string iCNo, string secretKey, out string token);
         void displayAvailableSerialPorts(string[] ports);
-        void exitMessage();
+        bool InputConfig(IAppConfig config);
         string inputPort(string[] ports);
         string InputSecretKey();
-        string InputSecretKeyAndConnect(string url, string IcNo);
+        bool InputSecretKeyAndConnect(IAppConfig config);
         string InputUrl();
+        void Loop();
         void printError(params string[] errorMessage);
-        void Start(IAppConfig config);
+        bool Start(IAppConfig config);
+        bool TestBoard(IAppConfig appConfig);
         bool TestServerStatus(string url);
         bool VerifyConfig(IAppConfig config);
     }

@@ -17,33 +17,59 @@ namespace App
             this._HldMainBoard = hldMainBoard;
         }
 
-        public void Start(IAppConfig config)
+        public bool Start(IAppConfig config)
         {
             Console.WriteLine("Welcome");
 
             // Load and verify config
             if (config.Load())
             {
-                // test board here
                 Console.WriteLine("Config file detected.");
-                if (VerifyConfig(config))
+                if (!TestBoard(config))
                 {
-                    exitMessage();
-                    return;
+                    Console.WriteLine("Connect to board unsuccessful. Please re-config.");
                 }
-                Console.WriteLine("Config file was invalid.");
+                else
+                {
+                    if (!VerifyConfig(config))
+                    {
+                        Console.WriteLine("Connect to server unsuccessful. Please re-config.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Load config and Connect to server Successful.");
+                    }
+                }
             }
             else
             {
-                Console.WriteLine("Config file doesn't exist.");
+                Console.WriteLine("Config file doesn't exist. Please config.");
             }
 
+            // Using cofig file fail input it.
+            if (!InputConfig(config))
+            {
+                return false;
+            }
+            else
+            {
+                config.Save();
+                return false;
+            }
+        }
+
+        public void Loop()
+        {
+
+        }
+
+        public bool InputConfig(IAppConfig config)
+        {
             var serialports = SerialPort.GetPortNames();
             if (serialports.Length < 1)
             {
                 Console.WriteLine("There isn't any plugged serial port, Please plug board then restart app.");
-                exitMessage();
-                return;
+                return false;
             }
             config.Port = inputPort(serialports);
             string errMsg = string.Empty;
@@ -52,8 +78,7 @@ namespace App
             {
                 printError(errMsg);
                 Console.WriteLine("Please plug board then restart app.");
-                exitMessage();
-                return;
+                return false;
             }
             else
             {
@@ -63,17 +88,17 @@ namespace App
             if (!TestServerStatus(config.ServerUrl))
             {
                 printError("Server now down");
-                exitMessage();
-                return;
+                return false;
             }
-            config.Token = InputSecretKeyAndConnect(config.ServerUrl, iCNo);
-            config.Save();
-            exitMessage();
-        }
-
-        public void Loop()
-        {
-
+            if (!InputSecretKeyAndConnect(config))
+            {
+                Console.WriteLine("Can't establish connection");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void displayAvailableSerialPorts(string[] ports)
@@ -83,12 +108,6 @@ namespace App
             {
                 Console.WriteLine("\t{0}. {1}", i + 1, ports[i]);
             }
-        }
-
-        public void exitMessage()
-        {
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadLine();
         }
 
         public string inputPort(string[] ports)
@@ -186,23 +205,27 @@ namespace App
             return true;
         }
 
-        public string InputSecretKeyAndConnect(string url, string IcNo)
+        public bool InputSecretKeyAndConnect(IAppConfig config)
         {
-            bool flag = false;
-            string secretKey = "";
-            string token = "";
+            int count = 0;
+            string secretKey = string.Empty;
+            string token;
             do
             {
-                if (flag)
+                if (count > 0)
                 {
-                    Console.WriteLine("IC No isn't exist on server or secret key is incorrect. Make sure Ic No was registered with server and secret key is correct.");
+                    if (count >= 3)
+                    {
+                        return false;
+                    }
+                    Console.WriteLine("Remaining Chance {0}, IC No isn't exist on server or secret key is incorrect. Make sure Ic No was registered with server and secret key is correct.", 3 - count);
                 }
-                flag = true;
+                count++;
                 secretKey = InputSecretKey();
 
-            } while (!connectToServer(url, IcNo, secretKey, out token));
-
-            return token;
+            } while (!connectToServer(config.ServerUrl, config.Port, secretKey, out token));
+            config.Token = token;
+            return true;
         }
 
         public bool VerifyConfig(IAppConfig config)
@@ -210,7 +233,7 @@ namespace App
             return true;
         }
 
-        public bool TestBoard(string port)
+        public bool TestBoard(IAppConfig appConfig)
         {
             return true;
         }
