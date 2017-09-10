@@ -134,11 +134,7 @@ namespace App
 
         public async Task Subscribe()
         {
-            var options = new IO.Options() { IgnoreServerCertificateValidation = true, AutoConnect = true, ForceNew = true };
-            var builder = System.Collections.Immutable.ImmutableList.CreateBuilder<string>();
-            builder.Add("websocket");
-            options.Transports = builder.ToImmutable();
-            var socket = IO.Socket("http://localhost:3000", options);
+            var socket = IO.Socket("http://localhost:3000");
             socket.On(Socket.EVENT_CONNECT, () =>
              {
                  Console.WriteLine("connected");
