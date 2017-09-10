@@ -13,8 +13,11 @@ namespace App
         /// </summary>
         /// <param name="args">
         /// 0: portname
-        /// 1: number of side
-        /// 2: max 
+        /// 1: number of relay on right side
+        /// 2: number of relay on left side
+        /// 3: server url
+        /// 4: secret
+        /// 5: debug mode or production mode (for prouction mode console app will be hidden)
         /// </param>
         static void Main(string[] args)
         {

@@ -21,45 +21,43 @@ namespace App
         Queue<String> commandsQueue;
         Queue<String> CommandsQueue => commandsQueue = commandsQueue ?? new Queue<string>();
 
-        private int numberOfSides;
+        private int nLeft;
 
-        public int NumberOfSides
+        public int NLeft
         {
-            get { return numberOfSides; }
-            set
-            {
-                if (value < 1 || value > 2)
-                    throw new ArgumentException("numberOfSides must be between 1 and 2", nameof(numberOfSides));
-                else
-                {
-                    numberOfSides = value;
-                    this.hldMainBoard.SetMaxSide(numberOfSides);
-                }
-
-            }
-        }
-
-        private int maxRelayPerSide;
-
-        public int MaxRelayPerSide
-        {
-            get { return maxRelayPerSide; }
+            get { return nLeft; }
             set
             {
                 if (value < 1 || value > 152)
-                    throw new ArgumentException("numberOfSides must be between 1 and 152", nameof(numberOfSides));
+                    throw new ArgumentException("Parameters is not valid");
                 else
-                    maxRelayPerSide = value;
+                    nLeft = value;
             }
         }
 
-        public App(string portName, int numberOfSides, int maxRelayPerSide, string serverUrl, string secret, IHldMainBoard hldMainBoard)
+        private int nRight;
+
+        public int NRight
+        {
+            get { return nRight; }
+            set
+            {
+                if (value < 1 || value > 152)
+                    throw new ArgumentException("Parameters is not valid");
+                else
+                    nRight = value;
+            }
+        }
+
+
+        public App(string portName, int nRight, int nLeft, string serverUrl, string secret, IHldMainBoard hldMainBoard)
         {
             this.portName = portName;
             this.serverUrl = serverUrl;
             this.hldMainBoard = hldMainBoard;
-            this.NumberOfSides = numberOfSides;
-            this.MaxRelayPerSide = maxRelayPerSide;
+            this.NRight = nRight;
+            this.NLeft = nLeft;
+            this.hldMainBoard.SetMaxSide(NLeft > 0 ? 1 : 0 + NRight > 0 ? 1 : 0);
 
         }
 
@@ -215,10 +213,7 @@ namespace App
         {
             try
             {
-                errMsg = string.Empty;
-                SafeBuilder builder = new SafeBuilder();
                 BoardStatus boardStatus = new BoardStatus();
-                errMsg = string.Empty;
                 if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
                 {
                     return null;
@@ -230,21 +225,13 @@ namespace App
                     return null;
                 }
 
-                for (int i = 0; i < numberOfSides; i++)
+                var list = GetSafeStatusOfAllSide(ref errMsg);
+                if (!string.IsNullOrEmpty(errMsg))
                 {
-                    var locks = hldMainBoard.GetLockAllStatus(i, ref errMsg);
-                    if (!string.IsNullOrEmpty(errMsg))
-                    {
-                        return null;
-                    }
-                    var sensors = hldMainBoard.GetSensorAllStatus(i, ref errMsg);
-                    if (!string.IsNullOrEmpty(errMsg))
-                    {
-                        return null;
-                    }
-                    boardStatus.SafeStatuss.AddRange(builder.BuildMany(locks, sensors, i, MaxRelayPerSide));
+                    return null;
                 }
 
+                boardStatus.SafeStatuss.AddRange(list);
                 return boardStatus;
             }
             catch (Exception ex)
@@ -271,6 +258,48 @@ namespace App
             {
                 PrintError(errMsg);
             }
+        }
+
+        public SafeStatus[] GetSafeStatusOfOneSide(int side, int n, ref string errMsg)
+        {
+            SafeStatusBuilder builder = new SafeStatusBuilder();
+
+            var locks = hldMainBoard.GetLockAllStatus(side, ref errMsg);
+            if (!string.IsNullOrEmpty(errMsg))
+            {
+                return null;
+            }
+            var sensors = hldMainBoard.GetSensorAllStatus(side, ref errMsg);
+            if (!string.IsNullOrEmpty(errMsg))
+            {
+                return null;
+            }
+
+            return builder.BuildMany(locks, sensors, side, n);
+        }
+
+        public List<SafeStatus> GetSafeStatusOfAllSide(ref string errMsg)
+        {
+            List<SafeStatus> list = new List<SafeStatus>();
+            if (nRight > 0)
+            {
+                var safeStatus = GetSafeStatusOfOneSide(0, nRight, ref errMsg);
+                if (!string.IsNullOrEmpty(errMsg))
+                {
+                    return list;
+                }
+                list.AddRange(safeStatus);
+            }
+            if (nLeft > 0)
+            {
+                var safeStatus = GetSafeStatusOfOneSide(1, nLeft, ref errMsg);
+                if (!string.IsNullOrEmpty(errMsg))
+                {
+                    return list;
+                }
+                list.AddRange(safeStatus);
+            }
+            return list;
         }
     }
 }
