@@ -22,8 +22,8 @@ namespace App
         static void Main(string[] args)
         {
             IHldMainBoard hldMainBoard = new HldMainBoard();
-            Task.Run(() => new App(args[0], int.Parse(args[1]), int.Parse(args[2]),
-                args[3], args[4], hldMainBoard).Run());
+            new App(args[0], int.Parse(args[1]), int.Parse(args[2]),
+                args[3], args[4], hldMainBoard).Run().GetAwaiter().GetResult();
             Console.ReadLine();
         }
     }

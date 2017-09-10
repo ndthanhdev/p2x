@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Quobject.SocketIoClientDotNet.Client;
 
 namespace App
 {
@@ -18,34 +19,34 @@ namespace App
         string portName, serverUrl;
         IHldMainBoard hldMainBoard;
 
-        Queue<String> commandsQueue;
-        Queue<String> CommandsQueue => commandsQueue = commandsQueue ?? new Queue<string>();
+        Queue<String> _commandsQueue;
+        Queue<String> CommandsQueue => _commandsQueue = _commandsQueue ?? new Queue<string>();
 
-        private int nLeft;
+        private int _nLeft;
 
         public int NLeft
         {
-            get { return nLeft; }
+            get { return _nLeft; }
             set
             {
                 if (value < 1 || value > 152)
                     throw new ArgumentException("Parameters is not valid");
                 else
-                    nLeft = value;
+                    _nLeft = value;
             }
         }
 
-        private int nRight;
+        private int _nRight;
 
         public int NRight
         {
-            get { return nRight; }
+            get { return _nRight; }
             set
             {
                 if (value < 1 || value > 152)
                     throw new ArgumentException("Parameters is not valid");
                 else
-                    nRight = value;
+                    _nRight = value;
             }
         }
 
@@ -83,9 +84,9 @@ namespace App
                 // if data changed
                 // send data
 
-                if (commandsQueue.Count > 0)
+                if (CommandsQueue.Count > 0)
                 {
-                    lock (commandsQueue)
+                    lock (CommandsQueue)
                     {
                         // execute command
                     }
@@ -133,9 +134,24 @@ namespace App
 
         public async Task Subscribe()
         {
+            var options = new IO.Options() { IgnoreServerCertificateValidation = true, AutoConnect = true, ForceNew = true };
+            var builder = System.Collections.Immutable.ImmutableList.CreateBuilder<string>();
+            builder.Add("websocket");
+            options.Transports = builder.ToImmutable();
+            var socket = IO.Socket("http://localhost:3000", options);
+            socket.On(Socket.EVENT_CONNECT, () =>
+             {
+                 Console.WriteLine("connected");
+             });
+            socket.On("ic123", data =>
+            {
+                Console.WriteLine(data);
+            });
+
             while (true)
             {
-                await Task.Delay(1000);
+
+                await Task.Yield();
             }
         }
 
@@ -281,18 +297,18 @@ namespace App
         public List<SafeStatus> GetSafeStatusOfAllSide(ref string errMsg)
         {
             List<SafeStatus> list = new List<SafeStatus>();
-            if (nRight > 0)
+            if (_nRight > 0)
             {
-                var safeStatus = GetSafeStatusOfOneSide(0, nRight, ref errMsg);
+                var safeStatus = GetSafeStatusOfOneSide(0, _nRight, ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
                 {
                     return list;
                 }
                 list.AddRange(safeStatus);
             }
-            if (nLeft > 0)
+            if (NLeft > 0)
             {
-                var safeStatus = GetSafeStatusOfOneSide(1, nLeft, ref errMsg);
+                var safeStatus = GetSafeStatusOfOneSide(1, NLeft, ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
                 {
                     return list;
