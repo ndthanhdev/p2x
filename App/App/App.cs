@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace App
@@ -16,6 +17,9 @@ namespace App
 
         string portName, serverUrl;
         IHldMainBoard hldMainBoard;
+
+        Queue<String> commandsQueue;
+        Queue<String> CommandsQueue => commandsQueue = commandsQueue ?? new Queue<string>();
 
         private int numberOfSides;
 
@@ -49,8 +53,6 @@ namespace App
             }
         }
 
-
-
         public App(string portName, int numberOfSides, int maxRelayPerSide, string serverUrl, string secret, IHldMainBoard hldMainBoard)
         {
             this.portName = portName;
@@ -63,6 +65,11 @@ namespace App
 
         public async Task Run()
         {
+            await Task.WhenAll(Loop(), Subscribe());
+        }
+
+        public async Task Loop()
+        {
             string iCNo = string.Empty;
             string version = string.Empty;
             string errMsg = string.Empty;
@@ -71,10 +78,21 @@ namespace App
 
             while (true)
             {
+                // check commandQueue and execute
                 // test board print info
                 // test server print info
                 // read data
+                // if data changed
                 // send data
+
+                if (commandsQueue.Count > 0)
+                {
+                    lock (commandsQueue)
+                    {
+                        // execute command
+                    }
+                }
+
                 if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
                 {
                     PrintError(errMsg);
@@ -102,8 +120,7 @@ namespace App
                         continue;
                     }
 
-                    SendData(latestStatus, ref errMsg);
-                    if (!string.IsNullOrEmpty(errMsg))
+                    if (!SendData(latestStatus, ref errMsg))
                     {
                         PrintError(errMsg);
                         await Task.Delay(ERROR_DELAY);
@@ -116,40 +133,56 @@ namespace App
 
         }
 
+        public async Task Subscribe()
+        {
+            while (true)
+            {
+                await Task.Delay(1000);
+            }
+        }
+
         public bool TestBoard(string portName, ref string iCNo, ref string version, ref string errMsg)
         {
-            errMsg = string.Empty;
-            if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
+            try
             {
-                return false;
-            }
-            var powerStatus = hldMainBoard.GetPowerStatus(ref errMsg);
-            if (!string.IsNullOrEmpty(errMsg) || powerStatus == POWER_STATUS_FAIL)
-            {
-                return false;
-            }
-            else if (powerStatus == POWER_STATUS_DOWN)
-            {
-                errMsg = "MainBoard's power is down";
-                return false;
-            }
+                errMsg = string.Empty;
+                if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
+                {
+                    return false;
+                }
+                var powerStatus = hldMainBoard.GetPowerStatus(ref errMsg);
+                if (!string.IsNullOrEmpty(errMsg) || powerStatus == POWER_STATUS_FAIL)
+                {
+                    return false;
+                }
+                else if (powerStatus == POWER_STATUS_DOWN)
+                {
+                    errMsg = "MainBoard's power is down";
+                    return false;
+                }
 
-            iCNo = hldMainBoard.GetICCardData();
-            version = hldMainBoard.GetVersion(ref errMsg);
-            if (!string.IsNullOrEmpty(errMsg))
+                iCNo = hldMainBoard.GetICCardData();
+                version = hldMainBoard.GetVersion(ref errMsg);
+                if (!string.IsNullOrEmpty(errMsg))
+                {
+                    return false;
+                }
+                else if (string.IsNullOrEmpty(iCNo))
+                {
+                    errMsg = "IC No is empty";
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
             {
+                errMsg = ex.ToString();
                 return false;
             }
-            else if (string.IsNullOrEmpty(iCNo))
+            finally
             {
-                errMsg = "IC No is empty";
-                return false;
+                CloseSerialPort();
             }
-            if (!hldMainBoard.CloseSerialPort(ref errMsg))
-            {
-                return false;
-            }
-            return true;
 
         }
 
@@ -158,8 +191,6 @@ namespace App
             // implement this
             return true;
         }
-
-        //public void 
 
         public void PrintError(params string[] errorMessage)
         {
@@ -184,8 +215,7 @@ namespace App
         {
             try
             {
-
-
+                errMsg = string.Empty;
                 SafeBuilder builder = new SafeBuilder();
                 BoardStatus boardStatus = new BoardStatus();
                 errMsg = string.Empty;
@@ -215,10 +245,6 @@ namespace App
                     boardStatus.SafeStatuss.AddRange(builder.BuildMany(locks, sensors, i, MaxRelayPerSide));
                 }
 
-                if (!hldMainBoard.CloseSerialPort(ref errMsg))
-                {
-                    return null;
-                }
                 return boardStatus;
             }
             catch (Exception ex)
@@ -226,11 +252,25 @@ namespace App
                 errMsg = ex.ToString();
                 return null;
             }
+            finally
+            {
+                CloseSerialPort();
+            }
         }
 
         public bool SendData(BoardStatus status, ref string errMsg)
         {
             return true;
+        }
+
+        public void CloseSerialPort()
+        {
+            string errMsg = string.Empty;
+            hldMainBoard.CloseSerialPort(ref errMsg);
+            if (!string.IsNullOrEmpty(errMsg))
+            {
+                PrintError(errMsg);
+            }
         }
     }
 }

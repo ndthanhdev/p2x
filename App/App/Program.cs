@@ -8,6 +8,14 @@ namespace App
 {
     class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args">
+        /// 0: portname
+        /// 1: number of side
+        /// 2: max 
+        /// </param>
         static void Main(string[] args)
         {
             IHldMainBoard hldMainBoard = new HldMainBoard();
