@@ -1,5 +1,4 @@
-﻿using App.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,19 +10,58 @@ namespace App
     {
         const int ERROR_DELAY = 3000;
         const int BAUD_RATE = 115200;
-
+        const int POWER_STATUS_NORMAL = 0;
+        const int POWER_STATUS_DOWN = 1;
+        const int POWER_STATUS_FAIL = -1;
 
         string portName, serverUrl;
         IHldMainBoard hldMainBoard;
 
-        public App(string portName, string serverUrl, string secret)
+        private int numberOfSides;
+
+        public int NumberOfSides
+        {
+            get { return numberOfSides; }
+            set
+            {
+                if (value < 1 || value > 2)
+                    throw new ArgumentException("numberOfSides must be between 1 and 2", nameof(numberOfSides));
+                else
+                {
+                    numberOfSides = value;
+                    this.hldMainBoard.SetMaxSide(numberOfSides);
+                }
+
+            }
+        }
+
+        private int maxRelayPerSide;
+
+        public int MaxRelayPerSide
+        {
+            get { return maxRelayPerSide; }
+            set
+            {
+                if (value < 1 || value > 152)
+                    throw new ArgumentException("numberOfSides must be between 1 and 152", nameof(numberOfSides));
+                else
+                    maxRelayPerSide = value;
+            }
+        }
+
+
+
+        public App(string portName, int numberOfSides, int maxRelayPerSide, string serverUrl, string secret, IHldMainBoard hldMainBoard)
         {
             this.portName = portName;
             this.serverUrl = serverUrl;
-            this.hldMainBoard = new HldMainBoard();
+            this.hldMainBoard = hldMainBoard;
+            this.NumberOfSides = numberOfSides;
+            this.MaxRelayPerSide = maxRelayPerSide;
+
         }
 
-        public void Run()
+        public async Task Run()
         {
             string iCNo = string.Empty;
             string version = string.Empty;
@@ -40,7 +78,7 @@ namespace App
                 if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
                 {
                     PrintError(errMsg);
-                    Task.Delay(ERROR_DELAY);
+                    await Task.Delay(ERROR_DELAY);
                     continue;
                 }
                 PrintBoardInfo(iCNo, version);
@@ -49,7 +87,7 @@ namespace App
                 if (!string.IsNullOrEmpty(errMsg))
                 {
                     PrintError(errMsg);
-                    Task.Delay(ERROR_DELAY);
+                    await Task.Delay(ERROR_DELAY);
                     continue;
                 }
 
@@ -60,7 +98,7 @@ namespace App
                     if (!connectionStatus)
                     {
                         PrintError(errMsg);
-                        Task.Delay(ERROR_DELAY);
+                        await Task.Delay(ERROR_DELAY);
                         continue;
                     }
 
@@ -68,7 +106,7 @@ namespace App
                     if (!string.IsNullOrEmpty(errMsg))
                     {
                         PrintError(errMsg);
-                        Task.Delay(ERROR_DELAY);
+                        await Task.Delay(ERROR_DELAY);
                         continue;
                     }
                     oldStatus = latestStatus;
@@ -81,16 +119,16 @@ namespace App
         public bool TestBoard(string portName, ref string iCNo, ref string version, ref string errMsg)
         {
             errMsg = string.Empty;
-            if (hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
+            if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
             {
                 return false;
             }
             var powerStatus = hldMainBoard.GetPowerStatus(ref errMsg);
-            if (!string.IsNullOrEmpty(errMsg) || powerStatus == PowerStatus.Fail)
+            if (!string.IsNullOrEmpty(errMsg) || powerStatus == POWER_STATUS_FAIL)
             {
                 return false;
             }
-            else if (powerStatus != PowerStatus.Normal)
+            else if (powerStatus == POWER_STATUS_DOWN)
             {
                 errMsg = "MainBoard's power is down";
                 return false;
@@ -107,7 +145,7 @@ namespace App
                 errMsg = "IC No is empty";
                 return false;
             }
-            if (hldMainBoard.CloseSerialPort(ref errMsg))
+            if (!hldMainBoard.CloseSerialPort(ref errMsg))
             {
                 return false;
             }
@@ -144,12 +182,50 @@ namespace App
 
         public BoardStatus ReadBoardStatus(ref string errMsg)
         {
-            errMsg = string.Empty;
-            if (hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
+            try
             {
+
+
+                SafeBuilder builder = new SafeBuilder();
+                BoardStatus boardStatus = new BoardStatus();
+                errMsg = string.Empty;
+                if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
+                {
+                    return null;
+                }
+
+                boardStatus.PowerStatus = hldMainBoard.GetPowerStatus(ref errMsg);
+                if (!string.IsNullOrEmpty(errMsg))
+                {
+                    return null;
+                }
+
+                for (int i = 0; i < numberOfSides; i++)
+                {
+                    var locks = hldMainBoard.GetLockAllStatus(i, ref errMsg);
+                    if (!string.IsNullOrEmpty(errMsg))
+                    {
+                        return null;
+                    }
+                    var sensors = hldMainBoard.GetSensorAllStatus(i, ref errMsg);
+                    if (!string.IsNullOrEmpty(errMsg))
+                    {
+                        return null;
+                    }
+                    boardStatus.SafeStatuss.AddRange(builder.BuildMany(locks, sensors, i, MaxRelayPerSide));
+                }
+
+                if (!hldMainBoard.CloseSerialPort(ref errMsg))
+                {
+                    return null;
+                }
+                return boardStatus;
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.ToString();
                 return null;
             }
-            return null;
         }
 
         public bool SendData(BoardStatus status, ref string errMsg)

@@ -1,5 +1,4 @@
-﻿using App.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,17 +8,9 @@ namespace App
 {
     class HldMainBoard : MainBoardLib.HldMainBoard, IHldMainBoard
     {
-        PowerStatus IHldMainBoard.GetPowerStatus(ref string strMsg)
+        bool IHldMainBoard.SetMaxSide(int nMaxSide)
         {
-            switch (base.GetPowerStatus(ref strMsg))
-            {
-                case 0:
-                    return PowerStatus.Normal;
-                case 1:
-                    return PowerStatus.PowerDown;
-                default:
-                    return PowerStatus.Fail;
-            }
+            return base.SetMaxSide(nMaxSide) == 0 ? true : false;
         }
     }
 }

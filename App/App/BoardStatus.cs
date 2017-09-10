@@ -1,5 +1,4 @@
-﻿using App.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +8,15 @@ namespace App
 {
     public class BoardStatus
     {
-        public PowerStatus PowerStatus { get; set; }
+        public int PowerStatus { get; set; }
 
-        public List<SafeStatus> LockDatas { get; set; }
+        private List<SafeStatus> safeStatuss;
+
+        public List<SafeStatus> SafeStatuss
+        {
+            get { return safeStatuss = safeStatuss ?? new List<SafeStatus>(); }
+            set { safeStatuss = value; }
+        }
+
     }
 }

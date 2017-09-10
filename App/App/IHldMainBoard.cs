@@ -1,5 +1,4 @@
-﻿using App.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +13,7 @@ namespace App
         string GetICCardData();
         int[] GetLockAllStatus(int nSide, ref string strMsg);
         int GetLockStatus(int nSide, int nLockID, ref string strMsg);
-        PowerStatus GetPowerStatus(ref string strMsg);
+        int GetPowerStatus(ref string strMsg);
         int[] GetSensorAllStatus(int nSide, ref string strMsg);
         int GetSensorStatus(int nSide, int nLockID, ref string strMsg);
         string GetVersion(ref string strMsg);
@@ -24,7 +23,7 @@ namespace App
         int SetCoderSleep(ref string strMsg);
         int SetCoderWakeup(ref string strMsg);
         int SetLight(int nSide, int nRelayID, int nDoLightType, ref string strMsg);
-        int SetMaxSide(int nMaxSide);
+        bool SetMaxSide(int nMaxSide);
     }
 }
 

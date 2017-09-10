@@ -10,7 +10,10 @@ namespace App
     {
         static void Main(string[] args)
         {
-            new App(args[0], args[1], args[2]).Run();
+            IHldMainBoard hldMainBoard = new HldMainBoard();
+            Task.Run(() => new App(args[0], int.Parse(args[1]), int.Parse(args[2]),
+                args[3], args[4], hldMainBoard).Run());
+            Console.ReadLine();
         }
     }
 }
