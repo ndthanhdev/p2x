@@ -10,6 +10,8 @@ namespace App
 {
     public class App : IApp
     {
+        const int BAUD_RATE = 115200;
+
         IHldMainBoard _HldMainBoard;
 
         public App(IHldMainBoard hldMainBoard)
@@ -20,14 +22,16 @@ namespace App
         public bool Start(IAppConfig config)
         {
             Console.WriteLine("Welcome");
-
+            string errMsg = string.Empty;
+            string iCNo = string.Empty;
+            string version = string.Empty;
             // Load and verify config
             if (config.Load())
             {
                 Console.WriteLine("Config file detected.");
-                if (!TestBoard(config))
+                if (!TestBoard(config, ref iCNo, ref version, ref errMsg))
                 {
-                    Console.WriteLine("Connect to board unsuccessful. Please re-config.");
+                    printError(errMsg, "Connect to board unsuccessful. Please re-config.");
                 }
                 else
                 {
@@ -47,14 +51,15 @@ namespace App
             }
 
             // Using cofig file fail input it.
-            if (!InputConfig(config))
+            if (!InputConfig(config, ref iCNo, ref version, ref errMsg))
             {
+                printError(errMsg);
                 return false;
             }
             else
             {
                 config.Save();
-                return false;
+                return true;
             }
         }
 
@@ -63,36 +68,27 @@ namespace App
 
         }
 
-        public bool InputConfig(IAppConfig config)
+        public bool InputConfig(IAppConfig config, ref string iCNo, ref string version, ref string errMsg)
         {
             var serialports = SerialPort.GetPortNames();
             if (serialports.Length < 1)
             {
-                Console.WriteLine("There isn't any plugged serial port, Please plug board then restart app.");
+                errMsg = "There isn't any plugged serial port, Please plug board then restart app.";
                 return false;
             }
             config.Port = inputPort(serialports);
-            string errMsg = string.Empty;
-            // testboard
-            if (!connectBoard(config.Port, out string iCNo, out string version, ref errMsg))
+            if (!TestBoard(config, ref iCNo, ref version, ref errMsg))
             {
-                printError(errMsg);
-                Console.WriteLine("Please plug board then restart app.");
                 return false;
-            }
-            else
-            {
-                Console.WriteLine(iCNo);
             }
             config.ServerUrl = InputUrl();
             if (!TestServerStatus(config.ServerUrl))
             {
-                printError("Server now down");
+                errMsg = "Server now down";
                 return false;
             }
-            if (!InputSecretKeyAndConnect(config))
+            if (!InputSecretKeyAndConnect(config, ref errMsg))
             {
-                Console.WriteLine("Can't establish connection");
                 return false;
             }
             else
@@ -136,7 +132,7 @@ namespace App
             iCNo = "";
             version = "";
             errMsg = string.Empty;
-            bool isConnected = _HldMainBoard.OpenSerialPort(choosenPort, AppConst.BAUD_RATE, ref errMsg);
+            bool isConnected = _HldMainBoard.OpenSerialPort(choosenPort, BAUD_RATE, ref errMsg);
             if (!isConnected)
             {
                 return false;
@@ -205,7 +201,7 @@ namespace App
             return true;
         }
 
-        public bool InputSecretKeyAndConnect(IAppConfig config)
+        public bool InputSecretKeyAndConnect(IAppConfig config, ref string errMsg)
         {
             int count = 0;
             string secretKey = string.Empty;
@@ -216,6 +212,7 @@ namespace App
                 {
                     if (count >= 3)
                     {
+                        errMsg = "Can't establish connection";
                         return false;
                     }
                     Console.WriteLine("Remaining Chance {0}, IC No isn't exist on server or secret key is incorrect. Make sure Ic No was registered with server and secret key is correct.", 3 - count);
@@ -233,8 +230,39 @@ namespace App
             return true;
         }
 
-        public bool TestBoard(IAppConfig appConfig)
+        public bool TestBoard(IAppConfig config, ref string iCNo, ref string version, ref string msg)
         {
+            msg = string.Empty;
+            if (_HldMainBoard.OpenSerialPort(config.Port, BAUD_RATE, ref msg))
+            {
+                return false;
+            }
+            var powerStatus = _HldMainBoard.GetPowerStatus(ref msg);
+            if (!string.IsNullOrEmpty(msg) || powerStatus == PowerStatus.Fail)
+            {
+                return false;
+            }
+            else if (powerStatus != PowerStatus.Normal)
+            {
+                msg = "MainBoard's power is down";
+                return false;
+            }
+
+            iCNo = _HldMainBoard.GetICCardData();
+            version = _HldMainBoard.GetVersion(ref msg);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                return false;
+            }
+            else if (string.IsNullOrEmpty(iCNo))
+            {
+                msg = "IC No is empty";
+                return false;
+            }
+            if (_HldMainBoard.CloseSerialPort(ref msg))
+            {
+                return false;
+            }
             return true;
         }
     }

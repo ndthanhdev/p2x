@@ -6,30 +6,12 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    public enum PowerStatus
-    {
-        Normal,
-        PowerDown,
-        Fail
-    }
 
-    public enum SensorStatus
-    {
-        Occupied,
-        Empty
-    }
 
-    public enum LockStatus
-    {
-        Open,
-        Closed
-    }
 
-    public enum Side
-    {
-        Right,
-        Left
-    }
+
+
+
 
     public class LockData
     {

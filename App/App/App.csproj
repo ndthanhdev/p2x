@@ -47,8 +47,11 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AppConfig.cs" />
-    <Compile Include="AppConst.cs" />
     <Compile Include="BoardStatus.cs" />
+    <Compile Include="Enums\LockStatus.cs" />
+    <Compile Include="Enums\PowerStatus.cs" />
+    <Compile Include="Enums\SensorStatus.cs" />
+    <Compile Include="Enums\Side.cs" />
     <Compile Include="HldMainBoard.cs" />
     <Compile Include="IApp.cs" />
     <Compile Include="IAppConfig.cs" />

@@ -13,7 +13,7 @@ namespace App
         string GetICCardData();
         int[] GetLockAllStatus(int nSide, ref string strMsg);
         int GetLockStatus(int nSide, int nLockID, ref string strMsg);
-        int GetPowerStatus(ref string strMsg);
+        PowerStatus GetPowerStatus(ref string strMsg);
         int[] GetSensorAllStatus(int nSide, ref string strMsg);
         int GetSensorStatus(int nSide, int nLockID, ref string strMsg);
         string GetVersion(ref string strMsg);

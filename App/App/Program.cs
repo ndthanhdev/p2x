@@ -10,11 +10,13 @@ namespace App
 {
     class Program
     {
+        const string CONFIG_FILE_PATH = "config.txt";
+
         static void Main(string[] args)
         {
             HldMainBoard hldMainBoard = new HldMainBoard();
             var app = new App(hldMainBoard);
-            if (!app.Start(new AppConfig(AppConst.CONFIG_FILE_PATH)))
+            if (!app.Start(new AppConfig(CONFIG_FILE_PATH)))
             {
                 exitMessage();
             }

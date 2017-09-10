@@ -23,7 +23,7 @@ namespace App
         {
             if (File.Exists(_path))
             {
-                var lines = File.ReadAllLines(AppConst.CONFIG_FILE_PATH);
+                var lines = File.ReadAllLines(_path);
                 if (lines.Length != 3)
                     return false;
                 Port = lines[0];
