@@ -8,9 +8,5 @@ namespace App
 {
     class HldMainBoard : MainBoardLib.HldMainBoard, IHldMainBoard
     {
-        bool IHldMainBoard.SetMaxSide(int nMaxSide)
-        {
-            return base.SetMaxSide(nMaxSide) == 0 ? true : false;
-        }
     }
 }

@@ -75,6 +75,13 @@ namespace App
             bool connectionStatus = false;
             BoardStatus oldStatus = null, latestStatus;
 
+            if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
+            {
+                PrintError(errMsg);
+                return;
+            }
+            PrintBoardInfo(iCNo, version);
+
             while (true)
             {
                 // check commandQueue and execute
@@ -91,14 +98,6 @@ namespace App
                         // execute command
                     }
                 }
-
-                if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
-                {
-                    PrintError(errMsg);
-                    await Task.Delay(ERROR_DELAY);
-                    continue;
-                }
-                PrintBoardInfo(iCNo, version);
 
                 latestStatus = ReadBoardStatus(ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))

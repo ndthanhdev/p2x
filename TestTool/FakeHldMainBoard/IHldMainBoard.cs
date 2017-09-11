@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App
+namespace FakeHldMainBoard
 {
-    public interface IHldMainBoard
+    interface IHldMainBoard
     {
         bool CloseSerialPort(ref string strMsg);
         string GetCoderTextData();
@@ -26,4 +26,3 @@ namespace App
         int SetMaxSide(int nMaxSide);
     }
 }
-
