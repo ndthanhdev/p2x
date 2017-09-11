@@ -40,7 +40,6 @@ namespace App
             IHldMainBoard hldMainBoard = new HldMainBoard();
             new App(args[0], int.Parse(args[1]), int.Parse(args[2]),
                 args[3], args[4], hldMainBoard).RunAsync().Wait();
-            Console.ReadLine();
         }
     }
 }

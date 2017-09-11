@@ -239,6 +239,15 @@ namespace App
                 {
                     return null;
                 }
+                else if (boardStatus.PowerStatus == 1)
+                {
+                    errMsg = "Power is down";
+                    return null;
+                }
+                if (boardStatus.PowerStatus != 0)
+                {
+                   /* No action required */
+                }
 
                 var list = GetSafeStatusOfAllSide(ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
@@ -296,9 +305,9 @@ namespace App
         public List<SafeState> GetSafeStatusOfAllSide(ref string errMsg)
         {
             List<SafeState> list = new List<SafeState>();
-            if (_nRight > 0)
+            if (NRight > 0)
             {
-                var safeStatus = GetSafeStatusOfOneSide(0, _nRight, ref errMsg);
+                var safeStatus = GetSafeStatusOfOneSide(0, NRight, ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
                 {
                     return list;

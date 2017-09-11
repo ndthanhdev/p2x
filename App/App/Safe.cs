@@ -32,7 +32,7 @@ namespace App
             get { return _id; }
             set
             {
-                if (value < 1 || value > 152)
+                if (value < 0 || value > 152)
                 {
                     throw new ArgumentOutOfRangeException();
                 }
