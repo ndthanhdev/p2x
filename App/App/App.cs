@@ -53,6 +53,7 @@ namespace App
         }
 
         private string iCNo = string.Empty;
+        string version = string.Empty;
         private Socket socket;
 
         public App(string portName, int nRight, int nLeft, string serverUrl, string secret, IHldMainBoard hldMainBoard)
@@ -81,6 +82,7 @@ namespace App
                 finally
                 {
                     iCNo = string.Empty;
+                    version = string.Empty;
                     socket?.Close();
                 }
             }
@@ -88,7 +90,6 @@ namespace App
 
         public async Task Loop()
         {
-            string version = string.Empty;
             string errMsg = string.Empty;
             BoardState oldStatus = null, latestStatus;
 
@@ -129,7 +130,16 @@ namespace App
                 {
                     lock (CommandsQueue)
                     {
-                        // execute command
+                        var safe = CommandsQueue.Dequeue();
+                        if (!ExecuteCommand(safe, ref errMsg))
+                        {
+                            AppLog.Error("{0}. {1}", "Execute command fail", errMsg);
+                        }
+                        else
+                        {
+                            AppLog.Info("Opened Safe:{0}", safe);
+                        }
+
                     }
                 }
 
@@ -155,14 +165,13 @@ namespace App
             socket.On(eventName, rawData =>
              {
                  Safe safe = JsonConvert.DeserializeObject<Safe>(rawData.ToString());
-                 AppLog.Info("Received {0} from server", safe);
+                 AppLog.Info("Received {0}", safe);
                  lock (CommandsQueue)
                  {
                      CommandsQueue.Enqueue(safe);
                  }
              });
         }
-
 
         public bool TestBoard(string portName, ref string iCNo, ref string version, ref string errMsg)
         {
@@ -313,9 +322,29 @@ namespace App
             return CommandsQueue.Count > 0;
         }
 
-        public void ExecuteCommand(Safe safe)
+        public bool ExecuteCommand(Safe safe, ref string msg)
         {
-            
+            try
+            {
+                if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref msg))
+                {
+                    return false;
+                }
+                if (hldMainBoard.OpenLock(safe.Side, safe.Id, ref msg) < 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                msg = ex.ToString();
+                return false;
+            }
+            finally
+            {
+                hldMainBoard.CloseSerialPort(ref msg);
+            }
         }
     }
 }
