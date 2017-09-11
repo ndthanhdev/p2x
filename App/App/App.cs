@@ -315,10 +315,7 @@ namespace App
 
         public void ExecuteCommand(Safe safe)
         {
-            if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
-            {
-                return null;
-            }
+            
         }
     }
 }

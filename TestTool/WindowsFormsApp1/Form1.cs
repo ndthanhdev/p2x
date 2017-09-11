@@ -37,51 +37,37 @@ namespace WindowsFormsApp1
                 if (!chbStart.Checked)
                 {
                     continue;
-                }
-                HldMainBoardStatus hld = new HldMainBoardStatus();
-                hld.OpenSerialPort = chbOpenSerialPort.Checked;
-                hld.CloseSerialPort = chbCloseSerialPort.Checked;
+                }         
 
-                hld.GetPowerStatus = Convert.ToInt32(npdSetPowerStatus.Value);
-                hld.ICNo = txtICNo.Text;
-                hld.GetVersion = txtGetVersion.Text;
+                HldMainBoardState state = new HldMainBoardState();
+                state.OpenSerialPort = chbOpenSerialPort.Checked;
+                state.CloseSerialPort = chbCloseSerialPort.Checked;
 
-                hld.SetMaxSide = Convert.ToInt32(npdSetMaxSize.Value);
+                state.GetPowerStatus = Convert.ToInt32(npdSetPowerStatus.Value);
+                state.ICNo = txtICNo.Text;
+                state.GetVersion = txtGetVersion.Text;
 
-                hld.nLockRight = new int[Convert.ToInt32(npdRight.Value)];
-                hld.nSensorRight = new int[Convert.ToInt32(npdRight.Value)];
+                state.SetMaxSide = Convert.ToInt32(npdSetMaxSize.Value);
+
+                state.nLockRight = new int[Convert.ToInt32(npdRight.Value)];
+                state.nSensorRight = new int[Convert.ToInt32(npdRight.Value)];
                 for (int i = 0; i < npdRight.Value; i++)
                 {
-                    hld.nLockRight[i] = RL[i].Checked ? 1 : 0;
-                    hld.nSensorRight[i] = RS[i].Checked ? 1 : 0;
+                    state.nLockRight[i] = RL[i].Checked ? 1 : 0;
+                    state.nSensorRight[i] = RS[i].Checked ? 1 : 0;
                 }
 
 
-                hld.nLockLeft = new int[Convert.ToInt32(npdLeft.Value)];
-                hld.nSensorLeft = new int[Convert.ToInt32(npdLeft.Value)];
+                state.nLockLeft = new int[Convert.ToInt32(npdLeft.Value)];
+                state.nSensorLeft = new int[Convert.ToInt32(npdLeft.Value)];
                 for (int i = 0; i < npdLeft.Value; i++)
                 {
-                    hld.nLockLeft[i] = LL[i].Checked ? 1 : 0;
-                    hld.nSensorLeft[i] = LS[i].Checked ? 1 : 0;
+                    state.nLockLeft[i] = LL[i].Checked ? 1 : 0;
+                    state.nSensorLeft[i] = LS[i].Checked ? 1 : 0;
                 }
 
-                save(txbPath.Text, hld);
+                state.Save(txbPath.Text);
 
-            }
-        }
-
-        void save(string path, HldMainBoardStatus hld)
-        {
-            try
-            {
-                var json = JsonConvert.SerializeObject(hld, Formatting.Indented);
-                File.WriteAllText(path, json);
-
-            }
-            catch (Exception ex)
-            {
-
-                throw;
             }
         }
 

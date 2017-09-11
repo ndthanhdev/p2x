@@ -12,14 +12,11 @@ namespace FakeHldMainBoard
     public class HldMainBoard : IHldMainBoard
     {
         public static string Path;
-        private HldMainBoardStatus Load()
-        {
-            var json = File.ReadAllText(Path);
-            return JsonConvert.DeserializeObject<HldMainBoardStatus>(json);
-        }
+
+
         public bool CloseSerialPort(ref string strMsg)
         {
-            return Load().CloseSerialPort;
+            return HldMainBoardState.Load(Path).CloseSerialPort;
         }
 
         public string GetCoderTextData()
@@ -29,12 +26,12 @@ namespace FakeHldMainBoard
 
         public string GetICCardData()
         {
-            return Load().ICNo;
+            return HldMainBoardState.Load(Path).ICNo;
         }
 
         public int[] GetLockAllStatus(int nSide, ref string strMsg)
         {
-            var status = Load();
+            var status = HldMainBoardState.Load(Path);
             return nSide == 0 ? status.nLockRight : status.nLockLeft;
         }
 
@@ -45,12 +42,12 @@ namespace FakeHldMainBoard
 
         public int GetPowerStatus(ref string strMsg)
         {
-            return Load().GetPowerStatus;
+            return HldMainBoardState.Load(Path).GetPowerStatus;
         }
 
         public int[] GetSensorAllStatus(int nSide, ref string strMsg)
         {
-            var status = Load();
+            var status = HldMainBoardState.Load(Path);
             return nSide == 0 ? status.nSensorRight : status.nSensorLeft;
         }
 
@@ -61,7 +58,7 @@ namespace FakeHldMainBoard
 
         public string GetVersion(ref string strMsg)
         {
-            return Load().GetVersion;
+            return HldMainBoardState.Load(Path).GetVersion;
         }
 
         public void IsDebug(bool bValue)
@@ -71,12 +68,22 @@ namespace FakeHldMainBoard
 
         public int OpenLock(int nSide, int nLockID, ref string strMsg)
         {
-            throw new NotImplementedException();
+            HldMainBoardState state = HldMainBoardState.Load(Path);
+            if (nSide == 0)
+            {
+                state.nLockRight[nLockID] = 0;
+            }
+            else if (nSide == 1)
+            {
+                state.nLockLeft[nLockID] = 0;
+            }
+            state.Save(Path);
+            return 0;
         }
 
         public bool OpenSerialPort(string strPortName, int nBaudRate, ref string strMsg)
         {
-            return Load().OpenSerialPort;
+            return HldMainBoardState.Load(Path).OpenSerialPort;
         }
 
         public int SetCoderSleep(ref string strMsg)
@@ -96,7 +103,7 @@ namespace FakeHldMainBoard
 
         public int SetMaxSide(int nMaxSide)
         {
-            return Load().SetMaxSide;
+            return HldMainBoardState.Load(Path).SetMaxSide;
         }
     }
 }

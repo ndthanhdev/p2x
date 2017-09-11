@@ -25,18 +25,18 @@ namespace App
         }
 
 
-        private int _no;
+        private int _id;
 
-        public int No
+        public int Id
         {
-            get { return _no; }
+            get { return _id; }
             set
             {
                 if (value < 1 || value > 152)
                 {
                     throw new ArgumentOutOfRangeException();
                 }
-                _no = value;
+                _id = value;
             }
         }
 
@@ -49,14 +49,14 @@ namespace App
         {
             return other != null &&
                    Side == other.Side &&
-                   No == other.No;
+                   Id == other.Id;
         }
 
         public override int GetHashCode()
         {
             var hashCode = 96580424;
             hashCode = hashCode * -1521134295 + Side.GetHashCode();
-            hashCode = hashCode * -1521134295 + No.GetHashCode();
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
             return hashCode;
         }
 

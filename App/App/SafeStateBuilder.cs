@@ -15,8 +15,11 @@ namespace App
             {
                 safes[i] = new SafeState()
                 {
-                    Side = side,
-                    No = i + 1,
+                    Safe = new Safe()
+                    {
+                        Side = side,
+                        Id = i
+                    },
                     LockStatus = locks[i],
                     SensorStatus = sensors[i]
                 };
