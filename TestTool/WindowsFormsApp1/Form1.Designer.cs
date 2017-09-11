@@ -421,7 +421,7 @@
             this.txbPath.Name = "txbPath";
             this.txbPath.Size = new System.Drawing.Size(973, 20);
             this.txbPath.TabIndex = 41;
-            this.txbPath.Text = "C:\\Users\\duyth\\Desktop\\p2x\\App\\App\\bin\\Debug\\boad.txt";
+            this.txbPath.Text = "C:\\Users\\duyth\\Desktop\\p2x\\App\\App\\bin\\Debug\\board.txt";
             // 
             // label13
             // 

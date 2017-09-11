@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Quobject.SocketIoClientDotNet.Client;
+using Newtonsoft.Json;
 
 namespace App
 {
@@ -15,12 +16,13 @@ namespace App
         const int POWER_STATUS_NORMAL = 0;
         const int POWER_STATUS_DOWN = 1;
         const int POWER_STATUS_FAIL = -1;
+        const string LOG_ERROR_PREFIX = "[Error]";
 
         string portName, serverUrl;
         IHldMainBoard hldMainBoard;
 
-        Queue<String> _commandsQueue;
-        Queue<String> CommandsQueue => _commandsQueue = _commandsQueue ?? new Queue<string>();
+        Queue<Safe> _commandsQueue;
+        Queue<Safe> CommandsQueue => _commandsQueue = _commandsQueue ?? new Queue<Safe>();
 
         private int _nLeft;
 
@@ -50,6 +52,8 @@ namespace App
             }
         }
 
+        private string iCNo = string.Empty;
+        private Socket socket;
 
         public App(string portName, int nRight, int nLeft, string serverUrl, string secret, IHldMainBoard hldMainBoard)
         {
@@ -64,97 +68,101 @@ namespace App
 
         public async Task RunAsync()
         {
-            await Task.WhenAny(Loop(), Subscribe());
+            while (true)
+            {
+                try
+                {
+                    await Loop();
+                }
+                catch (Exception ex)
+                {
+                    AppLog.Error(ex.ToString());
+                }
+                finally
+                {
+                    iCNo = string.Empty;
+                    socket?.Close();
+                }
+            }
         }
 
         public async Task Loop()
         {
-            string iCNo = string.Empty;
             string version = string.Empty;
             string errMsg = string.Empty;
-            bool connectionStatus = false;
-            BoardStatus oldStatus = null, latestStatus;
+            BoardState oldStatus = null, latestStatus;
+
+            if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
+            {
+                AppLog.Error("{0}. {1}", "Connect to board fail", errMsg);
+                await Task.Delay(ERROR_DELAY);
+                return;
+            }
+            PrintBoardInfo(iCNo, version);
+
+            Subscribe(iCNo);
 
             while (true)
             {
-                // check commandQueue and execute
-                // test board print info
-                // test server print info
-                // read data
-                // if data changed
-                // send data              
-
-                if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
+                latestStatus = ReadBoardState(ref errMsg);
+                if (latestStatus is null || !string.IsNullOrEmpty(errMsg))
                 {
-                    PrintError(errMsg);
-                    return;
+                    AppLog.Error("{0}. {1}", "Can't read board's state", errMsg);
+                    break;
                 }
-                PrintBoardInfo(iCNo, version);
 
-
-                while (true)
+                if (latestStatus != oldStatus)
                 {
-                    latestStatus = ReadBoardStatus(ref errMsg);
-                    if (!string.IsNullOrEmpty(errMsg))
+                    Console.WriteLine("Previous state:");
+                    Console.WriteLine(oldStatus);
+                    Console.WriteLine("New state:");
+                    Console.WriteLine(latestStatus);
+                    if (!SendData(latestStatus, ref errMsg))
                     {
-                        PrintError(errMsg);
-                        await Task.Delay(ERROR_DELAY);
+                        AppLog.Error("{0}. {1}", "Send data to server fail", errMsg);
                         break;
                     }
-
-                    if (latestStatus != oldStatus)
-                    {
-                        connectionStatus = TestConnection(serverUrl, ref errMsg);
-                        PrintConnectionStatus(connectionStatus);
-                        if (!connectionStatus)
-                        {
-                            PrintError(errMsg);
-                            await Task.Delay(ERROR_DELAY);
-                            break;
-                        }
-
-                        if (!SendData(latestStatus, ref errMsg))
-                        {
-                            PrintError(errMsg);
-                            await Task.Delay(ERROR_DELAY);
-                            break;
-                        }
-                        oldStatus = latestStatus;
-                    }
-
-                    if (CommandsQueue.Count > 0)
-                    {
-                        lock (CommandsQueue)
-                        {
-                            // execute command
-                        }
-                    }
-
-                    await Task.Delay(1000);
+                    oldStatus = latestStatus;
                 }
 
+                if (IsCommandAvailable())
+                {
+                    lock (CommandsQueue)
+                    {
+                        // execute command
+                    }
+                }
+
+                await Task.Delay(1000);
             }
+
+            await Task.Delay(ERROR_DELAY);
+
 
         }
 
-        public async Task Subscribe()
+        public void Subscribe(string eventName)
         {
-            var socket = IO.Socket("http://localhost:3000");
+            socket = IO.Socket(serverUrl);
             socket.On(Socket.EVENT_CONNECT, () =>
-             {
-                 Console.WriteLine("connected");
-             });
-            socket.On("ic123", data =>
             {
-                Console.WriteLine(data);
+                AppLog.Info("Connected to server");
             });
-
-            while (true)
+            socket.On(Socket.EVENT_RECONNECTING, () =>
             {
-
-                await Task.Yield();
-            }
+                AppLog.Info("Reconnecting to server...");
+            });
+            socket.On(eventName, rawData =>
+             {
+                 Safe safe = JsonConvert.DeserializeObject<Safe>(rawData.ToString());
+                 AppLog.Info("Received {0} from server", safe);
+                 lock (CommandsQueue)
+                 {
+                     CommandsQueue.Enqueue(safe);
+                 }
+             });
         }
+
 
         public bool TestBoard(string portName, ref string iCNo, ref string version, ref string errMsg)
         {
@@ -201,36 +209,17 @@ namespace App
 
         }
 
-        public bool TestConnection(string url, ref string msg)
-        {
-            // implement this
-            return true;
-        }
-
-        public void PrintError(params string[] errorMessage)
-        {
-            foreach (var msg in errorMessage)
-            {
-                Console.WriteLine("[Error] {0}. Restart in {1}ms...", msg, ERROR_DELAY.ToString());
-            }
-        }
-
         public void PrintBoardInfo(string iCNo, string version)
         {
-            Console.WriteLine("[Info] IC No: {0}", iCNo);
-            Console.WriteLine("[Info] Board Version: {0}", version);
+            AppLog.Info("IC No: {0}", iCNo);
+            AppLog.Info("Board Version: {0}", version);
         }
 
-        public void PrintConnectionStatus(bool status)
-        {
-            Console.WriteLine("[Info] Connection Status: {0}", status ? "Alive" : "Lost");
-        }
-
-        public BoardStatus ReadBoardStatus(ref string errMsg)
+        public BoardState ReadBoardState(ref string errMsg)
         {
             try
             {
-                BoardStatus boardStatus = new BoardStatus();
+                BoardState boardStatus = new BoardState();
                 if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
                 {
                     return null;
@@ -248,7 +237,7 @@ namespace App
                     return null;
                 }
 
-                boardStatus.SafeStatuss = list;
+                boardStatus.SafeStates = list;
                 return boardStatus;
             }
             catch (Exception ex)
@@ -262,7 +251,7 @@ namespace App
             }
         }
 
-        public bool SendData(BoardStatus status, ref string errMsg)
+        public bool SendData(BoardState status, ref string errMsg)
         {
             return true;
         }
@@ -273,13 +262,13 @@ namespace App
             hldMainBoard.CloseSerialPort(ref errMsg);
             if (!string.IsNullOrEmpty(errMsg))
             {
-                PrintError(errMsg);
+                AppLog.Error("{0}. {1}", "Close serial port fail", errMsg);
             }
         }
 
-        public SafeStatus[] GetSafeStatusOfOneSide(int side, int n, ref string errMsg)
+        public SafeState[] GetSafeStatusOfOneSide(int side, int n, ref string errMsg)
         {
-            SafeStatusBuilder builder = new SafeStatusBuilder();
+            SafeStateBuilder builder = new SafeStateBuilder();
 
             var locks = hldMainBoard.GetLockAllStatus(side, ref errMsg);
             if (!string.IsNullOrEmpty(errMsg))
@@ -295,9 +284,9 @@ namespace App
             return builder.BuildMany(locks, sensors, side, n);
         }
 
-        public List<SafeStatus> GetSafeStatusOfAllSide(ref string errMsg)
+        public List<SafeState> GetSafeStatusOfAllSide(ref string errMsg)
         {
-            List<SafeStatus> list = new List<SafeStatus>();
+            List<SafeState> list = new List<SafeState>();
             if (_nRight > 0)
             {
                 var safeStatus = GetSafeStatusOfOneSide(0, _nRight, ref errMsg);
@@ -317,6 +306,19 @@ namespace App
                 list.AddRange(safeStatus);
             }
             return list;
+        }
+
+        public bool IsCommandAvailable()
+        {
+            return CommandsQueue.Count > 0;
+        }
+
+        public void ExecuteCommand(Safe safe)
+        {
+            if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
+            {
+                return null;
+            }
         }
     }
 }

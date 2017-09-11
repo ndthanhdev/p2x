@@ -82,11 +82,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FakeHldMainBoard\FakeHldMainBoard.csproj">
-      <Project>{65abee15-7628-484d-becf-cf4ee66fc538}</Project>
-      <Name>FakeHldMainBoard</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    class SafeStatusBuilder
+    class SafeStateBuilder
     {
-        public SafeStatus[] BuildMany(int[] locks, int[] sensors, int side, int nRelay)
+        public SafeState[] BuildMany(int[] locks, int[] sensors, int side, int nRelay)
         {
-            SafeStatus[] safes = new SafeStatus[nRelay];
+            SafeState[] safes = new SafeState[nRelay];
             for (int i = 0; i < nRelay; i++)
             {
-                safes[i] = new SafeStatus()
+                safes[i] = new SafeState()
                 {
                     Side = side,
                     No = i + 1,
