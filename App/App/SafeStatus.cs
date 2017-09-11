@@ -47,11 +47,6 @@ namespace App
             return hashCode;
         }
 
-        public override string ToString()
-        {
-            return string.Format("{0}|{1}|{2}", Id, LockStatus, SensorStatus);
-        }
-
         public static bool operator ==(SafeStatus status1, SafeStatus status2)
         {
             return EqualityComparer<SafeStatus>.Default.Equals(status1, status2);
@@ -61,5 +56,11 @@ namespace App
         {
             return !(status1 == status2);
         }
+
+
+        //public override string ToString()
+        //{
+        //    return string.Format("{0}|{1}|{2}", Id, LockStatus, SensorStatus);
+        //}
     }
 }

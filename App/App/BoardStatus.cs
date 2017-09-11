@@ -10,26 +10,7 @@ namespace App
     {
         public int PowerStatus { get; set; }
 
-        private List<SafeStatus> safeStatuss;
-
-        public List<SafeStatus> SafeStatuss
-        {
-            get { return safeStatuss = safeStatuss ?? new List<SafeStatus>(); }
-            set { safeStatuss = value; }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine("====================");
-            builder.AppendLine(string.Format("Power: {0}", PowerStatus));
-            foreach (var item in SafeStatuss)
-            {
-                builder.AppendLine(item.ToString());
-            }
-            builder.AppendLine("====================");
-            return builder.ToString();
-        }
+        public IList<SafeStatus> SafeStatuss { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -40,14 +21,14 @@ namespace App
         {
             return other != null &&
                    PowerStatus == other.PowerStatus &&
-                   EqualityComparer<List<SafeStatus>>.Default.Equals(SafeStatuss, other.SafeStatuss);
+                   Enumerable.SequenceEqual<SafeStatus>(SafeStatuss, other.SafeStatuss);
         }
 
         public override int GetHashCode()
         {
-            var hashCode = -85989933;
+            var hashCode = -1391016798;
             hashCode = hashCode * -1521134295 + PowerStatus.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<List<SafeStatus>>.Default.GetHashCode(SafeStatuss);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<SafeStatus>>.Default.GetHashCode(SafeStatuss);
             return hashCode;
         }
 
@@ -60,5 +41,22 @@ namespace App
         {
             return !(status1 == status2);
         }
+
+
+
+        //public override string ToString()
+        //{
+        //    StringBuilder builder = new StringBuilder();
+        //    builder.AppendLine("====================");
+        //    builder.AppendLine(string.Format("Power: {0}", PowerStatus));
+        //    foreach (var item in SafeStatuss)
+        //    {
+        //        builder.AppendLine(item.ToString());
+        //    }
+        //    builder.AppendLine("====================");
+        //    return builder.ToString();
+        //}
+
+
     }
 }

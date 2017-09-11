@@ -62,9 +62,9 @@ namespace App
 
         }
 
-        public async Task Run()
+        public async Task RunAsync()
         {
-            await Task.WhenAll(Loop(), Subscribe());
+            await Task.WhenAny(Loop(), Subscribe());
         }
 
         public async Task Loop()
@@ -75,13 +75,6 @@ namespace App
             bool connectionStatus = false;
             BoardStatus oldStatus = null, latestStatus;
 
-            if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
-            {
-                PrintError(errMsg);
-                return;
-            }
-            PrintBoardInfo(iCNo, version);
-
             while (true)
             {
                 // check commandQueue and execute
@@ -89,42 +82,55 @@ namespace App
                 // test server print info
                 // read data
                 // if data changed
-                // send data
+                // send data              
 
-                if (CommandsQueue.Count > 0)
-                {
-                    lock (CommandsQueue)
-                    {
-                        // execute command
-                    }
-                }
-
-                latestStatus = ReadBoardStatus(ref errMsg);
-                if (!string.IsNullOrEmpty(errMsg))
+                if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
                 {
                     PrintError(errMsg);
-                    await Task.Delay(ERROR_DELAY);
-                    continue;
+                    return;
                 }
+                PrintBoardInfo(iCNo, version);
 
-                if (latestStatus != oldStatus)
+
+                while (true)
                 {
-                    connectionStatus = TestConnection(serverUrl, ref errMsg);
-                    PrintConnectionStatus(connectionStatus);
-                    if (!connectionStatus)
+                    latestStatus = ReadBoardStatus(ref errMsg);
+                    if (!string.IsNullOrEmpty(errMsg))
                     {
                         PrintError(errMsg);
                         await Task.Delay(ERROR_DELAY);
-                        continue;
+                        break;
                     }
 
-                    if (!SendData(latestStatus, ref errMsg))
+                    if (latestStatus != oldStatus)
                     {
-                        PrintError(errMsg);
-                        await Task.Delay(ERROR_DELAY);
-                        continue;
+                        connectionStatus = TestConnection(serverUrl, ref errMsg);
+                        PrintConnectionStatus(connectionStatus);
+                        if (!connectionStatus)
+                        {
+                            PrintError(errMsg);
+                            await Task.Delay(ERROR_DELAY);
+                            break;
+                        }
+
+                        if (!SendData(latestStatus, ref errMsg))
+                        {
+                            PrintError(errMsg);
+                            await Task.Delay(ERROR_DELAY);
+                            break;
+                        }
+                        oldStatus = latestStatus;
                     }
-                    oldStatus = latestStatus;
+
+                    if (CommandsQueue.Count > 0)
+                    {
+                        lock (CommandsQueue)
+                        {
+                            // execute command
+                        }
+                    }
+
+                    await Task.Delay(1000);
                 }
 
             }
@@ -217,7 +223,7 @@ namespace App
 
         public void PrintConnectionStatus(bool status)
         {
-            Console.WriteLine("[Info] Connection Status: {0}", status ? "Ablive" : "Lost");
+            Console.WriteLine("[Info] Connection Status: {0}", status ? "Alive" : "Lost");
         }
 
         public BoardStatus ReadBoardStatus(ref string errMsg)
@@ -242,7 +248,7 @@ namespace App
                     return null;
                 }
 
-                boardStatus.SafeStatuss.AddRange(list);
+                boardStatus.SafeStatuss = list;
                 return boardStatus;
             }
             catch (Exception ex)

@@ -21,9 +21,12 @@ namespace App
         /// </param>
         static void Main(string[] args)
         {
+            // for debug
+            FakeHldMainBoard.HldMainBoard.Path = "board.txt";
+
             IHldMainBoard hldMainBoard = new HldMainBoard();
             new App(args[0], int.Parse(args[1]), int.Parse(args[2]),
-                args[3], args[4], hldMainBoard).Run().GetAwaiter().GetResult();
+                args[3], args[4], hldMainBoard).RunAsync().Wait();
             Console.ReadLine();
         }
     }
