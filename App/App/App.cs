@@ -50,7 +50,7 @@ namespace App
             this.portName = config.PortName;
             this.serverUrl = config.ServerUrl;
             this.hldMainBoard = hldMainBoard;
-            this.NSafe = config.NoSafe;
+            this.NSafe = config.NLocks;
             this.IsSensor = config.IsSensor;
             this.hldMainBoard.SetMaxSide(IsSensor ? 2 : 1);
 

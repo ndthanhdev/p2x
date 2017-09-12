@@ -1,6 +1,6 @@
 ﻿{
   "PortName": "COM1",
-  "NoSafe": 8,
+  "NLocks": 8,
   "IsSensor": true,
   "ServerUrl": "http://localhost:3000",
   "Secret": "super secret",

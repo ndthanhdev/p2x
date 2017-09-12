@@ -11,7 +11,7 @@ namespace App
     {
         public string PortName { get; set; }
 
-        public int NoSafe { get; set; }
+        public int NLocks { get; set; }
 
         public bool IsSensor { get; set; }
 
