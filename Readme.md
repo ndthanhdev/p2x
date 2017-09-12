@@ -37,7 +37,7 @@ This part of project is used for collect data, send data to `Web Server` and exe
 - You can also use multiple `Mainboard` with a `PC`.
 
 #### Config file's fields
-| Parameter | Desscription | Type | Example
+| Parameter | Description | Type | Example
 | --- | --- | --- | --- |
 | PortName | Name of the port HldMainBoard is connected | string | `COM1`, `COM2` |
 | NLocks | Number of locks connected on right side of Mainboard | number (from 0 to 152) | `8`, `9`, `10` | 
