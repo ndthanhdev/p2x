@@ -15,7 +15,7 @@ This part of project is used for collect data, send data to `Web Server` and exe
 
 #### Getting started
 - Open `Console App`'s folder
-- Open `config.json` file. It's look like below.
+- Open `config.json` file. It looks like below.
 ```
 {
   "PortName": "COM1",
