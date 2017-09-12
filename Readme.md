@@ -27,10 +27,10 @@ This part of project is used for collect data, send data to `Web Server` and exe
 }
 ```
 - Edit config base on local value
-> **Note!** If you setup for production evironment, set `ShowWindow` value in `config.json` to `false` to hidden `Console App`
+> **Note!** If you setup for production environment, set `ShowWindow` value in `config.json` to `false` to hidden `Console App`
 - Run `App.exe`
 
-#### Setup for production evironment
+#### Setup for production environment
 - Set `ShowWindow` to false
 - Create a shortcut to `App.exe`
 - Place shortcut in startup folder of `Window` and app will auto startup with window
@@ -39,9 +39,9 @@ This part of project is used for collect data, send data to `Web Server` and exe
 #### Config file's fields
 | Parameter | Desscription | Type | Example
 | --- | --- | --- | --- |
-| PortName | Name of the the port HldMainBoard is connectd | string | `COM1` ,`COM2` |
-| NLocks | Number of locks connected on right side of Mainboard | number ( from 0 to 152) | `8`, `9`, `10` | 
+| PortName | Name of the port HldMainBoard is connected | string | `COM1`, `COM2` |
+| NLocks | Number of locks connected on right side of Mainboard | number (from 0 to 152) | `8`, `9`, `10` | 
 | IsSensor | Determine if the sensor is attached | boolean | false
 | ServerUrl | Server's address used for send and receive data | string | `http://localhost:3000`
 | Secret | Used for authentication | string | `super secret`
-| ShowWindow | Enable console window | boolen | `false`
+| ShowWindow | Enable console window | boolean | `false`
