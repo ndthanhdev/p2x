@@ -8,22 +8,19 @@ namespace App
 {
     class SafeStateBuilder
     {
-        public SafeState[] BuildMany(int[] locks, int[] sensors, int side, int nRelay)
+        public SafeState[] BuildMany(int nRelay, int[] locks, int[] sensors = null)
         {
             SafeState[] safes = new SafeState[nRelay];
             for (int i = 0; i < nRelay; i++)
             {
                 safes[i] = new SafeState()
                 {
-                    Safe = new Safe()
-                    {
-                        Side = side,
-                        Id = i
-                    },
+                    Id = i,
                     LockStatus = locks[i],
-                    SensorStatus = sensors[i]
+                    SensorStatus = sensors == null ? 1 : sensors[i]
                 };
-            }
+            };
+
             return safes;
         }
     }

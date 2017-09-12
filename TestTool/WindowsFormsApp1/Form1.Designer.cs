@@ -37,38 +37,25 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtGetVersion = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.chbRL1 = new System.Windows.Forms.CheckBox();
-            this.chbRL2 = new System.Windows.Forms.CheckBox();
-            this.chbRL3 = new System.Windows.Forms.CheckBox();
-            this.chbRL4 = new System.Windows.Forms.CheckBox();
-            this.chbRS4 = new System.Windows.Forms.CheckBox();
-            this.chbRS3 = new System.Windows.Forms.CheckBox();
-            this.chbRS2 = new System.Windows.Forms.CheckBox();
-            this.chbRS1 = new System.Windows.Forms.CheckBox();
-            this.chbLL4 = new System.Windows.Forms.CheckBox();
-            this.chbLL3 = new System.Windows.Forms.CheckBox();
-            this.chbLL2 = new System.Windows.Forms.CheckBox();
-            this.chbLL1 = new System.Windows.Forms.CheckBox();
-            this.chbLS4 = new System.Windows.Forms.CheckBox();
-            this.chbLS3 = new System.Windows.Forms.CheckBox();
-            this.chbLS2 = new System.Windows.Forms.CheckBox();
-            this.chbLS1 = new System.Windows.Forms.CheckBox();
+            this.chbL1 = new System.Windows.Forms.CheckBox();
+            this.chbL2 = new System.Windows.Forms.CheckBox();
+            this.chbL3 = new System.Windows.Forms.CheckBox();
+            this.chbL4 = new System.Windows.Forms.CheckBox();
+            this.chbS4 = new System.Windows.Forms.CheckBox();
+            this.chbS3 = new System.Windows.Forms.CheckBox();
+            this.chbS2 = new System.Windows.Forms.CheckBox();
+            this.chbS1 = new System.Windows.Forms.CheckBox();
             this.chbOpenSerialPort = new System.Windows.Forms.CheckBox();
             this.chbCloseSerialPort = new System.Windows.Forms.CheckBox();
             this.chbStart = new System.Windows.Forms.CheckBox();
-            this.npdRight = new System.Windows.Forms.NumericUpDown();
-            this.npdLeft = new System.Windows.Forms.NumericUpDown();
+            this.npdNSafe = new System.Windows.Forms.NumericUpDown();
             this.txbPath = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.npdSetMaxSize = new System.Windows.Forms.NumericUpDown();
             this.npdSetPowerStatus = new System.Windows.Forms.NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.npdRight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.npdLeft)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.npdNSafe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.npdSetMaxSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.npdSetPowerStatus)).BeginInit();
             this.SuspendLayout();
@@ -148,18 +135,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(15, 105);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(38, 13);
+            this.label7.Size = new System.Drawing.Size(35, 13);
             this.label7.TabIndex = 13;
-            this.label7.Text = "nRight";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(15, 222);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(31, 13);
-            this.label8.TabIndex = 15;
-            this.label8.Text = "nLeft";
+            this.label7.Text = "nSafe";
             // 
             // label9
             // 
@@ -179,183 +157,85 @@
             this.label10.TabIndex = 17;
             this.label10.Text = "sensor";
             // 
-            // label11
+            // chbL1
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(15, 311);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(38, 13);
-            this.label11.TabIndex = 19;
-            this.label11.Text = "sensor";
+            this.chbL1.AutoSize = true;
+            this.chbL1.Location = new System.Drawing.Point(81, 159);
+            this.chbL1.Name = "chbL1";
+            this.chbL1.Size = new System.Drawing.Size(80, 17);
+            this.chbL1.TabIndex = 20;
+            this.chbL1.Text = "checkBox1";
+            this.chbL1.UseVisualStyleBackColor = true;
             // 
-            // label12
+            // chbL2
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(15, 280);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(27, 13);
-            this.label12.TabIndex = 18;
-            this.label12.Text = "lock";
+            this.chbL2.AutoSize = true;
+            this.chbL2.Location = new System.Drawing.Point(167, 159);
+            this.chbL2.Name = "chbL2";
+            this.chbL2.Size = new System.Drawing.Size(80, 17);
+            this.chbL2.TabIndex = 21;
+            this.chbL2.Text = "checkBox2";
+            this.chbL2.UseVisualStyleBackColor = true;
             // 
-            // chbRL1
+            // chbL3
             // 
-            this.chbRL1.AutoSize = true;
-            this.chbRL1.Location = new System.Drawing.Point(81, 159);
-            this.chbRL1.Name = "chbRL1";
-            this.chbRL1.Size = new System.Drawing.Size(80, 17);
-            this.chbRL1.TabIndex = 20;
-            this.chbRL1.Text = "checkBox1";
-            this.chbRL1.UseVisualStyleBackColor = true;
+            this.chbL3.AutoSize = true;
+            this.chbL3.Location = new System.Drawing.Point(253, 159);
+            this.chbL3.Name = "chbL3";
+            this.chbL3.Size = new System.Drawing.Size(80, 17);
+            this.chbL3.TabIndex = 22;
+            this.chbL3.Text = "checkBox3";
+            this.chbL3.UseVisualStyleBackColor = true;
             // 
-            // chbRL2
+            // chbL4
             // 
-            this.chbRL2.AutoSize = true;
-            this.chbRL2.Location = new System.Drawing.Point(167, 159);
-            this.chbRL2.Name = "chbRL2";
-            this.chbRL2.Size = new System.Drawing.Size(80, 17);
-            this.chbRL2.TabIndex = 21;
-            this.chbRL2.Text = "checkBox2";
-            this.chbRL2.UseVisualStyleBackColor = true;
+            this.chbL4.AutoSize = true;
+            this.chbL4.Location = new System.Drawing.Point(339, 159);
+            this.chbL4.Name = "chbL4";
+            this.chbL4.Size = new System.Drawing.Size(80, 17);
+            this.chbL4.TabIndex = 23;
+            this.chbL4.Text = "checkBox4";
+            this.chbL4.UseVisualStyleBackColor = true;
             // 
-            // chbRL3
+            // chbS4
             // 
-            this.chbRL3.AutoSize = true;
-            this.chbRL3.Location = new System.Drawing.Point(253, 159);
-            this.chbRL3.Name = "chbRL3";
-            this.chbRL3.Size = new System.Drawing.Size(80, 17);
-            this.chbRL3.TabIndex = 22;
-            this.chbRL3.Text = "checkBox3";
-            this.chbRL3.UseVisualStyleBackColor = true;
+            this.chbS4.AutoSize = true;
+            this.chbS4.Location = new System.Drawing.Point(339, 194);
+            this.chbS4.Name = "chbS4";
+            this.chbS4.Size = new System.Drawing.Size(80, 17);
+            this.chbS4.TabIndex = 27;
+            this.chbS4.Text = "checkBox5";
+            this.chbS4.UseVisualStyleBackColor = true;
             // 
-            // chbRL4
+            // chbS3
             // 
-            this.chbRL4.AutoSize = true;
-            this.chbRL4.Location = new System.Drawing.Point(339, 159);
-            this.chbRL4.Name = "chbRL4";
-            this.chbRL4.Size = new System.Drawing.Size(80, 17);
-            this.chbRL4.TabIndex = 23;
-            this.chbRL4.Text = "checkBox4";
-            this.chbRL4.UseVisualStyleBackColor = true;
+            this.chbS3.AutoSize = true;
+            this.chbS3.Location = new System.Drawing.Point(253, 194);
+            this.chbS3.Name = "chbS3";
+            this.chbS3.Size = new System.Drawing.Size(80, 17);
+            this.chbS3.TabIndex = 26;
+            this.chbS3.Text = "checkBox6";
+            this.chbS3.UseVisualStyleBackColor = true;
             // 
-            // chbRS4
+            // chbS2
             // 
-            this.chbRS4.AutoSize = true;
-            this.chbRS4.Location = new System.Drawing.Point(339, 194);
-            this.chbRS4.Name = "chbRS4";
-            this.chbRS4.Size = new System.Drawing.Size(80, 17);
-            this.chbRS4.TabIndex = 27;
-            this.chbRS4.Text = "checkBox5";
-            this.chbRS4.UseVisualStyleBackColor = true;
+            this.chbS2.AutoSize = true;
+            this.chbS2.Location = new System.Drawing.Point(167, 194);
+            this.chbS2.Name = "chbS2";
+            this.chbS2.Size = new System.Drawing.Size(80, 17);
+            this.chbS2.TabIndex = 25;
+            this.chbS2.Text = "checkBox7";
+            this.chbS2.UseVisualStyleBackColor = true;
             // 
-            // chbRS3
+            // chbS1
             // 
-            this.chbRS3.AutoSize = true;
-            this.chbRS3.Location = new System.Drawing.Point(253, 194);
-            this.chbRS3.Name = "chbRS3";
-            this.chbRS3.Size = new System.Drawing.Size(80, 17);
-            this.chbRS3.TabIndex = 26;
-            this.chbRS3.Text = "checkBox6";
-            this.chbRS3.UseVisualStyleBackColor = true;
-            // 
-            // chbRS2
-            // 
-            this.chbRS2.AutoSize = true;
-            this.chbRS2.Location = new System.Drawing.Point(167, 194);
-            this.chbRS2.Name = "chbRS2";
-            this.chbRS2.Size = new System.Drawing.Size(80, 17);
-            this.chbRS2.TabIndex = 25;
-            this.chbRS2.Text = "checkBox7";
-            this.chbRS2.UseVisualStyleBackColor = true;
-            // 
-            // chbRS1
-            // 
-            this.chbRS1.AutoSize = true;
-            this.chbRS1.Location = new System.Drawing.Point(81, 194);
-            this.chbRS1.Name = "chbRS1";
-            this.chbRS1.Size = new System.Drawing.Size(80, 17);
-            this.chbRS1.TabIndex = 24;
-            this.chbRS1.Text = "checkBox8";
-            this.chbRS1.UseVisualStyleBackColor = true;
-            // 
-            // chbLL4
-            // 
-            this.chbLL4.AutoSize = true;
-            this.chbLL4.Location = new System.Drawing.Point(339, 276);
-            this.chbLL4.Name = "chbLL4";
-            this.chbLL4.Size = new System.Drawing.Size(80, 17);
-            this.chbLL4.TabIndex = 31;
-            this.chbLL4.Text = "checkBox9";
-            this.chbLL4.UseVisualStyleBackColor = true;
-            // 
-            // chbLL3
-            // 
-            this.chbLL3.AutoSize = true;
-            this.chbLL3.Location = new System.Drawing.Point(253, 276);
-            this.chbLL3.Name = "chbLL3";
-            this.chbLL3.Size = new System.Drawing.Size(86, 17);
-            this.chbLL3.TabIndex = 30;
-            this.chbLL3.Text = "checkBox10";
-            this.chbLL3.UseVisualStyleBackColor = true;
-            // 
-            // chbLL2
-            // 
-            this.chbLL2.AutoSize = true;
-            this.chbLL2.Location = new System.Drawing.Point(167, 276);
-            this.chbLL2.Name = "chbLL2";
-            this.chbLL2.Size = new System.Drawing.Size(86, 17);
-            this.chbLL2.TabIndex = 29;
-            this.chbLL2.Text = "checkBox11";
-            this.chbLL2.UseVisualStyleBackColor = true;
-            // 
-            // chbLL1
-            // 
-            this.chbLL1.AutoSize = true;
-            this.chbLL1.Location = new System.Drawing.Point(81, 276);
-            this.chbLL1.Name = "chbLL1";
-            this.chbLL1.Size = new System.Drawing.Size(86, 17);
-            this.chbLL1.TabIndex = 28;
-            this.chbLL1.Text = "checkBox12";
-            this.chbLL1.UseVisualStyleBackColor = true;
-            // 
-            // chbLS4
-            // 
-            this.chbLS4.AutoSize = true;
-            this.chbLS4.Location = new System.Drawing.Point(339, 311);
-            this.chbLS4.Name = "chbLS4";
-            this.chbLS4.Size = new System.Drawing.Size(86, 17);
-            this.chbLS4.TabIndex = 35;
-            this.chbLS4.Text = "checkBox13";
-            this.chbLS4.UseVisualStyleBackColor = true;
-            // 
-            // chbLS3
-            // 
-            this.chbLS3.AutoSize = true;
-            this.chbLS3.Location = new System.Drawing.Point(253, 311);
-            this.chbLS3.Name = "chbLS3";
-            this.chbLS3.Size = new System.Drawing.Size(86, 17);
-            this.chbLS3.TabIndex = 34;
-            this.chbLS3.Text = "checkBox14";
-            this.chbLS3.UseVisualStyleBackColor = true;
-            // 
-            // chbLS2
-            // 
-            this.chbLS2.AutoSize = true;
-            this.chbLS2.Location = new System.Drawing.Point(167, 311);
-            this.chbLS2.Name = "chbLS2";
-            this.chbLS2.Size = new System.Drawing.Size(86, 17);
-            this.chbLS2.TabIndex = 33;
-            this.chbLS2.Text = "checkBox15";
-            this.chbLS2.UseVisualStyleBackColor = true;
-            // 
-            // chbLS1
-            // 
-            this.chbLS1.AutoSize = true;
-            this.chbLS1.Location = new System.Drawing.Point(81, 311);
-            this.chbLS1.Name = "chbLS1";
-            this.chbLS1.Size = new System.Drawing.Size(86, 17);
-            this.chbLS1.TabIndex = 32;
-            this.chbLS1.Text = "checkBox16";
-            this.chbLS1.UseVisualStyleBackColor = true;
+            this.chbS1.AutoSize = true;
+            this.chbS1.Location = new System.Drawing.Point(81, 194);
+            this.chbS1.Name = "chbS1";
+            this.chbS1.Size = new System.Drawing.Size(80, 17);
+            this.chbS1.TabIndex = 24;
+            this.chbS1.Text = "checkBox8";
+            this.chbS1.UseVisualStyleBackColor = true;
             // 
             // chbOpenSerialPort
             // 
@@ -391,29 +271,17 @@
             this.chbStart.Text = "Start";
             this.chbStart.UseVisualStyleBackColor = true;
             // 
-            // npdRight
+            // npdNSafe
             // 
-            this.npdRight.Location = new System.Drawing.Point(15, 131);
-            this.npdRight.Maximum = new decimal(new int[] {
+            this.npdNSafe.Location = new System.Drawing.Point(15, 131);
+            this.npdNSafe.Maximum = new decimal(new int[] {
             4,
             0,
             0,
             0});
-            this.npdRight.Name = "npdRight";
-            this.npdRight.Size = new System.Drawing.Size(42, 20);
-            this.npdRight.TabIndex = 39;
-            // 
-            // npdLeft
-            // 
-            this.npdLeft.Location = new System.Drawing.Point(15, 238);
-            this.npdLeft.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.npdLeft.Name = "npdLeft";
-            this.npdLeft.Size = new System.Drawing.Size(42, 20);
-            this.npdLeft.TabIndex = 40;
+            this.npdNSafe.Name = "npdNSafe";
+            this.npdNSafe.Size = new System.Drawing.Size(42, 20);
+            this.npdNSafe.TabIndex = 39;
             // 
             // txbPath
             // 
@@ -485,32 +353,20 @@
             this.Controls.Add(this.npdSetMaxSize);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.txbPath);
-            this.Controls.Add(this.npdLeft);
-            this.Controls.Add(this.npdRight);
+            this.Controls.Add(this.npdNSafe);
             this.Controls.Add(this.chbStart);
             this.Controls.Add(this.chbCloseSerialPort);
             this.Controls.Add(this.chbOpenSerialPort);
-            this.Controls.Add(this.chbLS4);
-            this.Controls.Add(this.chbLS3);
-            this.Controls.Add(this.chbLS2);
-            this.Controls.Add(this.chbLS1);
-            this.Controls.Add(this.chbLL4);
-            this.Controls.Add(this.chbLL3);
-            this.Controls.Add(this.chbLL2);
-            this.Controls.Add(this.chbLL1);
-            this.Controls.Add(this.chbRS4);
-            this.Controls.Add(this.chbRS3);
-            this.Controls.Add(this.chbRS2);
-            this.Controls.Add(this.chbRS1);
-            this.Controls.Add(this.chbRL4);
-            this.Controls.Add(this.chbRL3);
-            this.Controls.Add(this.chbRL2);
-            this.Controls.Add(this.chbRL1);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label12);
+            this.Controls.Add(this.chbS4);
+            this.Controls.Add(this.chbS3);
+            this.Controls.Add(this.chbS2);
+            this.Controls.Add(this.chbS1);
+            this.Controls.Add(this.chbL4);
+            this.Controls.Add(this.chbL3);
+            this.Controls.Add(this.chbL2);
+            this.Controls.Add(this.chbL1);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtGetVersion);
@@ -522,8 +378,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.npdRight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.npdLeft)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.npdNSafe)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.npdSetMaxSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.npdSetPowerStatus)).EndInit();
             this.ResumeLayout(false);
@@ -541,32 +396,20 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtGetVersion;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.CheckBox chbRL1;
-        private System.Windows.Forms.CheckBox chbRL2;
-        private System.Windows.Forms.CheckBox chbRL3;
-        private System.Windows.Forms.CheckBox chbRL4;
-        private System.Windows.Forms.CheckBox chbRS4;
-        private System.Windows.Forms.CheckBox chbRS3;
-        private System.Windows.Forms.CheckBox chbRS2;
-        private System.Windows.Forms.CheckBox chbRS1;
-        private System.Windows.Forms.CheckBox chbLL4;
-        private System.Windows.Forms.CheckBox chbLL3;
-        private System.Windows.Forms.CheckBox chbLL2;
-        private System.Windows.Forms.CheckBox chbLL1;
-        private System.Windows.Forms.CheckBox chbLS4;
-        private System.Windows.Forms.CheckBox chbLS3;
-        private System.Windows.Forms.CheckBox chbLS2;
-        private System.Windows.Forms.CheckBox chbLS1;
+        private System.Windows.Forms.CheckBox chbL1;
+        private System.Windows.Forms.CheckBox chbL2;
+        private System.Windows.Forms.CheckBox chbL3;
+        private System.Windows.Forms.CheckBox chbL4;
+        private System.Windows.Forms.CheckBox chbS4;
+        private System.Windows.Forms.CheckBox chbS3;
+        private System.Windows.Forms.CheckBox chbS2;
+        private System.Windows.Forms.CheckBox chbS1;
         private System.Windows.Forms.CheckBox chbOpenSerialPort;
         private System.Windows.Forms.CheckBox chbCloseSerialPort;
         private System.Windows.Forms.CheckBox chbStart;
-        private System.Windows.Forms.NumericUpDown npdRight;
-        private System.Windows.Forms.NumericUpDown npdLeft;
+        private System.Windows.Forms.NumericUpDown npdNSafe;
         private System.Windows.Forms.TextBox txbPath;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown npdSetMaxSize;

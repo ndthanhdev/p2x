@@ -9,7 +9,7 @@ namespace App
 {
     public class SafeState : IEquatable<SafeState>
     {
-        public Safe Safe { get; set; }
+        public int Id { get; set; }
         public int LockStatus { get; set; }
         public int SensorStatus { get; set; }
 
@@ -21,15 +21,15 @@ namespace App
         public bool Equals(SafeState other)
         {
             return other != null &&
-                   EqualityComparer<Safe>.Default.Equals(Safe, other.Safe) &&
+                   Id == other.Id &&
                    LockStatus == other.LockStatus &&
                    SensorStatus == other.SensorStatus;
         }
 
         public override int GetHashCode()
         {
-            var hashCode = 696869137;
-            hashCode = hashCode * -1521134295 + EqualityComparer<Safe>.Default.GetHashCode(Safe);
+            var hashCode = 2109148185;
+            hashCode = hashCode * -1521134295 + Id.GetHashCode();
             hashCode = hashCode * -1521134295 + LockStatus.GetHashCode();
             hashCode = hashCode * -1521134295 + SensorStatus.GetHashCode();
             return hashCode;

@@ -15,10 +15,9 @@ namespace FakeHldMainBoard
         public bool CloseSerialPort { get; set; }
         public int GetPowerStatus { get; set; }
         public string ICNo { get; set; }
-        public int[] nLockLeft { get; set; }
-        public int[] nSensorLeft { get; set; }
-        public int[] nLockRight { get; set; }
-        public int[] nSensorRight { get; set; }
+        public int NRelay { get; set; }
+        public int[] Locks { get; set; }
+        public int[] Sensors { get; set; }
         public string GetVersion { get; set; }
         public int SetMaxSide { get; set; }
         public void Save(string path)

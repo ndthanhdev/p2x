@@ -32,7 +32,7 @@ namespace FakeHldMainBoard
         public int[] GetLockAllStatus(int nSide, ref string strMsg)
         {
             var status = HldMainBoardState.Load(Path);
-            return nSide == 0 ? status.nLockRight : status.nLockLeft;
+            return status.Locks;
         }
 
         public int GetLockStatus(int nSide, int nLockID, ref string strMsg)
@@ -48,7 +48,7 @@ namespace FakeHldMainBoard
         public int[] GetSensorAllStatus(int nSide, ref string strMsg)
         {
             var status = HldMainBoardState.Load(Path);
-            return nSide == 0 ? status.nSensorRight : status.nSensorLeft;
+            return status.Sensors;
         }
 
         public int GetSensorStatus(int nSide, int nLockID, ref string strMsg)
@@ -69,14 +69,7 @@ namespace FakeHldMainBoard
         public int OpenLock(int nSide, int nLockID, ref string strMsg)
         {
             HldMainBoardState state = HldMainBoardState.Load(Path);
-            if (nSide == 0)
-            {
-                state.nLockRight[nLockID] = 0;
-            }
-            else if (nSide == 1)
-            {
-                state.nLockLeft[nLockID] = 0;
-            }
+            state.Locks[nLockID] = 0;
             state.Save(Path);
             return 0;
         }

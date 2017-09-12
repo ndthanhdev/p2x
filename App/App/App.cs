@@ -12,6 +12,7 @@ namespace App
     class App
     {
         const int ERROR_DELAY = 3000;
+        const int LOOP_DELAY = 500;
         const int BAUD_RATE = 115200;
         const int POWER_STATUS_NORMAL = 0;
         const int POWER_STATUS_DOWN = 1;
@@ -21,49 +22,37 @@ namespace App
         string portName, serverUrl;
         IHldMainBoard hldMainBoard;
 
-        Queue<Safe> _commandsQueue;
-        Queue<Safe> CommandsQueue => _commandsQueue = _commandsQueue ?? new Queue<Safe>();
+        Queue<int> _commandsQueue;
+        Queue<int> CommandsQueue => _commandsQueue = _commandsQueue ?? new Queue<int>();
 
-        private int _nLeft;
+        private int _nSafe;
 
-        public int NLeft
+        public int NSafe
         {
-            get { return _nLeft; }
+            get { return _nSafe; }
             set
             {
                 if (value < 1 || value > 152)
                     throw new ArgumentException("Parameters is not valid");
                 else
-                    _nLeft = value;
+                    _nSafe = value;
             }
         }
 
-        private int _nRight;
-
-        public int NRight
-        {
-            get { return _nRight; }
-            set
-            {
-                if (value < 1 || value > 152)
-                    throw new ArgumentException("Parameters is not valid");
-                else
-                    _nRight = value;
-            }
-        }
+        public bool IsSensor { get; set; }
 
         private string iCNo = string.Empty;
         string version = string.Empty;
         private Socket socket;
 
-        public App(string portName, int nRight, int nLeft, string serverUrl, string secret, IHldMainBoard hldMainBoard)
+        public App(AppConfig config, IHldMainBoard hldMainBoard)
         {
-            this.portName = portName;
-            this.serverUrl = serverUrl;
+            this.portName = config.PortName;
+            this.serverUrl = config.ServerUrl;
             this.hldMainBoard = hldMainBoard;
-            this.NRight = nRight;
-            this.NLeft = nLeft;
-            this.hldMainBoard.SetMaxSide(NLeft > 0 ? 1 : 0 + NRight > 0 ? 1 : 0);
+            this.NSafe = config.NoSafe;
+            this.IsSensor = config.IsSensor;
+            this.hldMainBoard.SetMaxSide(IsSensor ? 2 : 1);
 
         }
 
@@ -85,6 +74,7 @@ namespace App
                     version = string.Empty;
                     socket?.Close();
                 }
+                await Task.Delay(ERROR_DELAY);
             }
         }
 
@@ -143,32 +133,31 @@ namespace App
                     }
                 }
 
-                await Task.Delay(1000);
+                await Task.Delay(LOOP_DELAY);
             }
-
-            await Task.Delay(ERROR_DELAY);
-
-
         }
 
         public void Subscribe(string eventName)
         {
             socket = IO.Socket(serverUrl);
-            socket.On(Socket.EVENT_CONNECT, () =>
+            socket.On(Socket.EVENT_CONNECT, async () =>
             {
+                await Task.Yield();
                 AppLog.Info("Connected to server");
             });
-            socket.On(Socket.EVENT_RECONNECTING, () =>
+            socket.On(Socket.EVENT_RECONNECTING, async () =>
             {
+                await Task.Yield();
                 AppLog.Info("Reconnecting to server...");
             });
-            socket.On(eventName, rawData =>
+            socket.On(eventName, async (rawData) =>
              {
-                 Safe safe = JsonConvert.DeserializeObject<Safe>(rawData.ToString());
-                 AppLog.Info("Received {0}", safe);
+                 await Task.Yield();
+                 int safeId = int.Parse(rawData.ToString());
+                 AppLog.Info("Received {0}", safeId);
                  lock (CommandsQueue)
                  {
-                     CommandsQueue.Enqueue(safe);
+                     CommandsQueue.Enqueue(safeId);
                  }
              });
         }
@@ -246,10 +235,10 @@ namespace App
                 }
                 if (boardStatus.PowerStatus != 0)
                 {
-                   /* No action required */
+                    /* No action required */
                 }
 
-                var list = GetSafeStatusOfAllSide(ref errMsg);
+                var list = GetAllSafeState(ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
                 {
                     return null;
@@ -284,44 +273,27 @@ namespace App
             }
         }
 
-        public SafeState[] GetSafeStatusOfOneSide(int side, int n, ref string errMsg)
+        public List<SafeState> GetAllSafeState(ref string errMsg)
         {
             SafeStateBuilder builder = new SafeStateBuilder();
-
-            var locks = hldMainBoard.GetLockAllStatus(side, ref errMsg);
-            if (!string.IsNullOrEmpty(errMsg))
-            {
-                return null;
-            }
-            var sensors = hldMainBoard.GetSensorAllStatus(side, ref errMsg);
-            if (!string.IsNullOrEmpty(errMsg))
-            {
-                return null;
-            }
-
-            return builder.BuildMany(locks, sensors, side, n);
-        }
-
-        public List<SafeState> GetSafeStatusOfAllSide(ref string errMsg)
-        {
             List<SafeState> list = new List<SafeState>();
-            if (NRight > 0)
+            var locks = hldMainBoard.GetLockAllStatus(0, ref errMsg);
+            if (!string.IsNullOrEmpty(errMsg))
             {
-                var safeStatus = GetSafeStatusOfOneSide(0, NRight, ref errMsg);
-                if (!string.IsNullOrEmpty(errMsg))
-                {
-                    return list;
-                }
-                list.AddRange(safeStatus);
+                return null;
             }
-            if (NLeft > 0)
+            if (IsSensor)
             {
-                var safeStatus = GetSafeStatusOfOneSide(1, NLeft, ref errMsg);
+                var sensors = hldMainBoard.GetSensorAllStatus(1, ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
                 {
-                    return list;
+                    return null;
                 }
-                list.AddRange(safeStatus);
+                list.AddRange(builder.BuildMany(NSafe, locks, sensors));
+            }
+            else
+            {
+                list.AddRange(builder.BuildMany(NSafe, locks));
             }
             return list;
         }
@@ -331,7 +303,7 @@ namespace App
             return CommandsQueue.Count > 0;
         }
 
-        public bool ExecuteCommand(Safe safe, ref string msg)
+        public bool ExecuteCommand(int safeId, ref string msg)
         {
             try
             {
@@ -339,7 +311,7 @@ namespace App
                 {
                     return false;
                 }
-                if (hldMainBoard.OpenLock(safe.Side, safe.Id, ref msg) < 0)
+                if (hldMainBoard.OpenLock(0, safeId, ref msg) < 0)
                 {
                     return false;
                 }

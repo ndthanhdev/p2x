@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace App
 {
@@ -11,35 +13,28 @@ namespace App
 
     class Program
     {
+        const string CONFIG_PATH = "config.json";
+
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         [DllImport("Kernel32")]
         private static extern IntPtr GetConsoleWindow();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="args">
-        /// 0: portname
-        /// 1: number of relay on right side
-        /// 2: number of relay on left side
-        /// 3: server url
-        /// 4: secret
-        /// 5: 0 = Hidden window ( for production), 5 = Show window (more info https://msdn.microsoft.com/en-us/library/ms633548(VS.85).aspx)
-        /// </param>
         static void Main(string[] args)
         {
+            var json = File.ReadAllText(CONFIG_PATH);
+            AppConfig config = JsonConvert.DeserializeObject<AppConfig>(json);
+
             IntPtr hwnd;
             hwnd = GetConsoleWindow();
-            ShowWindow(hwnd, int.Parse(args[5]));
+            ShowWindow(hwnd, config.ShowWindow ? 5 : 0);
 
             // for debug
             FakeHldMainBoard.HldMainBoard.Path = "board.txt";
 
             IHldMainBoard hldMainBoard = new HldMainBoard();
-            new App(args[0], int.Parse(args[1]), int.Parse(args[2]),
-                args[3], args[4], hldMainBoard).RunAsync().Wait();
+            new App(config, hldMainBoard).RunAsync().Wait();
         }
     }
 }

@@ -87,11 +87,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="AppConfig.cs" />
     <Compile Include="BoardState.cs" />
     <Compile Include="HldMainBoard.cs" />
     <Compile Include="IHldMainBoard.cs" />
     <Compile Include="AppLog.cs" />
-    <Compile Include="Safe.cs" />
     <Compile Include="SafeStateBuilder.cs" />
     <Compile Include="SafeState.cs" />
     <Compile Include="Program.cs" />
@@ -99,6 +99,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="config.example.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
