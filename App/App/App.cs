@@ -91,7 +91,7 @@ namespace App
             }
             PrintBoardInfo(iCNo, version);
 
-            Subscribe(iCNo);
+            //Subscribe(iCNo);
 
             while (true)
             {

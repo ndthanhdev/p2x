@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    class HldMainBoard : FakeHldMainBoard.HldMainBoard, IHldMainBoard
+    class HldMainBoard : MainBoardLib.HldMainBoard, IHldMainBoard
     {
     }
 }
