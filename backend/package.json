@@ -1,0 +1,61 @@
+{
+  "name": "typescript-node",
+  "version": "1.0.0",
+  "description": "A minimal Node.js project using TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run tslint && npm run serve",
+    "serve": "nodemon --watch \"src/**/*.ts\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node\" --inspect src/server.ts",
+    "build": "npm run tslint && npm run build-ts",
+    "build-ts": "tsc",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "jest --forceExit"
+  },
+  "author": "no one",
+  "license": "MIT",
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json"
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": [
+      "**/test/**/*.test.(ts|js)"
+    ],
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.0",
+    "compression": "^1.7.0",
+    "dotenv": "^4.0.0",
+    "errorhandler": "^1.5.0",
+    "express": "^4.15.4",
+    "mongoose": "^4.11.11",
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.5",
+    "@types/compression": "0.0.34",
+    "@types/dotenv": "^4.0.1",
+    "@types/errorhandler": "0.0.31",
+    "@types/express": "^4.0.37",
+    "@types/jest": "^20.0.8",
+    "@types/mongoose": "^4.7.21",
+    "@types/morgan": "^1.7.32",
+    "@types/supertest": "^2.0.3",
+    "jest": "^21.0.2",
+    "nodemon": "^1.12.0",
+    "supertest": "^3.0.0",
+    "ts-jest": "^21.0.0",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2"
+  }
+}
