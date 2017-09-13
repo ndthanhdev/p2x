@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HldMainBoard.cs" />
-    <Compile Include="HldMainBoardState.cs" />
+    <Compile Include="HldMainBoardStatus.cs" />
     <Compile Include="IHldMainBoard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

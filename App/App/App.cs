@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Quobject.SocketIoClientDotNet.Client;
 using Newtonsoft.Json;
+using RestSharp;
 
 namespace App
 {
@@ -18,6 +19,7 @@ namespace App
         const int POWER_STATUS_DOWN = 1;
         const int POWER_STATUS_FAIL = -1;
         const string LOG_ERROR_PREFIX = "[Error]";
+        const int TIME_OUT = 5000;
 
         string portName, serverUrl;
         IHldMainBoard hldMainBoard;
@@ -44,6 +46,7 @@ namespace App
         private string iCNo = string.Empty;
         string version = string.Empty;
         private Socket socket;
+        private RestClient _client;
 
         public App(AppConfig config, IHldMainBoard hldMainBoard)
         {
@@ -53,6 +56,10 @@ namespace App
             this.NSafe = config.NLocks;
             this.IsSensor = config.IsSensor;
             this.hldMainBoard.SetMaxSide(IsSensor ? 2 : 1);
+            _client = new RestClient(serverUrl)
+            {
+                Timeout = TIME_OUT
+            };
 
         }
 
@@ -81,7 +88,7 @@ namespace App
         public async Task Loop()
         {
             string errMsg = string.Empty;
-            BoardState oldStatus = null, latestStatus;
+            BoardStatus oldStatus = null, latestStatus;
 
             if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
             {
@@ -95,22 +102,23 @@ namespace App
 
             while (true)
             {
-                latestStatus = ReadBoardState(ref errMsg);
+                latestStatus = ReadBoardStatus(ref errMsg);
                 if (latestStatus is null || !string.IsNullOrEmpty(errMsg))
                 {
-                    AppLog.Error("{0}. {1}", "Can't read board's state", errMsg);
+                    AppLog.Error("{0}. {1}", "Can't read board's status", errMsg);
                     break;
                 }
 
                 if (latestStatus != oldStatus)
                 {
-                    Console.WriteLine("Previous state:");
+                    Console.WriteLine("Previous status:");
                     Console.WriteLine(oldStatus);
-                    Console.WriteLine("New state:");
+                    Console.WriteLine("New status:");
                     Console.WriteLine(latestStatus);
-                    if (!SendData(latestStatus, ref errMsg))
+                    var dto = await SendStatus(latestStatus);
+                    if (dto.Code > 0)
                     {
-                        AppLog.Error("{0}. {1}", "Send data to server fail", errMsg);
+                        AppLog.Error("{0}. {1}", "Send data to server fail", dto.Data);
                         break;
                     }
                     oldStatus = latestStatus;
@@ -213,11 +221,11 @@ namespace App
             AppLog.Info("Board Version: {0}", version);
         }
 
-        public BoardState ReadBoardState(ref string errMsg)
+        public BoardStatus ReadBoardStatus(ref string errMsg)
         {
             try
             {
-                BoardState boardStatus = new BoardState();
+                BoardStatus boardStatus = new BoardStatus();
                 if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
                 {
                     return null;
@@ -228,23 +236,19 @@ namespace App
                 {
                     return null;
                 }
-                else if (boardStatus.PowerStatus == 1)
+                else if (boardStatus.PowerStatus != 0)
                 {
                     errMsg = "Power is down";
                     return null;
                 }
-                if (boardStatus.PowerStatus != 0)
-                {
-                    /* No action required */
-                }
 
-                var list = GetAllSafeState(ref errMsg);
+                var list = GetAllSafeStatus(ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
                 {
                     return null;
                 }
 
-                boardStatus.SafeStates = list;
+                boardStatus.SafeStatuss = list;
                 return boardStatus;
             }
             catch (Exception ex)
@@ -258,9 +262,12 @@ namespace App
             }
         }
 
-        public bool SendData(BoardState status, ref string errMsg)
+        public async Task<DTO<string>> SendStatus(BoardStatus status)
         {
-            return true;
+
+            var request = MakeRequest(status);
+            var response = (await _client.ExecuteTaskAsync<DTO<string>>(request));
+            return response.Data;
         }
 
         public void CloseSerialPort()
@@ -273,10 +280,10 @@ namespace App
             }
         }
 
-        public List<SafeState> GetAllSafeState(ref string errMsg)
+        public List<SafeStatus> GetAllSafeStatus(ref string errMsg)
         {
-            SafeStateBuilder builder = new SafeStateBuilder();
-            List<SafeState> list = new List<SafeState>();
+            SafeStatusBuilder builder = new SafeStatusBuilder();
+            List<SafeStatus> list = new List<SafeStatus>();
             var locks = hldMainBoard.GetLockAllStatus(0, ref errMsg);
             if (!string.IsNullOrEmpty(errMsg))
             {
@@ -326,6 +333,14 @@ namespace App
             {
                 hldMainBoard.CloseSerialPort(ref msg);
             }
+        }
+
+        private RestRequest MakeRequest(BoardStatus status)
+        {
+            RestRequest restRequest = new RestRequest("status", Method.POST);
+            restRequest.RequestFormat = DataFormat.Json;
+            restRequest.AddBody(new DTO.Status(status, iCNo));
+            return restRequest;
         }
     }
 }

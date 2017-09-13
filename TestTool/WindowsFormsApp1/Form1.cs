@@ -39,27 +39,27 @@ namespace WindowsFormsApp1
                     continue;
                 }
 
-                HldMainBoardState state = new HldMainBoardState();
-                state.OpenSerialPort = chbOpenSerialPort.Checked;
-                state.CloseSerialPort = chbCloseSerialPort.Checked;
+                HldMainBoardStatus status = new HldMainBoardStatus();
+                status.OpenSerialPort = chbOpenSerialPort.Checked;
+                status.CloseSerialPort = chbCloseSerialPort.Checked;
 
-                state.GetPowerStatus = Convert.ToInt32(npdSetPowerStatus.Value);
-                state.ICNo = txtICNo.Text;
-                state.GetVersion = txtGetVersion.Text;
+                status.GetPowerStatus = Convert.ToInt32(npdSetPowerStatus.Value);
+                status.ICNo = txtICNo.Text;
+                status.GetVersion = txtGetVersion.Text;
 
-                state.SetMaxSide = Convert.ToInt32(npdSetMaxSize.Value);
+                status.SetMaxSide = Convert.ToInt32(npdSetMaxSize.Value);
 
-                state.NRelay = Convert.ToInt32(npdNSafe.Value);
-                state.Locks = new int[state.NRelay];
-                state.Sensors = state.SetMaxSide > 1 ? new int[state.NRelay] : null;
-                for (int i = 0; i < state.NRelay; i++)
+                status.NRelay = Convert.ToInt32(npdNSafe.Value);
+                status.Locks = new int[status.NRelay];
+                status.Sensors = status.SetMaxSide > 1 ? new int[status.NRelay] : null;
+                for (int i = 0; i < status.NRelay; i++)
                 {
-                    state.Locks[i] = L[i].Checked ? 1 : 0;
-                    if (state.Sensors != null)
-                        state.Sensors[i] = S[i].Checked ? 1 : 0;
+                    status.Locks[i] = L[i].Checked ? 1 : 0;
+                    if (status.Sensors != null)
+                        status.Sensors[i] = S[i].Checked ? 1 : 0;
                 }
 
-                state.Save(txbPath.Text);
+                status.Save(txbPath.Text);
 
             }
         }

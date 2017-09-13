@@ -282,6 +282,11 @@
             this.npdNSafe.Name = "npdNSafe";
             this.npdNSafe.Size = new System.Drawing.Size(42, 20);
             this.npdNSafe.TabIndex = 39;
+            this.npdNSafe.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
             // 
             // txbPath
             // 
@@ -317,7 +322,7 @@
             this.npdSetMaxSize.Size = new System.Drawing.Size(42, 20);
             this.npdSetMaxSize.TabIndex = 43;
             this.npdSetMaxSize.Value = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
@@ -338,11 +343,6 @@
             this.npdSetPowerStatus.Name = "npdSetPowerStatus";
             this.npdSetPowerStatus.Size = new System.Drawing.Size(42, 20);
             this.npdSetPowerStatus.TabIndex = 44;
-            this.npdSetPowerStatus.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // Form1
             // 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FakeHldMainBoard
 {
-    public class HldMainBoardState
+    public class HldMainBoardStatus
     {
         public bool OpenSerialPort { get; set; }
         public bool CloseSerialPort { get; set; }
@@ -26,10 +26,10 @@ namespace FakeHldMainBoard
             File.WriteAllText(path, json);
         }
 
-        public static HldMainBoardState Load(string path)
+        public static HldMainBoardStatus Load(string path)
         {
             var json = File.ReadAllText(path);
-            return JsonConvert.DeserializeObject<HldMainBoardState>(json);
+            return JsonConvert.DeserializeObject<HldMainBoardStatus>(json);
         }
     }
 }

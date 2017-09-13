@@ -8,17 +8,19 @@ import * as logger from "morgan";
 import * as errorHandler from "errorhandler";
 import * as dotenv from "dotenv";
 import * as http from "http";
-import * as mongoose from "mongoose";
+import mongoose = require("mongoose");
+import * as Bluebird from "bluebird";
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.config({ path: ".env.example" });
+dotenv.config({ path: ".env" });
 
 /**
  * Controllers (route handlers).
  */
-import * as homeController from "./controllers/home";
+import * as testController from "./controllers/test";
+import * as statisController from "./controllers/status";
 
 /**
  * Create Express server.
@@ -28,6 +30,7 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
+mongoose.Promise = Bluebird;
 mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 mongoose.connection.on("error", () => {
     console.log("MongoDB connection error. Please make sure MongoDB is running.");
@@ -47,7 +50,8 @@ app.use("", express.static("frontend"));
 /**
  * Primary app routes.
  */
-app.get("/status", homeController.index);
+app.get("/test", testController.index);
+app.post("/status", statisController.postStatus);
 
 /**
  * Error Handler. Provides full stack - remove for production

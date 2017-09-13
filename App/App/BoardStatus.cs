@@ -7,38 +7,38 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    public class BoardState : IEquatable<BoardState>
+    public class BoardStatus : IEquatable<BoardStatus>
     {
         public int PowerStatus { get; set; }
 
-        public IList<SafeState> SafeStates { get; set; }
+        public IList<SafeStatus> SafeStatuss { get; set; }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as BoardState);
+            return Equals(obj as BoardStatus);
         }
 
-        public bool Equals(BoardState other)
+        public bool Equals(BoardStatus other)
         {
             return other != null &&
                    PowerStatus == other.PowerStatus &&
-                   Enumerable.SequenceEqual<SafeState>(SafeStates, other.SafeStates);
+                   Enumerable.SequenceEqual<SafeStatus>(SafeStatuss, other.SafeStatuss);
         }
 
         public override int GetHashCode()
         {
             var hashCode = -85989933;
             hashCode = hashCode * -1521134295 + PowerStatus.GetHashCode();
-            hashCode = hashCode * -1521134295 + EqualityComparer<IList<SafeState>>.Default.GetHashCode(SafeStates);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<SafeStatus>>.Default.GetHashCode(SafeStatuss);
             return hashCode;
         }
 
-        public static bool operator ==(BoardState status1, BoardState status2)
+        public static bool operator ==(BoardStatus status1, BoardStatus status2)
         {
-            return EqualityComparer<BoardState>.Default.Equals(status1, status2);
+            return EqualityComparer<BoardStatus>.Default.Equals(status1, status2);
         }
 
-        public static bool operator !=(BoardState status1, BoardState status2)
+        public static bool operator !=(BoardStatus status1, BoardStatus status2)
         {
             return !(status1 == status2);
         }

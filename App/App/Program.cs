@@ -31,7 +31,7 @@ namespace App
             ShowWindow(hwnd, config.ShowWindow ? 5 : 0);
 
             // for debug
-            // HldMainBoard.Path = "board.txt";
+            HldMainBoard.Path = "board.txt";
 
             IHldMainBoard hldMainBoard = new HldMainBoard();
             new App(config, hldMainBoard).RunAsync().Wait();

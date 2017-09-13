@@ -16,7 +16,7 @@ namespace FakeHldMainBoard
 
         public bool CloseSerialPort(ref string strMsg)
         {
-            return HldMainBoardState.Load(Path).CloseSerialPort;
+            return HldMainBoardStatus.Load(Path).CloseSerialPort;
         }
 
         public string GetCoderTextData()
@@ -26,12 +26,12 @@ namespace FakeHldMainBoard
 
         public string GetICCardData()
         {
-            return HldMainBoardState.Load(Path).ICNo;
+            return HldMainBoardStatus.Load(Path).ICNo;
         }
 
         public int[] GetLockAllStatus(int nSide, ref string strMsg)
         {
-            var status = HldMainBoardState.Load(Path);
+            var status = HldMainBoardStatus.Load(Path);
             return status.Locks;
         }
 
@@ -42,12 +42,12 @@ namespace FakeHldMainBoard
 
         public int GetPowerStatus(ref string strMsg)
         {
-            return HldMainBoardState.Load(Path).GetPowerStatus;
+            return HldMainBoardStatus.Load(Path).GetPowerStatus;
         }
 
         public int[] GetSensorAllStatus(int nSide, ref string strMsg)
         {
-            var status = HldMainBoardState.Load(Path);
+            var status = HldMainBoardStatus.Load(Path);
             return status.Sensors;
         }
 
@@ -58,7 +58,7 @@ namespace FakeHldMainBoard
 
         public string GetVersion(ref string strMsg)
         {
-            return HldMainBoardState.Load(Path).GetVersion;
+            return HldMainBoardStatus.Load(Path).GetVersion;
         }
 
         public void IsDebug(bool bValue)
@@ -68,7 +68,7 @@ namespace FakeHldMainBoard
 
         public int OpenLock(int nSide, int nLockID, ref string strMsg)
         {
-            HldMainBoardState state = HldMainBoardState.Load(Path);
+            HldMainBoardStatus state = HldMainBoardStatus.Load(Path);
             state.Locks[nLockID] = 0;
             state.Save(Path);
             return 0;
@@ -76,7 +76,7 @@ namespace FakeHldMainBoard
 
         public bool OpenSerialPort(string strPortName, int nBaudRate, ref string strMsg)
         {
-            return HldMainBoardState.Load(Path).OpenSerialPort;
+            return HldMainBoardStatus.Load(Path).OpenSerialPort;
         }
 
         public int SetCoderSleep(ref string strMsg)
@@ -96,7 +96,7 @@ namespace FakeHldMainBoard
 
         public int SetMaxSide(int nMaxSide)
         {
-            return HldMainBoardState.Load(Path).SetMaxSide;
+            return HldMainBoardStatus.Load(Path).SetMaxSide;
         }
     }
 }

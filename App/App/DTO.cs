@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace App
 {
-    class HldMainBoard : FakeHldMainBoard.HldMainBoard, IHldMainBoard
+    class DTO<T>
     {
+        public int Code { get; set; }
+        public T Data { get; set; }
     }
 }
