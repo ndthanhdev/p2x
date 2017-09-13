@@ -7,7 +7,7 @@ import { ISafeStatus } from "../models/SafeStatus";
 
 export const postStatus = async (req: Request, res: Response) => {
     try {
-        const status:IStatus = req.body;
+        const status: IStatus = req.body;
         const kiosk = await KioskModel.findOne(<IKiosk>{ ICNo: status.KioskICNo }).exec();
         if (!kiosk) {
             res.send(<DTO>{ Code: 1, Data: "Kiosk does not exist" });

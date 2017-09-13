@@ -3,11 +3,13 @@ import { ISafeStatus, SafeStatusSchema } from "./SafeStatus";
 
 export interface IStatus {
     KioskICNo: string;
+    createdAt?: Date;
     SafeStatuss: ISafeStatus[];
 }
 
 const StatusSchema = new Schema({
     KioskICNo: String,
+    createdAt: { type: Date, default: Date.now },
     SafeStatuss: [SafeStatusSchema]
 });
 
