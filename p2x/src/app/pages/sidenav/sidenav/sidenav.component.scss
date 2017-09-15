@@ -1,0 +1,32 @@
+:host {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+:host ::ng-deep .side-nav-container {
+    width: 100%;
+    background-color: blue;
+    .mat-drawer-content {
+        position: absolute;
+        right: 0;
+        left: 0;
+    }
+}
+
+.side-nav-content {
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: red;
+    overflow: auto;
+}
+
+.side-nav {
+    position: absolute;
+    bottom: 0;
+    width: 240px;
+    height: 100%;
+    background-color: green;
+    overflow: auto;
+}

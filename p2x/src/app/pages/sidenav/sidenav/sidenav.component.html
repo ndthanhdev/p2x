@@ -1,0 +1,13 @@
+<md-sidenav-container class="side-nav-container">
+  <md-sidenav class="side-nav" [opened]="!isScreenSmall()" [mode]="isScreenSmall() ? 'over' : 'side'">
+    Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly
+    good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good!
+    <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly
+    good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good! <br>Jolly good!
+    <br>Jolly good! <br>Jolly good! <br>
+  </md-sidenav>
+  <div class="side-nav-content">
+    <p2x-page-header (toggleSidenav)="sidenav.toggle()"></p2x-page-header>
+    <router-outlet></router-outlet>
+  </div>
+</md-sidenav-container>

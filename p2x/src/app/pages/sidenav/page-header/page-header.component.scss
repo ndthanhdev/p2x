@@ -1,0 +1,13 @@
+@import "../../../../styles/constants";
+
+.sidenav-toggle {
+    padding: 0;
+    margin: 8px;
+    min-width: 64px;
+    display: none;
+    @media (max-width: $small-breakpoint-width) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
