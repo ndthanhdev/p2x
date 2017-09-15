@@ -1,0 +1,49 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@import 'variables';
+@import '../node_modules/font-awesome/scss/font-awesome';
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+@import '~@angular/material/theming';
+
+// Include material core styles.
+@include mat-core();
+
+
+
+app-root{
+    position: absolute;
+    top: 50px;
+    bottom: 50px;
+    left: 50px;
+    right: 50px;
+    display: flex;
+    flex-direction: column;
+  }
+app-root > app-sidenav {
+    flex: 1 1 auto;
+    display: flex;
+}
+
+app-navbar {
+    position: relative;
+    z-index: 10;
+  }
+
+  // .sidenav-container {
+  //   width: 100%;
+    
+  //   .mat-drawer-content {
+  //     position: absolute;
+  //     right: 0;
+  //     left: 0;
+  //   }
+  
+  // }
+  // .sidenav-container .mat-drawer-content {
+  //   position: absolute;
+  //   right: 0;
+  //   left: 0;
+  // }
+  

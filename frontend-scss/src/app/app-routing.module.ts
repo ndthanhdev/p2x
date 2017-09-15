@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  { path: "", redirectTo: "kiosk-list", pathMatch: "full" },
-  { path: "kiosk-list", loadChildren: "app/pages/sidenav/sidenav.module#SidenavModule" }
+  { path: "", loadChildren: "app/modules/sidenav/sidenav.module#SidenavModule" }
 ];
 
 @NgModule({
