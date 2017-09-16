@@ -5,9 +5,9 @@ import {SidenavComponent} from './sidenav/sidenav.component';
 const routes: Routes = [
   {
     path: "", component: SidenavComponent, children: [
-    {path: "", redirectTo: "kiosk-list", pathMatch: "full"},
-    {path: "kiosk-list", loadChildren: "app/pages/kiosk-list/kiosk-list.module#KioskListModule"},
-    {path: "kiosk", loadChildren: "app/pages/kiosk/kiosk.module#KioskModule"}
+    {path: "", loadChildren: "app/pages/kiosk-list/kiosk-list.module#KioskListModule"},
+    {path: "safe", loadChildren: "app/pages/safe/safe.module#SafeModule"},
+    {path: ":id", loadChildren: "app/pages/kiosk/kiosk.module#KioskModule"}
   ]
   }
 ];

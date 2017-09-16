@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import {PageTitleService} from "../../../services/page-title/page-title.service";
 
 @Component({
-  selector: 'p2x-kiosk',
-  templateUrl: './kiosk.component.html',
-  styleUrls: ['./kiosk.component.scss']
+  selector: 'p2x-safe',
+  templateUrl: './safe.component.html',
+  styleUrls: ['./safe.component.scss']
 })
-export class KioskComponent implements OnInit {
+export class SafeComponent implements OnInit {
 
   constructor(public _pageTitle: PageTitleService) { }
 
   ngOnInit() {
-    this._pageTitle.title = "Safe";
+    this._pageTitle.title = 'Safe X';
   }
 
 }
