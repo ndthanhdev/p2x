@@ -1,3 +1,5 @@
+$sidenav-spacing-unit: 8px;
+
 :host {
   display: flex;
   flex: 1 1 auto;
@@ -5,7 +7,6 @@
 
 :host ::ng-deep .side-nav-container {
   width: 100%;
-  background-color: blue;
   .mat-drawer-content {
     position: absolute;
     right: 0;
@@ -18,7 +19,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: red;
   overflow: auto;
 }
 
@@ -27,11 +27,45 @@
   bottom: 0;
   width: 240px;
   height: 100%;
-  background-color: green;
   overflow: auto;
   box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
   padding-bottom: 72px;
   &.mat-sidenav-opened {
     box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Sidenav navigation item
+  li {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin: 0;
+    padding: 0;
+
+    // Hide the border on the last item
+    &:last-child {
+      border-color: transparent;
+    }
+
+    > a {
+      box-sizing: border-box;
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: ($sidenav-spacing-unit * 6) - 1;
+      text-decoration: none;
+      transition: all .3s;
+      padding: 0 ($sidenav-spacing-unit * 2);
+      position: relative;
+
+      &.docs-component-viewer-sidenav-item-selected {
+        font-weight: 600;
+      }
+    }
   }
 }

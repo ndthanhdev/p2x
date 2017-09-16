@@ -1,7 +1,14 @@
 @import "./shared/navbar/navbar-theme";
+@import "./pages/sidenav/sidenav/sidenav-theme";
+@import "./pages/kiosk-list/kiosk-list/kiosk-list-theme";
+@import "./shared/footer/footer-theme";
 
 @mixin app-theme($theme) {
-  @include nav-bar-theme($theme);
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warn: map-get($theme, warn);
+  $background: map-get($theme, background);
+  $foreground: map-get($theme, foreground);
 
   .p2x-primary-content {
     background: mat-color($primary);
@@ -10,4 +17,14 @@
       color: mat-color($primary, default-contrast);
     }
   }
+
+  p2x-footer {
+    background: mat-color($primary);
+    color: mat-color($primary, default-contrast);
+  }
+
+  @include nav-bar-theme($theme);
+  @include sidenav-theme($theme);
+  @include component-category-list-theme($theme);
+  @include footer-theme($theme);
 }

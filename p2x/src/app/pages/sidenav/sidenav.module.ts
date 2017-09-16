@@ -5,6 +5,7 @@ import {SidenavRoutingModule} from './sidenav-routing.module';
 import {SidenavComponent} from './sidenav/sidenav.component';
 import {PageHeaderComponent} from './page-header/page-header.component';
 import {PageTitleService} from "../../services/page-title/page-title.service";
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import {PageTitleService} from "../../services/page-title/page-title.service";
     MdListModule,
     MdButtonModule,
     MdIconModule,
-    MdToolbarModule
+    MdToolbarModule,
+    SharedModule
   ],
   declarations: [SidenavComponent, PageHeaderComponent],
   providers: [PageTitleService]
