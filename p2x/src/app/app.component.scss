@@ -1,14 +1,15 @@
-:host(p2x-root) {
-    // @extend .d-flex;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    app-navbar {
-        position: relative;
-        z-index: 10;
-    }
+:host {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  p2x-navbar {
+    position: relative;
+    z-index: 10;
+  }
 }
+
+

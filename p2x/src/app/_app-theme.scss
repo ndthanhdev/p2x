@@ -1,5 +1,13 @@
 @import "./shared/navbar/navbar-theme";
 
 @mixin app-theme($theme) {
-  @include nav-bar-theme($theme)
+  @include nav-bar-theme($theme);
+
+  .p2x-primary-content {
+    background: mat-color($primary);
+
+    h1 {
+      color: mat-color($primary, default-contrast);
+    }
+  }
 }

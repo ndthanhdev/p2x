@@ -4,7 +4,7 @@ import { Title } from '@angular/platform-browser';
 @Injectable()
 export class PageTitleService {
 
-  _title = '';
+  _title = 'Title';
 
   get title(): string { return this._title; }
 

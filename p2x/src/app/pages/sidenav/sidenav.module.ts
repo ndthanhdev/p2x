@@ -1,9 +1,10 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MdSidenavModule, MdListModule, MdButtonModule } from "@angular/material";
-import { SidenavRoutingModule } from './sidenav-routing.module';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { PageHeaderComponent } from './page-header/page-header.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MdSidenavModule, MdListModule, MdButtonModule, MdIconModule, MdToolbarModule} from "@angular/material";
+import {SidenavRoutingModule} from './sidenav-routing.module';
+import {SidenavComponent} from './sidenav/sidenav.component';
+import {PageHeaderComponent} from './page-header/page-header.component';
+import {PageTitleService} from "../../services/page-title/page-title.service";
 
 @NgModule({
   imports: [
@@ -11,8 +12,12 @@ import { PageHeaderComponent } from './page-header/page-header.component';
     SidenavRoutingModule,
     MdSidenavModule,
     MdListModule,
-    MdButtonModule
+    MdButtonModule,
+    MdIconModule,
+    MdToolbarModule
   ],
-  declarations: [SidenavComponent, PageHeaderComponent]
+  declarations: [SidenavComponent, PageHeaderComponent],
+  providers: [PageTitleService]
 })
-export class SidenavModule { }
+export class SidenavModule {
+}

@@ -6,17 +6,8 @@
   $foreground: map-get($theme, foreground);
 
   p2x-navbar {
-    mat-toolbar {
-      color: mat-color($primary, default-contrast);
+    .test {
+      background-color: red;
     }
-  }
-
-  mat-toolbar {
-    a {
-      background-color: mat-color($primary, default-contrast);
-    }
-  }
-  .test {
-    background-color: red;
   }
 }
