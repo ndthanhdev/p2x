@@ -8,7 +8,7 @@ import { MdToolbarModule, MdButtonModule } from "@angular/material";
     CommonModule,
     MdToolbarModule,
     MdButtonModule
-    
+
   ],
   declarations: [NavbarComponent],
   exports: [NavbarComponent]

@@ -1,0 +1,5 @@
+@import "./shared/navbar/navbar-theme";
+
+@mixin app-theme($theme) {
+  @include nav-bar-theme($theme)
+}
