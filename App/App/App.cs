@@ -115,12 +115,12 @@ namespace App
                     Console.WriteLine(oldStatus);
                     Console.WriteLine("New status:");
                     Console.WriteLine(latestStatus);
-                    var dto = await SendStatus(latestStatus);
-                    if (dto.Code > 0)
-                    {
-                        AppLog.Error("{0}. {1}", "Send data to server fail", dto.Data);
-                        break;
-                    }
+                    //var dto = await SendStatus(latestStatus);
+                    //if (dto is null || dto.Code > 0)
+                    //{
+                    //    AppLog.Error("{0}. {1}", "Send data to server fail", dto?.Data);
+                    //    break;
+                    //}
                     oldStatus = latestStatus;
                 }
 
@@ -273,10 +273,9 @@ namespace App
         public void CloseSerialPort()
         {
             string errMsg = string.Empty;
-            hldMainBoard.CloseSerialPort(ref errMsg);
-            if (!string.IsNullOrEmpty(errMsg))
+            if (!hldMainBoard.CloseSerialPort(ref errMsg) || !string.IsNullOrEmpty(errMsg))
             {
-                AppLog.Error("{0}. {1}", "Close serial port fail", errMsg);
+                throw new Exception(string.Format("{0}. {1}", "Close serial port fail", errMsg));
             }
         }
 

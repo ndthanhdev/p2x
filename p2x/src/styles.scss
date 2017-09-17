@@ -1,12 +1,17 @@
+@import "variable";
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/font-awesome/scss/font-awesome';
+
 //@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "~@angular/material/theming";
+
+// Include material core styles.
+@include mat-core();
 
 @import "./styles/general";
 @import "./app/app-theme";
 
 
-// Include material core styles.
-@include mat-core();
 
 // Define the light theme.
 $primary: mat-palette($mat-indigo);
