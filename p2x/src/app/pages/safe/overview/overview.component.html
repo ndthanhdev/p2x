@@ -1,3 +1,27 @@
-<md-card>
-
-</md-card>
+<div class="mat-elevation-z8">
+  <md-card>
+    <md-card-header>
+      <md-card-title>Safe X</md-card-title>
+      <md-card-subtitle>
+        <md-chip-list>
+          <md-chip color="primary" selected="true">Lock</md-chip>
+          <md-chip color="primary" selected="true">Fill</md-chip>
+        </md-chip-list>
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      <div class="d-inline-flex mw-100">
+        <div class="w-50 safe-icon mr-5">
+          <p2x-svg-viewer [src]="'../../../../assets/open.svg'" [scaleToContainer]="true"></p2x-svg-viewer>
+        </div>
+        <div class="w-50">
+          <md-form-field>
+            <input mdInput placeholder="Passcode">
+          </md-form-field>
+          <button md-raised-button color="primary">Open</button>
+          <button md-raised-button color="accent">Generate Passcode</button>
+        </div>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>

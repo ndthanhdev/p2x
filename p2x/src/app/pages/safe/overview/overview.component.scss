@@ -1,0 +1,10 @@
+@import "~@angular/material/theming";
+
+// Include material core styles.
+@include mat-core()
+
+.safe-icon {
+  @media($mat-small) {
+    display: none;
+  }
+}
