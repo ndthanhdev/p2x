@@ -35,8 +35,8 @@ const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
   'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
   'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
 
-export interface UserData {
-  id: string;
+export interface SafeHistoryData {
+  date: string;
   name: string;
   progress: string;
   color: string;
@@ -45,8 +45,8 @@ export interface UserData {
 /** An example database that the data source uses to retrieve data for the table. */
 export class ExampleDatabase {
   /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<UserData[]> = new BehaviorSubject<UserData[]>([]);
-  get data(): UserData[] { return this.dataChange.value; }
+  dataChange: BehaviorSubject<SafeHistoryData[]> = new BehaviorSubject<SafeHistoryData[]>([]);
+  get data(): SafeHistoryData[] { return this.dataChange.value; }
 
   constructor() {
     // Fill up the database with 100 users.
@@ -67,7 +67,7 @@ export class ExampleDatabase {
       NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
 
     return {
-      id: (this.data.length + 1).toString(),
+      date: (this.data.length + 1).toString(),
       name: name,
       progress: Math.round(Math.random() * 100).toString(),
       color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
@@ -88,7 +88,7 @@ export class ExampleDataSource extends DataSource<any> {
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<UserData[]> {
+  connect(): Observable<SafeHistoryData[]> {
     const displayDataChanges = [
       this._exampleDatabase.dataChange,
       this._sort.mdSortChange,
@@ -103,7 +103,7 @@ export class ExampleDataSource extends DataSource<any> {
   }
 
   /** Returns a sorted copy of the database data. */
-  getSortedData(): UserData[] {
+  getSortedData(): SafeHistoryData[] {
     const data = this._exampleDatabase.data.slice();
     if (!this._sort.active || this._sort.direction == '') {
       return data;
@@ -115,7 +115,7 @@ export class ExampleDataSource extends DataSource<any> {
 
       switch (this._sort.active) {
         case 'userId':
-          [propertyA, propertyB] = [a.id, b.id];
+          [propertyA, propertyB] = [a.date, b.date];
           break;
         case 'userName':
           [propertyA, propertyB] = [a.name, b.name];

@@ -4,7 +4,9 @@
 @include mat-core()
 
 .safe-icon {
-  @media($mat-small) {
+  max-height: 256px;
+  max-width: 256px;
+  @media($mat-xsmall) {
     display: none;
   }
 }

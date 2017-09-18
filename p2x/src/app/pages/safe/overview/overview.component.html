@@ -11,14 +11,14 @@
     </md-card-header>
     <md-card-content>
       <div class="d-inline-flex mw-100">
-        <div class="w-50 safe-icon mr-5">
-          <p2x-svg-viewer [src]="'../../../../assets/open.svg'" [scaleToContainer]="true"></p2x-svg-viewer>
+        <div class="safe-icon mr-5">
+          <p2x-svg-viewer [src]="'../../../../assets/open.svg'" [scaleToContainer]="false"></p2x-svg-viewer>
         </div>
-        <div class="w-50">
-          <md-form-field>
+        <div class="w-100">
+          <md-form-field class="w-100">
             <input mdInput placeholder="Passcode">
           </md-form-field>
-          <button md-raised-button color="primary">Open</button>
+          <button md-raised-button color="primary" class="mr-2 mb-2">Open</button>
           <button md-raised-button color="accent">Generate Passcode</button>
         </div>
       </div>
