@@ -35,7 +35,7 @@ const NAMES = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
   'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
   'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
 
-export interface SafeHistoryData {
+export interface ExampleData {
   date: string;
   name: string;
   progress: string;
@@ -45,8 +45,8 @@ export interface SafeHistoryData {
 /** An example database that the data source uses to retrieve data for the table. */
 export class ExampleDatabase {
   /** Stream that emits whenever the data has been modified. */
-  dataChange: BehaviorSubject<SafeHistoryData[]> = new BehaviorSubject<SafeHistoryData[]>([]);
-  get data(): SafeHistoryData[] { return this.dataChange.value; }
+  dataChange: BehaviorSubject<ExampleData[]> = new BehaviorSubject<ExampleData[]>([]);
+  get data(): ExampleData[] { return this.dataChange.value; }
 
   constructor() {
     // Fill up the database with 100 users.
@@ -88,7 +88,7 @@ export class ExampleDataSource extends DataSource<any> {
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<SafeHistoryData[]> {
+  connect(): Observable<ExampleData[]> {
     const displayDataChanges = [
       this._exampleDatabase.dataChange,
       this._sort.mdSortChange,
@@ -103,7 +103,7 @@ export class ExampleDataSource extends DataSource<any> {
   }
 
   /** Returns a sorted copy of the database data. */
-  getSortedData(): SafeHistoryData[] {
+  getSortedData(): ExampleData[] {
     const data = this._exampleDatabase.data.slice();
     if (!this._sort.active || this._sort.direction == '') {
       return data;
@@ -134,4 +134,18 @@ export class ExampleDataSource extends DataSource<any> {
       return (valueA < valueB ? -1 : 1) * (this._sort.direction == 'asc' ? 1 : -1);
     });
   }
+
+
+
+
+
+
 }
+
+export interface SafeHistoryData{
+  date:string;
+  lockStatus:boolean;
+  sensorStatus:boolean;
+}
+
+

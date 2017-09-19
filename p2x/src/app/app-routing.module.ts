@@ -1,8 +1,9 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
-  {path: "", loadChildren: "app/pages/sidenav/sidenav.module#SidenavModule"}
+  { path: "manage-kiosks", loadChildren: "app/pages/manage-kiosks/manage-kiosks.module#ManageKiosksModule" },  
+  { path: "", loadChildren: "app/pages/sidenav/sidenav.module#SidenavModule" },
 ];
 
 @NgModule({
