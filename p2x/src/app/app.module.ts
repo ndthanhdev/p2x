@@ -5,6 +5,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from "./shared/shared.module";
 import { PageTitleService } from "./services/page-title/page-title.service";
+import { StoreModule } from '@ngrx/store';
+import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
+import { reducers, CustomRouterStateSerializer } from './redux/reducer/root';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -13,10 +17,19 @@ import { PageTitleService } from "./services/page-title/page-title.service";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
+    StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({
+      maxAge: 10 //  Retains last 25 states
+    }),
+    AppRoutingModule,    
+    StoreRouterConnectingModule,
+
     SharedModule
   ],
-  providers: [PageTitleService],
+  providers: [
+    PageTitleService,
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,8 +4,9 @@ import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
 
 const routes: Routes = [
-  {path:":id",component:EditComponent},
-  {path:"",component:CreateComponent}
+  { path: "", redirectTo: "create", pathMatch: "full" },
+  { path: "create", component: CreateComponent },  
+  { path: ":id", component: EditComponent }
 ];
 
 @NgModule({
