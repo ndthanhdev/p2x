@@ -7,6 +7,9 @@ import { MdInputModule, MdCardModule, MdButtonModule } from '@angular/material';
 import { PageTitleService } from '../../services/page-title/page-title.service';
 import { EditComponent } from './edit/edit.component';
 import { SharedModule } from '../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './reducer';
 
 @NgModule({
   imports: [
@@ -15,7 +18,10 @@ import { SharedModule } from '../../shared/shared.module';
     MdInputModule,
     MdCardModule,
     MdButtonModule,
-    SharedModule
+    FormsModule,
+    SharedModule,
+
+    StoreModule.forFeature('manage-kiosks', reducers),
   ],
   declarations: [CreateComponent, EditComponent],
   providers:[PageTitleService]

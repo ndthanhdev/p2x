@@ -1,25 +1,27 @@
 <div class="docs-primary-header">
-  <h1>Guides</h1>
+  <h1>Create Kiosk</h1>
 </div>
 <div class="container justify-content-center">
-  <md-card class="m-sm-5 m-xs-0">
-    <md-card-header>
-      <md-card-title>Create Kiosk</md-card-title>
-    </md-card-header>
-    <md-card-content>
-    <md-form-field class="w-100">
-      <input mdInput placeholder="IC No">
-    </md-form-field>
-    <md-form-field class="w-100">
-      <input mdInput type="password" placeholder="Secret key">
-    </md-form-field>
-    <md-form-field class="w-100">
-      <input mdInput placeholder="Name">
-    </md-form-field>
-  </md-card-content>
-    <md-card-actions>
-        <button md-raised-button color="primary">Create</button>
+  <form #createKioskForm="ngForm" (ngSubmit)="onSubmit()">
+    <md-card class="m-sm-5 m-xs-0">
+      <md-card-header>
+        <md-card-title>Create Kiosk</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-form-field class="w-100">
+          <input mdInput placeholder="IC No" [(ngModel)]="model.iCNo" name="iCNo">
+        </md-form-field>
+        <md-form-field class="w-100">
+          <input mdInput type="password" placeholder="Secret key" [(ngModel)]="model.secret" name="secret">
+        </md-form-field>
+        <md-form-field class="w-100">
+          <input mdInput placeholder="Name" [(ngModel)]="model.name" name="name">
+        </md-form-field>
+      </md-card-content>
+      <md-card-actions>
+        <button type="submit" [disabled]="pending$ | async" md-raised-button color="primary">Create</button>
       </md-card-actions>
-  </md-card>
+    </md-card>
+  </form>
 </div>
 <p2x-footer></p2x-footer>

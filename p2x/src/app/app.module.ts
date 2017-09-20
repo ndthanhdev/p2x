@@ -7,7 +7,7 @@ import { SharedModule } from "./shared/shared.module";
 import { PageTitleService } from "./services/page-title/page-title.service";
 import { StoreModule } from '@ngrx/store';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
-import { reducers, CustomRouterStateSerializer } from './redux/reducer/root';
+import { reducers, CustomRouterStateSerializer } from './reducer/root';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
@@ -27,7 +27,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     SharedModule
   ],
   providers: [
-    PageTitleService,
+    PageTitleService,    
     { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
   ],
   bootstrap: [AppComponent]
