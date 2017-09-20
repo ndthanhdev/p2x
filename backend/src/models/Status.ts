@@ -3,7 +3,7 @@ import { ISafeStatus, SafeStatusSchema } from "./SafeStatus";
 
 export interface IStatus {
     KioskICNo: string;
-    createdAt?: Date;
+    createdAt: Date;
     SafeStatuss: ISafeStatus[];
 }
 
@@ -11,7 +11,7 @@ const StatusSchema = new Schema({
     KioskICNo: String,
     createdAt: { type: Date, default: Date.now },
     SafeStatuss: [SafeStatusSchema]
-});
+}, { timestamps: { createdAt: "created_at" } });
 
 export interface IStatusModel extends IStatus, Document { }
 

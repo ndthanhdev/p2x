@@ -1,11 +1,15 @@
 import { types } from "./types";
 import { GraphQLSchema, GraphQLObjectType } from "graphql";
-import { queryFields } from "./queries";
-
+import { queries } from "./queries";
+import { mutations } from "./mutation";
 export const schema = new GraphQLSchema({
     query: new GraphQLObjectType({
         name: "Query",
-        fields: queryFields
+        fields: queries
+    }),
+    mutation: new GraphQLObjectType({
+        name: "mutation",
+        fields: mutations
     }),
     types: types
 });

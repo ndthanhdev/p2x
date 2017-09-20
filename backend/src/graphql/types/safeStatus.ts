@@ -26,3 +26,18 @@ export const safeStatusType = new GraphQLObjectType({
         }
     })
 });
+
+export const safeStatusInputType = new GraphQLInputObjectType({
+    name: "SafeStatusInput",
+    fields: () => ({
+        IdNo: {
+            type: GraphQLInt
+        },
+        Lock: {
+            type: GraphQLBoolean
+        },
+        Sensor: {
+            type: GraphQLBoolean
+        }
+    })
+});

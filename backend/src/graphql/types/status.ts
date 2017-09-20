@@ -8,7 +8,7 @@ import {
     GraphQLBoolean, GraphQLList
 } from "graphql";
 
-import { safeStatusType } from "./safeStatus";
+import { safeStatusType, safeStatusInputType } from "./safeStatus";
 
 export const statusType = new GraphQLObjectType({
     name: "Status",
@@ -24,6 +24,18 @@ export const statusType = new GraphQLObjectType({
         },
         SafeStatuss: {
             type: new GraphQLList(safeStatusType)
+        }
+    })
+});
+
+export const statusInputType = new GraphQLInputObjectType({
+    name: "StatusInput",
+    fields: () => ({
+        KioskICNo: {
+            type: GraphQLString
+        },
+        SafeStatuss: {
+            type: new GraphQLList(safeStatusInputType)
         }
     })
 });
