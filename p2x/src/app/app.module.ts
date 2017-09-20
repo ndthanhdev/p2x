@@ -9,6 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { reducers, CustomRouterStateSerializer } from './reducer/root';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     }),
     AppRoutingModule,    
     StoreRouterConnectingModule,
-
+    EffectsModule.forRoot([]),
     SharedModule
   ],
   providers: [

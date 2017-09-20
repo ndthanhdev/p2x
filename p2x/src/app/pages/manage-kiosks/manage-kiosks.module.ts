@@ -10,6 +10,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { CreateEffects } from './effects/create.effect';
 
 @NgModule({
   imports: [
@@ -22,8 +24,9 @@ import { reducers } from './reducer';
     SharedModule,
 
     StoreModule.forFeature('manage-kiosks', reducers),
+    EffectsModule.forFeature([CreateEffects]),
   ],
   declarations: [CreateComponent, EditComponent],
-  providers:[PageTitleService]
+  providers: [PageTitleService]
 })
 export class ManageKiosksModule { }
