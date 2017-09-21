@@ -13,7 +13,8 @@ export interface IKiosk {
     Name: string;
     Secret: string;
     IsSensor: boolean;
-    Safes: [ISafe];
+    IsOnline: boolean;
+    // Safes: [ISafe];
 }
 
 export interface IKioskModel extends IKiosk, Document {
@@ -25,7 +26,8 @@ const KioskSchema: Schema = new Schema({
     Name: String,
     Secret: String,
     IsSensor: Boolean,
-    Safes: [SafeSchema]
+    IsOnline: { type: Boolean, default: false }
+    // Safes: [SafeSchema]
 });
 
 export const KioskModel: Model<IKioskModel> = model<IKioskModel>("Kiosk", KioskSchema);

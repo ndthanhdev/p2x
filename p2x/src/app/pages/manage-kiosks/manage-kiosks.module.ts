@@ -12,6 +12,8 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from './reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { CreateEffects } from './effects/create.effect';
+import { ListComponent } from './list/list.component';
+import { ListEffects } from './effects/list.effect';
 
 @NgModule({
   imports: [
@@ -24,9 +26,9 @@ import { CreateEffects } from './effects/create.effect';
     SharedModule,
 
     StoreModule.forFeature('manage-kiosks', reducers),
-    EffectsModule.forFeature([CreateEffects]),
+    EffectsModule.forFeature([CreateEffects,ListEffects]),
   ],
-  declarations: [CreateComponent, EditComponent],
+  declarations: [CreateComponent, EditComponent, ListComponent],
   providers: [PageTitleService]
 })
 export class ManageKiosksModule { }

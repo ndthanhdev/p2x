@@ -23,6 +23,11 @@ export class CreateSuccess implements Action {
 
 export class CreateFailure implements Action {
     readonly type = CREATE_FAILURE;
+    /**
+     *
+     */
+    constructor(public payload: any) {
+    }
 }
 
 export type Actions = Create

@@ -1,6 +1,6 @@
 import { GraphQLFieldConfig } from "graphql";
 import { kioskType, kioskInputType } from "../../types/kiosk";
-import { KioskModel,IKioskModel } from "../../../models/Kiosk";
+import { KioskModel, IKioskModel } from "../../../models/Kiosk";
 
 export const addKiosk: GraphQLFieldConfig<any, any> = {
     type: kioskType,
@@ -9,7 +9,7 @@ export const addKiosk: GraphQLFieldConfig<any, any> = {
             type: kioskInputType
         }
     },
-    resolve: async (source,args,context,info) => {        
+    resolve: async (source, args, context, info) => {
         try {
             const kiosk = await KioskModel.create(args.data);
             return kiosk;

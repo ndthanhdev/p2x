@@ -1,5 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {PageTitleService} from "../../../services/page-title/page-title.service";
+import { Component, OnInit } from '@angular/core';
+import { PageTitleService } from "../../../services/page-title/page-title.service";
+import { Store } from '@ngrx/store';
+import * as fromReducers from "../reducers";
+import * as fromActions from "../actions";
 
 @Component({
   selector: 'p2x-kiosk-list',
@@ -8,10 +11,14 @@ import {PageTitleService} from "../../../services/page-title/page-title.service"
 })
 export class KioskListComponent implements OnInit {
 
-  constructor(public _pageTitle: PageTitleService) {
+  kiosks$ = this.store.select(fromReducers.getKiosks);
+
+  constructor(private store: Store<fromReducers.State>,
+    public _pageTitle: PageTitleService) {
   }
 
   ngOnInit() {
     this._pageTitle.title = 'Kiosk List';
+    this.store.dispatch(new fromActions.Load());
   }
 }

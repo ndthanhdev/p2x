@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLID, GraphQLString, GraphQLInputObjectType } from "graphql";
+import { GraphQLObjectType, GraphQLNonNull, GraphQLID, GraphQLString, GraphQLInputObjectType, GraphQLBoolean } from "graphql";
 
 export const kioskType = new GraphQLObjectType({
     name: "Kiosk",
@@ -11,6 +11,9 @@ export const kioskType = new GraphQLObjectType({
         },
         Name: {
             type: GraphQLString
+        },
+        IsOnline: {
+            type: GraphQLBoolean
         }
     })
 });

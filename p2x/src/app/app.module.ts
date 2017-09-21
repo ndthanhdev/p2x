@@ -10,6 +10,20 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 import { reducers, CustomRouterStateSerializer } from './reducer/root';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
+import { ApolloModule } from 'apollo-angular';
+import { ApolloClient, createNetworkInterface } from 'apollo-client';
+
+
+// by default, this client will send queries to `/graphql` (relative to the URL of your app)
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface({
+    uri: 'http://localhost:3000/graphql'
+  }),
+});
+
+export function provideClient(): ApolloClient {
+  return client;
+}
 
 @NgModule({
   declarations: [
@@ -22,13 +36,14 @@ import { EffectsModule } from '@ngrx/effects';
     StoreDevtoolsModule.instrument({
       maxAge: 10 //  Retains last 25 states
     }),
-    AppRoutingModule,    
+    AppRoutingModule,
     StoreRouterConnectingModule,
     EffectsModule.forRoot([]),
+    ApolloModule.forRoot(provideClient),
     SharedModule
   ],
   providers: [
-    PageTitleService,    
+    PageTitleService,
     { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
   ],
   bootstrap: [AppComponent]
