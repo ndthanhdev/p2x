@@ -14,6 +14,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CreateEffects } from './effects/create.effect';
 import { ListComponent } from './list/list.component';
 import { ListEffects } from './effects/list.effect';
+import { EditEffects } from "./effects/edit.effect"
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { ListEffects } from './effects/list.effect';
     SharedModule,
 
     StoreModule.forFeature('manage-kiosks', reducers),
-    EffectsModule.forFeature([CreateEffects,ListEffects]),
+    EffectsModule.forFeature([CreateEffects, ListEffects, EditEffects]),
   ],
   declarations: [CreateComponent, EditComponent, ListComponent],
   providers: [PageTitleService]

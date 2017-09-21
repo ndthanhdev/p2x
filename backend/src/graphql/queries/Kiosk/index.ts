@@ -1,5 +1,7 @@
 import { Kiosks } from "./multiple";
+import { Kiosk } from "./single";
 
-export const Kiosk = {
+export const KioskQueries = {
+    Kiosk,
     Kiosks
 };

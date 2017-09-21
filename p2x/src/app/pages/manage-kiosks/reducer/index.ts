@@ -1,20 +1,24 @@
 import * as fromCreate from "./create";
 import * as fromList from "./list";
+import * as fromEdit from "./edit";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 
 export interface State {
     create: fromCreate.State,
-    list: fromList.State
+    list: fromList.State,
+    edit: fromEdit.State
 };
 
 export const initialState: State = {
     create: fromCreate.initialState,
-    list: fromList.initialState
+    list: fromList.initialState,
+    edit: fromEdit.initialState
 };
 
 export const reducers = {
     create: fromCreate.reducer,
-    list: fromList.reducers
+    list: fromList.reducers,
+    edit: fromEdit.reducers
 };
 
 export const selectManageKiosksState = createFeatureSelector<State>('manage-kiosks');
@@ -34,3 +38,11 @@ export const selectListState = createSelector(
 );
 
 export const getListKiosks = createSelector(selectListState, fromList.getKiosks);
+
+// Edit
+export const selectEditState = createSelector(
+    selectManageKiosksState,
+    (state: State) => state.edit
+);
+
+export const getEditKiosk = createSelector(selectEditState, fromEdit.getKiosk);

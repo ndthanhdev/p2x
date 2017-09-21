@@ -9,7 +9,6 @@ export class Load implements Action {
     readonly type = LOAD;
 }
 
-
 export class LoadSuccess implements Action {
     readonly type = LOAD_SUCCESS;
     constructor(public payload: Kiosk[]) {

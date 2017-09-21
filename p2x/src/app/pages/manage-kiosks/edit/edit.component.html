@@ -1,26 +1,26 @@
 <div class="docs-primary-header">
-  <h1>Guides</h1>
+  <h1>{{pageTitle.title}}</h1>
 </div>
 <div class="container justify-content-center">
   <md-card class="m-sm-5 m-xs-0">
     <md-card-header>
-      <md-card-title>Create Kiosk</md-card-title>
+      <md-card-title>Edit Kiosk</md-card-title>
     </md-card-header>
     <md-card-content>
-    <md-form-field class="w-100">
-      <input mdInput placeholder="IC No" disabled value="123456">
-    </md-form-field>
-    <md-form-field class="w-100">
-      <input mdInput type="password" placeholder="Secret key">
-    </md-form-field>
-    <md-form-field class="w-100">
-      <input mdInput placeholder="Name">
-    </md-form-field>
-  </md-card-content>
+      <md-form-field class="w-100">
+        <input mdInput placeholder="IC No" disabled [value]="(kiosk$| async)?.ICNo">
+      </md-form-field>
+      <md-form-field class="w-100">
+        <input mdInput type="password" placeholder="Secret key" [value]="(kiosk$| async)?.Secret">
+      </md-form-field>
+      <md-form-field class="w-100">
+        <input mdInput placeholder="Name" [value]="(kiosk$| async)?.Name">
+      </md-form-field>
+    </md-card-content>
     <md-card-actions>
-        <button md-raised-button color="warn">Delete</button>        
-        <button md-raised-button color="primary">Update</button>
-      </md-card-actions>
+      <button md-raised-button color="warn">Delete</button>
+      <button md-raised-button color="primary">Update</button>
+    </md-card-actions>
   </md-card>
 </div>
 <p2x-footer></p2x-footer>

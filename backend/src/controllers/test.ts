@@ -12,7 +12,7 @@ export const index = async (req: Request, res: Response) => {
         IsSensor: false,
         Name: "kiosk",
         Secret: "password",
-        Safes: []
+        IsOnline: false
     });
     res.send(await KioskModel.findOne({ ICNo: "ic1234" }).exec());
 
