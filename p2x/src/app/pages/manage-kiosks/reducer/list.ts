@@ -1,5 +1,5 @@
 import * as fromListActions from "../actions/list";
-import { Kiosk } from "../../sidenav/models/Kiosk";
+import { Kiosk } from "../../../models/Kiosk";
 
 export interface State {
     kiosks: Kiosk[]

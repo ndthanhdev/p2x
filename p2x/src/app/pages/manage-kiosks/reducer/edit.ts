@@ -1,5 +1,5 @@
 import * as fromEditActions from "../actions/edit";
-import { Kiosk } from "../../sidenav/models/Kiosk";
+import { Kiosk } from "../../../models/Kiosk";
 
 export interface State {
     kiosk: Kiosk

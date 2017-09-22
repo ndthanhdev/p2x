@@ -9,17 +9,17 @@
       </md-card-header>
       <md-card-content>
         <md-form-field class="w-100">
-          <input mdInput placeholder="IC No" [(ngModel)]="model.ICNo" name="ICNo">
+          <input mdInput placeholder="IC No" [(ngModel)]="model.ICNo" name="ICNo" required>
         </md-form-field>
         <md-form-field class="w-100">
-          <input mdInput type="password" placeholder="Secret key" [(ngModel)]="model.Secret" name="Secret">
+          <input mdInput type="password" placeholder="Secret key" [(ngModel)]="model.Secret" name="Secret" required>
         </md-form-field>
         <md-form-field class="w-100">
-          <input mdInput placeholder="Name" [(ngModel)]="model.Name" name="Name">
+          <input mdInput placeholder="Name" [(ngModel)]="model.Name" name="Name" required>
         </md-form-field>
       </md-card-content>
       <md-card-actions>
-        <button type="submit" [disabled]="pending$ | async" md-raised-button color="primary">Create</button>
+        <button type="submit" [disabled]="(pending$ | async) || (!createKioskForm.valid)" md-raised-button color="primary">Create</button>
       </md-card-actions>
     </md-card>
   </form>

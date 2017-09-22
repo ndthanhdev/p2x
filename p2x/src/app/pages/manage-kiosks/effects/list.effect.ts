@@ -7,7 +7,7 @@ import * as fromActions from "../actions/list";
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/exhaustMap';
-import { Kiosk } from "../../sidenav/models/Kiosk";
+import { Kiosk } from "../../../models/Kiosk";
 
 const getKiosks = gql`
 query getKiosks{

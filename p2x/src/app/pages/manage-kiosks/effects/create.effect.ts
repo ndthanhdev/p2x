@@ -10,6 +10,7 @@ import 'rxjs/add/operator/concatMap';
 import * as CreateActions from "../actions/create";
 import { Apollo } from "apollo-angular";
 import gql from 'graphql-tag';
+import { Router } from "@angular/router";
 
 const createKiosk = gql`
 mutation createKiosk($kiosk:KioskInput){
@@ -24,7 +25,7 @@ mutation createKiosk($kiosk:KioskInput){
 @Injectable()
 export class CreateEffects {
 
-    constructor(private actions$: Actions, private apollo: Apollo) { }
+    constructor(private actions$: Actions, private apollo: Apollo, private router: Router) { }
 
     @Effect()
     create$ = this.actions$
@@ -35,8 +36,10 @@ export class CreateEffects {
             variables: {
                 kiosk: payload
             }
-        }).concatMap(({ data }) => of(new CreateActions.CreateSuccess()))
-            .catch(error => of(new CreateActions.CreateFailure(error))));
+        }).concatMap(({ data }) => {
+            this.router.navigate(["/manage-kiosks"]);
+            return of(new CreateActions.CreateSuccess())
+        }).catch(error => of(new CreateActions.CreateFailure(error))));
 
     @Effect({ dispatch: false })
     failure$ = this.actions$.ofType(CreateActions.CREATE_FAILURE)
