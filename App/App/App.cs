@@ -100,10 +100,10 @@ namespace App
             PrintBoardInfo(_iCNo, version);
 
             AppLog.Info("Authenticating...");
-            var loginResponse = await Login(_iCNo, _config.Secret);
+            _jwt = await Login(_iCNo, _config.Secret);
             AppLog.Info("Authenticated");
 
-            //Subscribe(iCNo);
+            Subscribe(_jwt);
 
             while (true)
             {
@@ -166,9 +166,12 @@ namespace App
             return response.Data;
         }
 
-        public void Subscribe(string eventName)
+        public void Subscribe(string jwt)
         {
-            socket = IO.Socket(_config.ServerUrl);
+            var options = new IO.Options();
+            options.Query = new Dictionary<string, string>();
+            options.Query["token"] = jwt;
+            socket = IO.Socket(_config.ServerUrl, options);
             socket.On(Socket.EVENT_CONNECT, async () =>
             {
                 await Task.Yield();
@@ -179,16 +182,16 @@ namespace App
                 await Task.Yield();
                 AppLog.Info("Reconnecting to server...");
             });
-            socket.On(eventName, async (rawData) =>
-             {
-                 await Task.Yield();
-                 int safeId = int.Parse(rawData.ToString());
-                 AppLog.Info("Received {0}", safeId);
-                 lock (CommandsQueue)
-                 {
-                     CommandsQueue.Enqueue(safeId);
-                 }
-             });
+            //socket.On(eventName, async (rawData) =>
+            // {
+            //     await Task.Yield();
+            //     int safeId = int.Parse(rawData.ToString());
+            //     AppLog.Info("Received {0}", safeId);
+            //     lock (CommandsQueue)
+            //     {
+            //         CommandsQueue.Enqueue(safeId);
+            //     }
+            // });
         }
 
         public bool TestBoard(string portName, ref string iCNo, ref string version, ref string errMsg)

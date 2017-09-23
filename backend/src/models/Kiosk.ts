@@ -48,7 +48,8 @@ function hashSecret(next: Function) {
             next();
         });
     });
-};
+}
+
 kioskSchema.pre("save", hashSecret);
 kioskSchema.pre("update", hashSecret);
 

@@ -15,6 +15,11 @@ import { graphiqlExpress, graphqlExpress } from "apollo-server-express";
 import expressValidator = require("express-validator");
 
 /**
+ * Websocket
+ */
+import * as fromSocket from "./socket";
+
+/**
  * Schema for GraphQL
  */
 import { schema } from "./graphql/schema";
@@ -89,5 +94,11 @@ server.listen(app.get("port"), () => {
     console.log(("  App is running at http://localhost:%d in %s mode"), app.get("port"), app.get("env"));
     console.log("  Press CTRL-C to stop\n");
 });
+
+/**
+ * Setup socket.io
+ */
+export const io = fromSocket.listen(server);
+
 
 module.exports = app;
