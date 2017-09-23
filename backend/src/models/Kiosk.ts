@@ -51,7 +51,7 @@ function hashSecret(next: Function) {
 }
 
 kioskSchema.pre("save", hashSecret);
-kioskSchema.pre("update", hashSecret);
+// kioskSchema.pre("update", hashSecret);
 
 
 kioskSchema.methods.compareSecret = function (candidateSecret: string, cb: (err: any, isMatch: any) => {}) {

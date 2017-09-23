@@ -2,16 +2,16 @@ import { Document, Model, model, Schema } from "mongoose";
 import { ISafeStatus, SafeStatusSchema } from "./SafeStatus";
 
 export interface IStatus {
-    KioskICNo: string;
+    ICNo: string;
     createdAt: Date;
     SafeStatuss: ISafeStatus[];
 }
 
 const StatusSchema = new Schema({
-    KioskICNo: String,
+    ICNo: String,
     createdAt: { type: Date, default: Date.now },
     SafeStatuss: [SafeStatusSchema]
-}, { timestamps: { createdAt: "created_at" } });
+}, { timestamps: true });
 
 export interface IStatusModel extends IStatus, Document { }
 

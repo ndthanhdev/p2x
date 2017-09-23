@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Quobject.SocketIoClientDotNet.Client;
 using Newtonsoft.Json;
 using RestSharp;
+using App.DTO;
 
 namespace App
 {
@@ -46,7 +47,7 @@ namespace App
         private string _iCNo = string.Empty;
         private string _jwt = string.Empty;
         string version = string.Empty;
-        private Socket socket;
+        private Socket _socket;
         private RestClient _client;
 
         public App(AppConfig config, IHldMainBoard hldMainBoard)
@@ -79,7 +80,7 @@ namespace App
                 {
                     _iCNo = string.Empty;
                     version = string.Empty;
-                    socket?.Close();
+                    _socket?.Close();
                 }
                 AppLog.Info("Restarting...");
                 await Task.Delay(ERROR_DELAY);
@@ -120,12 +121,7 @@ namespace App
                     Console.WriteLine(oldStatus);
                     Console.WriteLine("New status:");
                     Console.WriteLine(latestStatus);
-                    //var dto = await SendStatus(latestStatus);
-                    //if (dto is null || dto.Code > 0)
-                    //{
-                    //    AppLog.Error("{0}. {1}", "Send data to server fail", dto?.Data);
-                    //    break;
-                    //}
+                    SendStatus(latestStatus);
                     oldStatus = latestStatus;
                 }
 
@@ -171,17 +167,18 @@ namespace App
             var options = new IO.Options();
             options.Query = new Dictionary<string, string>();
             options.Query["token"] = jwt;
-            socket = IO.Socket(_config.ServerUrl, options);
-            socket.On(Socket.EVENT_CONNECT, async () =>
+            _socket = IO.Socket(_config.ServerUrl, options);
+            _socket.On(Socket.EVENT_CONNECT, async () =>
             {
                 await Task.Yield();
                 AppLog.Info("Connected to server");
             });
-            socket.On(Socket.EVENT_RECONNECTING, async () =>
+            _socket.On(Socket.EVENT_RECONNECTING, async () =>
             {
                 await Task.Yield();
                 AppLog.Info("Reconnecting to server...");
             });
+
             //socket.On(eventName, async (rawData) =>
             // {
             //     await Task.Yield();
@@ -192,6 +189,11 @@ namespace App
             //         CommandsQueue.Enqueue(safeId);
             //     }
             // });
+        }
+
+        public void SendStatus(BoardStatus boardStatus)
+        {
+            _socket.Emit("status", JsonConvert.SerializeObject(boardStatus));
         }
 
         public bool TestBoard(string portName, ref string iCNo, ref string version, ref string errMsg)
@@ -284,14 +286,6 @@ namespace App
             {
                 CloseSerialPort();
             }
-        }
-
-        public async Task<DTO<string>> SendStatus(BoardStatus status)
-        {
-
-            var request = MakeRequest(status);
-            var response = (await _client.ExecuteTaskAsync<DTO<string>>(request));
-            return response.Data;
         }
 
         public void CloseSerialPort()

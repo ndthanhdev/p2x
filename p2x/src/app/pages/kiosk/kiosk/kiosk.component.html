@@ -1,110 +1,11 @@
 <div class="docs-component-category-list">
-  <a class="docs-component-category-list-item" routerLink="/safe/9/9">
+  <a class="docs-component-category-list-item" *ngFor="let safeStatus of status?.SafeStatuss" [routerLink]="['/safe',status.ICNo,safeStatus.IdNo]">
     <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
+      <md-card-title>Safe {{safeStatus.IdNo}}</md-card-title>
       <md-card-subtitle>
         <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip>Open</md-chip>
-          <md-chip>Empty</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
-        </md-chip-list>
-      </md-card-subtitle>
-    </md-card>
-  </a>
-  <a class="docs-component-category-list-item" routerLink="/kiosk/5">
-    <md-card class="docs-component-category-list-card">
-      <md-card-title>Safe X</md-card-title>
-      <md-card-subtitle>
-        <md-chip-list>
-          <md-chip color="primary" selected="true">Lock</md-chip>
-          <md-chip color="primary" selected="true">Fill</md-chip>
+          <md-chip [color]="safeStatus.Lock?'primary':'accent'" selected="true">{{safeStatus.Lock?'Closed':'Open'}}</md-chip>
+          <md-chip [color]="safeStatus.Sensor?'primary':'accent'" selected="true">{{safeStatus.Sensor?'Empty':'Occupied'}}</md-chip>
         </md-chip-list>
       </md-card-subtitle>
     </md-card>

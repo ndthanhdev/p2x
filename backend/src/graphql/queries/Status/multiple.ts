@@ -12,7 +12,7 @@ export const Statuss: GraphQLFieldConfig<any, any> = {
         try {
             const statuss = await StatusModel.find().exec();
             if (!statuss) {
-                throw new Error("Error getting users");
+                throw new Error("Error getting statuss");
             }
             return statuss;
         } catch (error) {

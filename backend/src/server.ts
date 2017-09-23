@@ -33,7 +33,6 @@ dotenv.config({ path: ".env" });
  * Controllers (route handlers).
  */
 import * as testController from "./controllers/test";
-import * as statisController from "./controllers/status";
 import * as kioskController from "./controllers/kiosk";
 
 /**
@@ -67,7 +66,6 @@ app.use("", express.static("frontend"));
  * Primary app routes.
  */
 app.get("api/test", testController.index);
-app.post("api/status", statisController.postStatus);
 app.post("/api/login", kioskController.postLogin);
 
 /**

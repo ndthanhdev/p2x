@@ -16,7 +16,7 @@ export const statusType = new GraphQLObjectType({
         _id: {
             type: new GraphQLNonNull(GraphQLID)
         },
-        KioskICNo: {
+        ICNo: {
             type: GraphQLString
         },
         createdAt: {
@@ -31,7 +31,7 @@ export const statusType = new GraphQLObjectType({
 export const statusInputType = new GraphQLInputObjectType({
     name: "StatusInput",
     fields: () => ({
-        KioskICNo: {
+        ICNo: {
             type: GraphQLString
         },
         SafeStatuss: {
