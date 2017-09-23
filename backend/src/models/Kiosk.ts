@@ -1,10 +1,11 @@
-import { Document, Model, model, Schema } from "mongoose";
+import * as bcrypt from "bcrypt-nodejs";
+import * as mongoose from "mongoose";
 
 export interface ISafe {
-    No: Number;
+    No: number;
 }
 
-const SafeSchema: Schema = new Schema({
+const SafeSchema: mongoose.Schema = new mongoose.Schema({
     No: Number
 });
 
@@ -15,13 +16,15 @@ export interface IKiosk {
     IsSensor: boolean;
     IsOnline: boolean;
     // Safes: [ISafe];
+
+    compareSecret: (candidateSecret: string, cb: (err: any, isMatch: any) => {}) => void;
 }
 
-export interface IKioskModel extends IKiosk, Document {
+export interface IKioskModel extends IKiosk, mongoose.Document {
 
 }
 
-const KioskSchema: Schema = new Schema({
+const kioskSchema: mongoose.Schema = new mongoose.Schema({
     ICNo: { type: String, unique: true },
     Name: String,
     Secret: String,
@@ -30,4 +33,26 @@ const KioskSchema: Schema = new Schema({
     // Safes: [SafeSchema]
 });
 
-export const KioskModel: Model<IKioskModel> = model<IKioskModel>("Kiosk", KioskSchema);
+/**
+ * Secret hash middleware.
+ */
+kioskSchema.pre("save", function save(next) {
+    const kiosk = this;
+    if (!kiosk.isModified("Secret")) { return next(); }
+    bcrypt.genSalt(10, (err, salt) => {
+        if (err) { return next(err); }
+        bcrypt.hash(kiosk.Secret, salt, undefined, (err: mongoose.Error, hash) => {
+            if (err) { return next(err); }
+            kiosk.Secret = hash;
+            next();
+        });
+    });
+});
+
+kioskSchema.methods.compareSecret = function (candidateSecret: string, cb: (err: any, isMatch: any) => {}) {
+    bcrypt.compare(candidateSecret, this.Secret, (err: mongoose.Error, isMatch: boolean) => {
+        cb(err, isMatch);
+    });
+};
+
+export const KioskModel: mongoose.Model<IKioskModel> = mongoose.model<IKioskModel>("Kiosk", kioskSchema);

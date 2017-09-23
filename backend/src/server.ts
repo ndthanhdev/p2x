@@ -12,6 +12,7 @@ import { createServer } from "http";
 import mongoose = require("mongoose");
 import * as Bluebird from "bluebird";
 import { graphiqlExpress, graphqlExpress } from "apollo-server-express";
+import expressValidator = require("express-validator");
 
 /**
  * Schema for GraphQL
@@ -28,6 +29,7 @@ dotenv.config({ path: ".env" });
  */
 import * as testController from "./controllers/test";
 import * as statisController from "./controllers/status";
+import * as kioskController from "./controllers/kiosk";
 
 /**
  * Create Express server.
@@ -43,6 +45,7 @@ mongoose.connection.on("error", () => {
     console.log("MongoDB connection error. Please make sure MongoDB is running.");
     process.exit();
 });
+
 /**
  * Express configuration.
  */
@@ -52,13 +55,15 @@ app.use(logger("dev"));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressValidator());
 app.use("", express.static("frontend"));
 
 /**
  * Primary app routes.
  */
-app.get("/test", testController.index);
-app.post("/status", statisController.postStatus);
+app.get("api/test", testController.index);
+app.post("api/status", statisController.postStatus);
+app.post("/api/login", kioskController.postLogin);
 
 /**
  * Config graphQL route
