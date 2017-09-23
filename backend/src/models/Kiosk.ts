@@ -36,7 +36,8 @@ const kioskSchema: mongoose.Schema = new mongoose.Schema({
 /**
  * Secret hash middleware.
  */
-kioskSchema.pre("save", function save(next) {
+
+function hashSecret(next: Function) {
     const kiosk = this;
     if (!kiosk.isModified("Secret")) { return next(); }
     bcrypt.genSalt(10, (err, salt) => {
@@ -47,7 +48,10 @@ kioskSchema.pre("save", function save(next) {
             next();
         });
     });
-});
+};
+kioskSchema.pre("save", hashSecret);
+kioskSchema.pre("update", hashSecret);
+
 
 kioskSchema.methods.compareSecret = function (candidateSecret: string, cb: (err: any, isMatch: any) => {}) {
     bcrypt.compare(candidateSecret, this.Secret, (err: mongoose.Error, isMatch: boolean) => {

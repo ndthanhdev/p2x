@@ -21,7 +21,7 @@ namespace App
         const string LOG_ERROR_PREFIX = "[Error]";
         const int TIME_OUT = 5000;
 
-        string portName, serverUrl;
+        private readonly AppConfig _config;
         IHldMainBoard hldMainBoard;
 
         Queue<int> _commandsQueue;
@@ -43,20 +43,20 @@ namespace App
 
         public bool IsSensor { get; set; }
 
-        private string iCNo = string.Empty;
+        private string _iCNo = string.Empty;
+        private string _jwt = string.Empty;
         string version = string.Empty;
         private Socket socket;
         private RestClient _client;
 
         public App(AppConfig config, IHldMainBoard hldMainBoard)
         {
-            this.portName = config.PortName;
-            this.serverUrl = config.ServerUrl;
+            _config = config;
             this.hldMainBoard = hldMainBoard;
             this.NSafe = config.NLocks;
             this.IsSensor = config.IsSensor;
             this.hldMainBoard.SetMaxSide(IsSensor ? 2 : 1);
-            _client = new RestClient(serverUrl)
+            _client = new RestClient(_config.ServerUrl)
             {
                 Timeout = TIME_OUT
             };
@@ -77,10 +77,11 @@ namespace App
                 }
                 finally
                 {
-                    iCNo = string.Empty;
+                    _iCNo = string.Empty;
                     version = string.Empty;
                     socket?.Close();
                 }
+                AppLog.Info("Restarting...");
                 await Task.Delay(ERROR_DELAY);
             }
         }
@@ -90,13 +91,17 @@ namespace App
             string errMsg = string.Empty;
             BoardStatus oldStatus = null, latestStatus;
 
-            if (!TestBoard(portName, ref iCNo, ref version, ref errMsg))
+            if (!TestBoard(_config.PortName, ref _iCNo, ref version, ref errMsg))
             {
                 AppLog.Error("{0}. {1}", "Connect to board fail", errMsg);
                 await Task.Delay(ERROR_DELAY);
                 return;
             }
-            PrintBoardInfo(iCNo, version);
+            PrintBoardInfo(_iCNo, version);
+
+            AppLog.Info("Authenticating...");
+            var loginResponse = await Login(_iCNo, _config.Secret);
+            AppLog.Info("Authenticated");
 
             //Subscribe(iCNo);
 
@@ -145,9 +150,25 @@ namespace App
             }
         }
 
+        public async Task<string> Login(string icNo, string secret)
+        {
+            var loginRequest = MakeLoginRequest(icNo, secret);
+            var response = (await _client.ExecuteTaskAsync<DTO<string>>(loginRequest)).Data;
+            if (response is null)
+            {
+                // login unsuccess 
+                throw new Exception("Can't get response from server");
+            }
+            else if (response.Code != 0)
+            {
+                throw new Exception(response.Errors);
+            }
+            return response.Data;
+        }
+
         public void Subscribe(string eventName)
         {
-            socket = IO.Socket(serverUrl);
+            socket = IO.Socket(_config.ServerUrl);
             socket.On(Socket.EVENT_CONNECT, async () =>
             {
                 await Task.Yield();
@@ -226,7 +247,7 @@ namespace App
             try
             {
                 BoardStatus boardStatus = new BoardStatus();
-                if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref errMsg))
+                if (!hldMainBoard.OpenSerialPort(_config.PortName, BAUD_RATE, ref errMsg))
                 {
                     return null;
                 }
@@ -313,7 +334,7 @@ namespace App
         {
             try
             {
-                if (!hldMainBoard.OpenSerialPort(portName, BAUD_RATE, ref msg))
+                if (!hldMainBoard.OpenSerialPort(_config.PortName, BAUD_RATE, ref msg))
                 {
                     return false;
                 }
@@ -338,7 +359,19 @@ namespace App
         {
             RestRequest restRequest = new RestRequest("status", Method.POST);
             restRequest.RequestFormat = DataFormat.Json;
-            restRequest.AddBody(new DTO.Status(status, iCNo));
+            restRequest.AddBody(new DTO.Status(status, _iCNo));
+            return restRequest;
+        }
+
+        private RestRequest MakeLoginRequest(string iCNo, string secret)
+        {
+            RestRequest restRequest = new RestRequest("api/login", Method.POST);
+            restRequest.RequestFormat = DataFormat.Json;
+            restRequest.AddBody(new
+            {
+                ICNo = iCNo,
+                Secret = secret
+            });
             return restRequest;
         }
     }

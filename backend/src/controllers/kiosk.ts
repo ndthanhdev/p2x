@@ -19,7 +19,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
         // Parameter error
         return res.json(<DTO>{
             Code: 1,
-            Data: errors
+            Errors: errors
         });
     }
     KioskModel.findOne(<IKiosk>{ ICNo: req.body.ICNo }, (err, kiosk) => {
@@ -31,14 +31,13 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
             //  Kiosk isn't exist
             return res.json(<DTO>{
                 Code: 2,
-                Data: "Kiosk isn't exist"
+                Errors: "Kiosk isn't exist"
             });
         }
         kiosk.compareSecret(req.body.Secret, (secret_err: Error, isMatch: boolean) => {
             if (secret_err) {
                 return res.json(<DTO>{
-                    Code: 3,
-                    Data: "Kiosk isn't exist"
+                    Code: 3
                 });
             }
             if (isMatch) {
@@ -52,6 +51,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
                 //  Secret isn't match
                 return res.json(<DTO>{
                     Code: 4,
+                    Errors: "Secret isn't match"
                 });
             }
         });

@@ -10,5 +10,7 @@ namespace App
     {
         public int Code { get; set; }
         public T Data { get; set; }
+
+        public string Errors { get; set; }
     }
 }
