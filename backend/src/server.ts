@@ -13,6 +13,7 @@ import mongoose = require("mongoose");
 import * as Bluebird from "bluebird";
 import { graphiqlExpress, graphqlExpress } from "apollo-server-express";
 import expressValidator = require("express-validator");
+import { SubscriptionServer } from "subscriptions-transport-ws";
 
 /**
  * Websocket
@@ -34,6 +35,7 @@ dotenv.config({ path: ".env" });
  */
 import * as testController from "./controllers/test";
 import * as kioskController from "./controllers/kiosk";
+import { execute, subscribe } from "graphql";
 
 /**
  * Create Express server.
@@ -75,7 +77,8 @@ app.use("/graphql", graphqlExpress({
     schema: schema
 }));
 app.use("/graphiql", graphiqlExpress({
-    endpointURL: "/graphql"
+    endpointURL: "/graphql",
+    subscriptionsEndpoint: `ws://localhost:${app.get("port")}/subscriptions`
 }));
 
 /**
@@ -90,6 +93,15 @@ app.use(errorHandler());
 const server = createServer(app);
 server.listen(app.get("port"), () => {
     console.log(("  App is running at http://localhost:%d in %s mode"), app.get("port"), app.get("env"));
+    // Set up the WebSocket for handling GraphQL subscriptions
+    new SubscriptionServer({
+        execute,
+        subscribe,
+        schema
+    }, {
+            server: server,
+            path: "/subscriptions",
+        });
     console.log("  Press CTRL-C to stop\n");
 });
 
