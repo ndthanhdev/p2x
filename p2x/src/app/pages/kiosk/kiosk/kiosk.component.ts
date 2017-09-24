@@ -6,6 +6,22 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute } from '@angular/router';
 import { IStatus } from '../../../models/Status';
+import gql from 'graphql-tag';
+import { Apollo } from 'apollo-angular';
+
+const statusAdded = gql`
+subscription statusAdded($ICNo:String){
+  statusAdded(ICNo:$ICNo){
+    ICNo
+    createdAt
+    SafeStatuss {
+      IdNo
+      Lock
+      Sensor
+    }
+  }
+}
+`;
 
 @Component({
   selector: 'p2x-kiosk',
@@ -18,14 +34,20 @@ export class KioskComponent implements OnInit, OnDestroy {
   status: IStatus = undefined;
   private routeSub: Subscription;
   private statusSub: Subscription;
+  private statusAddedSub: Subscription;
+
   constructor(private store: Store<fromReducers.State>,
     public _pageTitle: PageTitleService,
-    private _route: ActivatedRoute) { }
+    private _route: ActivatedRoute,
+    private apollo: Apollo) { }
 
   ngOnInit() {
     this._pageTitle.title = "Safe";
     this.routeSub = this._route.params.subscribe(params => {
       this.store.dispatch(new fromActions.Load(params.id));
+      this.statusAddedSub = this.apollo.subscribe({ query: statusAdded, variables: { ICNo: params.id } })
+        .subscribe(({ statusAdded }) => this.store.dispatch(new fromActions.AddedStatus(statusAdded)));
+
     });
     this.statusSub = this.status$.subscribe(status => this.status = status);
   }

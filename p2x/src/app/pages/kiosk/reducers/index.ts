@@ -14,6 +14,8 @@ export function reducer(state: State = initialState, action: fromAction.Actions)
     switch (action.type) {
         case fromAction.LOAD_SUCCESS:
             return { ...state, status: action.payload };
+        case fromAction.ADDED_STATUS:
+            return { ...state, status: action.payload };
         default:
             return state;
     }
