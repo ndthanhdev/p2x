@@ -44,9 +44,9 @@ export class KioskComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._pageTitle.title = "Safe";
     this.routeSub = this._route.params.subscribe(params => {
-      this.store.dispatch(new fromActions.Load(params.id));
       this.statusAddedSub = this.apollo.subscribe({ query: statusAdded, variables: { ICNo: params.id } })
         .subscribe(({ statusAdded }) => this.store.dispatch(new fromActions.AddedStatus(statusAdded)));
+      this.store.dispatch(new fromActions.Load(params.id));
 
     });
     this.statusSub = this.status$.subscribe(status => this.status = status);

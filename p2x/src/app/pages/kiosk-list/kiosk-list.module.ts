@@ -4,10 +4,7 @@ import { MdCardModule, MdIconModule, MdButtonModule } from "@angular/material";
 
 import { KioskListRoutingModule } from './kiosk-list-routing.module';
 import { KioskListComponent } from './kiosk-list/kiosk-list.component';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { reducers } from "./reducers";
-import { KioskListEffects } from "./effects";
+// import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   imports: [
@@ -16,9 +13,9 @@ import { KioskListEffects } from "./effects";
     MdCardModule,
     MdIconModule,
     MdButtonModule,
-
-    StoreModule.forFeature('kiosk-list', reducers),
-    EffectsModule.forFeature([KioskListEffects]),
+    
+    // StoreModule.forFeature('sidenav', reducers),
+    // EffectsModule.forFeature([SidenavEffects]),
   ],
   declarations: [KioskListComponent],
   providers: []

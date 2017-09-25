@@ -14,6 +14,8 @@ export function reducers(state: State = initialState, action: fromActions.Action
     switch (action.type) {
         case fromActions.LOAD_SUCCESS:
             return { ...state, kiosks: action.payload };
+        case fromActions.KIOSKS_CHANGED:
+            return { ...state, kiosks: action.payload };
         default:
             return state;
     }
