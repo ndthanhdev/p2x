@@ -5,7 +5,7 @@
       <md-card-subtitle>
         <md-chip-list>
           <md-chip [color]="safeStatus.Lock?'primary':'accent'" selected="true">{{safeStatus.Lock?'Closed':'Open'}}</md-chip>
-          <md-chip [color]="safeStatus.Sensor?'primary':'accent'" selected="true">{{safeStatus.Sensor?'Empty':'Occupied'}}</md-chip>
+          <md-chip [color]="safeStatus.Sensor?'accent':'primary'" selected="true">{{safeStatus.Sensor?'Empty':'Occupied'}}</md-chip>
         </md-chip-list>
       </md-card-subtitle>
     </md-card>

@@ -36,6 +36,8 @@ dotenv.config({ path: ".env" });
 import * as testController from "./controllers/test";
 import * as kioskController from "./controllers/kiosk";
 import { execute, subscribe } from "graphql";
+import { makeAllKioskOffline } from "./utils";
+import { KioskModel } from "./models/Kiosk";
 
 /**
  * Create Express server.
@@ -50,6 +52,11 @@ mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
 mongoose.connection.on("error", () => {
     console.log("MongoDB connection error. Please make sure MongoDB is running.");
     process.exit();
+});
+mongoose.connection.once("connected", async () => {
+    // Make all offline whenever sever start
+    await makeAllKioskOffline();
+
 });
 
 /**
@@ -86,12 +93,11 @@ app.use("/graphiql", graphiqlExpress({
  */
 app.use(errorHandler());
 
-
 /**
  * Start Express server.
  */
 const server = createServer(app);
-server.listen(app.get("port"), () => {
+server.listen(app.get("port"), async () => {
     console.log(("  App is running at http://localhost:%d in %s mode"), app.get("port"), app.get("env"));
     // Set up the WebSocket for handling GraphQL subscriptions
     new SubscriptionServer({

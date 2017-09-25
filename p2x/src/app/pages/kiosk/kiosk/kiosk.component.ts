@@ -55,6 +55,7 @@ export class KioskComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
     this.statusSub.unsubscribe();
+    this.statusAddedSub.unsubscribe();
   }
 
 }

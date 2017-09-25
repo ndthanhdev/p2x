@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { Kiosk } from "../models/Kiosk";
+import { Kiosk } from "../../../models/Kiosk";
 import * as fromActions from "../actions";
 
 export interface State {

@@ -2,7 +2,7 @@ import { GraphQLFieldConfig, GraphQLString, subscribe, buildSchema } from "graph
 import { statusInputType, statusType } from "../../types/status";
 import { StatusModel } from "../../../models/Status";
 import { withFilter } from "graphql-subscriptions";
-import { pubsub } from "../../pubsub";
+import { pubsub, EVENT_STATUS_ADDED } from "../../pubsub";
 
 
 export const statusAdded = <GraphQLFieldConfig<any, any>>{
@@ -13,7 +13,7 @@ export const statusAdded = <GraphQLFieldConfig<any, any>>{
         }
     },
     resolve: async (source, args, context, info) => source,
-    subscribe: withFilter(() => pubsub.asyncIterator("statusAdded"), (source, args, context, info) => {
+    subscribe: withFilter(() => pubsub.asyncIterator(EVENT_STATUS_ADDED), (source, args, context, info) => {
         return source.ICNo === args.ICNo;
     })
 };

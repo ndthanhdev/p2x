@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Kiosk } from "../../sidenav/models/Kiosk";
+import { Kiosk } from "../../../models/Kiosk";
 
 export const LOAD = "[Kiosk List] Load";
 export const LOAD_SUCCESS = "[Kiosk List] Load Success";

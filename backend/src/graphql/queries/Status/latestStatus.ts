@@ -16,9 +16,10 @@ export const LatestStatus: GraphQLFieldConfig<any, any> = {
     },
     resolve: async (source, args, context, info) => {
         try {
-            const status = await StatusModel.findOne({ ICNo: args.ICNo }).sort({ created_at: -1 }).exec();
+            const status = await StatusModel.findOne({ ICNo: args.ICNo }, undefined, { sort: { createdAt: -1 } }).exec();
             if (!status) {
-                throw new Error("Error getting status");
+                // throw new Error("Error getting status");
+                return [];
             }
             return status;
         } catch (error) {

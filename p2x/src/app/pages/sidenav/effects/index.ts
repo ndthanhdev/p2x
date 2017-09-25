@@ -7,7 +7,7 @@ import * as fromActions from "../actions";
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/exhaustMap';
-import { Kiosk } from "../models/Kiosk";
+import { Kiosk } from "../../../models/Kiosk";
 
 const getKiosks = gql`
 query getKiosks{
@@ -15,6 +15,7 @@ query getKiosks{
       _id
       ICNo
       Name
+      IsOnline
     }
   }
 `;

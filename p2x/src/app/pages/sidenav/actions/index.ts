@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Kiosk } from "../models/Kiosk";
+import { Kiosk } from "../../../models/Kiosk";
 
 export const LOAD = "[Sidenav] Load";
 export const LOAD_SUCCESS = "[Sidenav] Load Success";

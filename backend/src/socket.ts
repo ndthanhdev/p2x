@@ -1,9 +1,9 @@
 import * as socketio from "socket.io";
 import * as socketiojwt from "socketio-jwt";
-import { pubsub } from "./graphql/pubsub";
+import { pubsub, EVENT_STATUS_ADDED, EVENT_KIOSKS_CHANGED } from "./graphql/pubsub";
 import { Server } from "http";
 import { StatusModel, IStatus } from "./models/Status";
-import { KioskModel } from "./models/Kiosk";
+import { KioskModel, IKiosk } from "./models/Kiosk";
 
 export function listen(server: Server) {
 
@@ -15,16 +15,22 @@ export function listen(server: Server) {
         handshake: true
     }));
 
-    io.on("connection", (socket) => {
+    io.on("connection", async (socket) => {
         const iCNo = <string>(<any>socket).decoded_token.ICNo;
-        // KioskModel.findOneAndUpdate()
+        await KioskModel.findOneAndUpdate(<IKiosk>{ ICNo: iCNo }, { $set: { IsOnline: true } }).exec();
+        pubsub.publish(EVENT_KIOSKS_CHANGED, undefined);
         socket.join(iCNo);
+        socket.on("disconnect", async () => {
+            await KioskModel.findOneAndUpdate(<IKiosk>{ ICNo: iCNo }, { $set: { IsOnline: false } }).exec();
+            pubsub.publish(EVENT_KIOSKS_CHANGED, undefined);            
+        });
         socket.on("status", async (arg: any) => {
             const status = <IStatus>JSON.parse(arg);
             status.ICNo = iCNo;
             const model = await StatusModel.create(status);
-            pubsub.publish("statusAdded", model);
+            pubsub.publish(EVENT_STATUS_ADDED, model);
         });
+
     });
 
     return io;

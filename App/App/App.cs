@@ -167,6 +167,7 @@ namespace App
             var options = new IO.Options();
             options.Query = new Dictionary<string, string>();
             options.Query["token"] = jwt;
+            options.Reconnection = true;
             _socket = IO.Socket(_config.ServerUrl, options);
             _socket.On(Socket.EVENT_CONNECT, async () =>
             {

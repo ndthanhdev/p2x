@@ -5,7 +5,12 @@
   $background: map-get($theme, background);
   $foreground: map-get($theme, foreground);
 
-  .docs-component-category-list-card-summary {
-    color: mat-color($foreground, secondary-text);
+  .kiosk-online {
+    //background: mat-color($foreground);
+  }
+
+  .kiosk-offline {
+    color: mat-color($primary, default-contrast);
+    background: mat-color($warn);
   }
 }
