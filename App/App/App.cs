@@ -44,11 +44,13 @@ namespace App
 
         public bool IsSensor { get; set; }
 
+        private RestClient _client;
+
+        // context
         private string _iCNo = string.Empty;
         private string _jwt = string.Empty;
         string version = string.Empty;
         private Socket _socket;
-        private RestClient _client;
 
         public App(AppConfig config, IHldMainBoard hldMainBoard)
         {
@@ -79,6 +81,7 @@ namespace App
                 finally
                 {
                     _iCNo = string.Empty;
+                    _jwt = string.Empty;
                     version = string.Empty;
                     _socket?.Close();
                 }
@@ -164,36 +167,33 @@ namespace App
 
         public async Task Subscribe(string jwt)
         {
-            AppLog.Info("Connecting to server...");
-            var options = new IO.Options();
-            options.Query = new Dictionary<string, string>();
-            options.Query["token"] = jwt;
-            options.Reconnection = true;
-            _socket = IO.Socket(_config.ServerUrl, options);
-            _socket.On(Socket.EVENT_CONNECT, async () =>
+            await Task.WhenAny(Task.Delay(TIME_OUT), Task.Run(async () =>
             {
-                await Task.Yield();
-                AppLog.Info("Connected to server");
-            });
-            _socket.On(Socket.EVENT_RECONNECTING, async () =>
+                AppLog.Info("Connecting to server...");
+                var options = new IO.Options();
+                options.Query = new Dictionary<string, string>();
+                options.Query["token"] = jwt;
+                options.Reconnection = true;
+                _socket = IO.Socket(_config.ServerUrl, options);
+                _socket.On(Socket.EVENT_CONNECT, () =>
+                {
+                    AppLog.Info("Connected to server");
+                });
+                _socket.On(Socket.EVENT_RECONNECTING, () =>
+                {
+                    AppLog.Info("Reconnecting to server...");
+                });
+
+                // wait for connect to server
+                while (_socket.Io().ReadyState != Manager.ReadyStateEnum.OPEN)
+                {
+                    await Task.Yield();
+                }
+            }));
+            if (_socket.Io().ReadyState != Manager.ReadyStateEnum.OPEN)
             {
-                await Task.Yield();
-                AppLog.Info("Reconnecting to server...");
-            });
-
-            // wait for connect to server
-            await Task.Delay(3000);
-
-            //socket.On(eventName, async (rawData) =>
-            // {
-            //     await Task.Yield();
-            //     int safeId = int.Parse(rawData.ToString());
-            //     AppLog.Info("Received {0}", safeId);
-            //     lock (CommandsQueue)
-            //     {
-            //         CommandsQueue.Enqueue(safeId);
-            //     }
-            // });
+                throw new Exception("Open socket timeout.");
+            }
         }
 
         public void SendStatus(BoardStatus boardStatus)

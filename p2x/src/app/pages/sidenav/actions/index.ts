@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Kiosk } from "../../../models/Kiosk";
+import { IKiosk } from "../../../models/Kiosk";
 
 export const LOAD = "[Sidenav] Load";
 export const LOAD_SUCCESS = "[Sidenav] Load Success";
@@ -20,7 +20,7 @@ export class Load implements Action {
 
 export class LoadSuccess implements Action {
     readonly type = LOAD_SUCCESS;
-    constructor(public payload: Kiosk[]) {
+    constructor(public payload: IKiosk[]) {
     }
 }
 
@@ -32,7 +32,7 @@ export class LoadFailure implements Action {
 export class KioksChanged implements Action {
     readonly type = KIOSKS_CHANGED;
 
-    constructor(public payload: Kiosk[]) { }
+    constructor(public payload: IKiosk[]) { }
 }
 
 export type Actions = Load

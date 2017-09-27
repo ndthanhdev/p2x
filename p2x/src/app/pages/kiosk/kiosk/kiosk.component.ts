@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IStatus } from '../../../models/Status';
 import gql from 'graphql-tag';
 import { Apollo } from 'apollo-angular';
+import { IKiosk } from '../../../models/kiosk';
 
 const statusAdded = gql`
 subscription statusAdded($ICNo:String){
@@ -32,8 +33,13 @@ export class KioskComponent implements OnInit, OnDestroy {
 
   status$ = this.store.select(fromReducers.getStatus);
   status: IStatus = undefined;
+
+  kiosk$ = this.store.select(fromReducers.getKiosk);
+  kiosk: IKiosk = undefined;
+
   private routeSub: Subscription;
   private statusSub: Subscription;
+  private kioskSub: Subscription;
   private statusAddedSub: Subscription;
 
   constructor(private store: Store<fromReducers.State>,
@@ -50,6 +56,11 @@ export class KioskComponent implements OnInit, OnDestroy {
 
     });
     this.statusSub = this.status$.subscribe(status => this.status = status);
+    this.kioskSub = this.kiosk$.subscribe(kiosk => {
+      this._pageTitle.title = kiosk.Name;
+      this.kiosk = kiosk;
+    });
+    this.kiosk
   }
 
   ngOnDestroy(): void {

@@ -7,7 +7,7 @@ import * as fromActions from "../actions/edit";
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/exhaustMap';
-import { Kiosk } from "../../../models/Kiosk";
+import { IKiosk } from "../../../models/Kiosk";
 import { Router } from "@angular/router";
 
 const getKiosk = gql`
@@ -58,7 +58,7 @@ export class EditEffects {
             },
             fetchPolicy: 'network-only'
         })
-            .concatMap(({ data }) => of(new fromActions.LoadSuccess(<Kiosk>data["Kiosk"])))
+            .concatMap(({ data }) => of(new fromActions.LoadSuccess(<IKiosk>data["Kiosk"])))
             .catch(error => of(new fromActions.LoadFailure())));
 
     @Effect()
@@ -70,7 +70,7 @@ export class EditEffects {
             variables: {
                 kiosk: payload
             }
-        }).concatMap(({ data }) => of(new fromActions.UpdateSuccess(<Kiosk>data)))
+        }).concatMap(({ data }) => of(new fromActions.UpdateSuccess(<IKiosk>data)))
             .catch(error => of(new fromActions.UpdateFailure())));
 
     @Effect()

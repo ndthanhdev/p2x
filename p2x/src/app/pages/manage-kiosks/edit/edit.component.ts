@@ -5,7 +5,7 @@ import * as fromActions from "../actions/edit";
 import * as fromReducers from "../reducer";
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { Kiosk } from '../../../models/Kiosk';
+import { IKiosk } from '../../../models/Kiosk';
 
 @Component({
   selector: 'p2x-edit',
@@ -50,7 +50,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this._store.dispatch(new fromActions.Update(<Kiosk>{
+    this._store.dispatch(new fromActions.Update(<IKiosk>{
       ICNo: this.ICNo,
       Secret: this.Secret,
       Name: this.Name

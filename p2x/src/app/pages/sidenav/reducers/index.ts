@@ -1,9 +1,9 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { Kiosk } from "../../../models/Kiosk";
+import { IKiosk } from "../../../models/Kiosk";
 import * as fromActions from "../actions";
 
 export interface State {
-    kiosks: Kiosk[]
+    kiosks: IKiosk[]
 };
 
 export const initialState: State = {

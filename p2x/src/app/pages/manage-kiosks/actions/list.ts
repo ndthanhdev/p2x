@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { Kiosk } from "../../../models/Kiosk";
+import { IKiosk } from "../../../models/Kiosk";
 
 export const LOAD = "[Manage Kiosk] Load";
 export const LOAD_SUCCESS = "[Manage Kiosk] Load Success";
@@ -11,7 +11,7 @@ export class Load implements Action {
 
 export class LoadSuccess implements Action {
     readonly type = LOAD_SUCCESS;
-    constructor(public payload: Kiosk[]) {
+    constructor(public payload: IKiosk[]) {
     }
 }
 

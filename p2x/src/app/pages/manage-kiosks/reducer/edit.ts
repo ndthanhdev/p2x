@@ -1,8 +1,8 @@
 import * as fromEditActions from "../actions/edit";
-import { Kiosk } from "../../../models/Kiosk";
+import { IKiosk } from "../../../models/Kiosk";
 
 export interface State {
-    kiosk: Kiosk
+    kiosk: IKiosk
 };
 
 export const initialState: State = {

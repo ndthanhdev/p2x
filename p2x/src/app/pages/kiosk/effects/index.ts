@@ -9,18 +9,23 @@ import 'rxjs/add/operator/exhaustMap';
 import 'rxjs/add/operator/concatMap';
 import "rxjs/add/operator/map";
 
-import { IStatus } from "../../../models/Status";
+import { IKiosk } from '../../../models/kiosk';
 
-const loadLatest = gql`
-query loadlatest($ICNo:String){
-    LatestStatus(ICNo:$ICNo){
-      ICNo
-      createdAt
-      SafeStatuss {
-        IdNo
-        Lock
-        Sensor
-      }
+const load = gql`
+query load($ICNo:String){
+    Kiosk(ICNo:$ICNo){
+        ICNo
+        Name
+        IsOnline
+        LatestStatus{
+          ICNo
+          createdAt
+          SafeStatuss {
+            IdNo
+            Lock
+            Sensor        
+          }
+        }    
     }
   }
 `;
@@ -31,15 +36,15 @@ export class KioskEffects {
     constructor(private actions$: Actions, private apollo: Apollo) { }
 
     @Effect()
-    loadlol$ = this.actions$
+    load$ = this.actions$
         .ofType(fromActions.LOAD)
         .map((action: fromActions.Load) => action.payload)
         .exhaustMap(payload => this.apollo.query({
-            query: loadLatest,
+            query: load,
             variables: {
                 ICNo: payload
             },
             fetchPolicy: 'network-only'
-        }).concatMap(({ data }) => of(new fromActions.LoadSuccess(<IStatus>data["LatestStatus"])))
+        }).concatMap(({ data }) => of(new fromActions.LoadSuccess(<IKiosk>data["Kiosk"])))
             .catch(error => of(new fromActions.LoadFailure())));
 }

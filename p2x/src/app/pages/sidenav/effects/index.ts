@@ -7,7 +7,7 @@ import * as fromActions from "../actions";
 import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/exhaustMap';
-import { Kiosk } from "../../../models/Kiosk";
+import { IKiosk } from "../../../models/Kiosk";
 
 const getKiosks = gql`
 query getKiosks{
@@ -31,6 +31,6 @@ export class SidenavEffects {
         .exhaustMap(() => this.apollo.query({
             query: getKiosks,
             fetchPolicy: 'network-only'
-        }).concatMap(({ data }) => of(new fromActions.LoadSuccess(<Kiosk[]>data["Kiosks"])))
+        }).concatMap(({ data }) => of(new fromActions.LoadSuccess(<IKiosk[]>data["Kiosks"])))
             .catch(error => of(new fromActions.LoadFailure())));
 }
