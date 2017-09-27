@@ -43,4 +43,5 @@ export class ChangedKiosk implements Action {
 export type Actions = Load
     | LoadSuccess
     | LoadFailure
-    | AddedStatus;
+    | AddedStatus
+    | ChangedKiosk;

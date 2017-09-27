@@ -24,6 +24,21 @@ subscription statusAdded($ICNo:String){
 }
 `;
 
+const kioskChanged = gql`
+subscription kioskChanged($ICNo:String){
+  kioskChanged(ICNo:$ICNo){
+    _id
+    ICNo
+    Name
+    IsOnline
+    LatestStatus {
+      ICNo
+      createdAt
+    }
+  }
+}
+`;
+
 @Component({
   selector: 'p2x-kiosk',
   templateUrl: './kiosk.component.html',
@@ -41,6 +56,7 @@ export class KioskComponent implements OnInit, OnDestroy {
   private statusSub: Subscription;
   private kioskSub: Subscription;
   private statusAddedSub: Subscription;
+  private kioskChangedSub: Subscription;
 
   constructor(private store: Store<fromReducers.State>,
     public _pageTitle: PageTitleService,
@@ -50,8 +66,13 @@ export class KioskComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._pageTitle.title = "Safe";
     this.routeSub = this._route.params.subscribe(params => {
+
       this.statusAddedSub = this.apollo.subscribe({ query: statusAdded, variables: { ICNo: params.id } })
         .subscribe(({ statusAdded }) => this.store.dispatch(new fromActions.AddedStatus(statusAdded)));
+
+      this.kioskChangedSub = this.apollo.subscribe({ query: kioskChanged, variables: { ICNo: params.id } })
+        .subscribe(({ kioskChanged }) => this.store.dispatch(new fromActions.ChangedKiosk(kioskChanged)));
+
       this.store.dispatch(new fromActions.Load(params.id));
 
     });
@@ -67,6 +88,8 @@ export class KioskComponent implements OnInit, OnDestroy {
     this.routeSub.unsubscribe();
     this.statusSub.unsubscribe();
     this.statusAddedSub.unsubscribe();
+    this.kioskSub.unsubscribe();
+    this.kioskChangedSub.unsubscribe();    
   }
 
 }

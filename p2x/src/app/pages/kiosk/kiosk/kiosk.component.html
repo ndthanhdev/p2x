@@ -1,6 +1,12 @@
+<div class="m-3">
+  <md-chip-list>
+    <md-chip *ngIf="kiosk?.IsOnline" color="primary" selected="true">Online</md-chip>
+    <md-chip *ngIf="!kiosk?.IsOnline" color="warn" selected="true">Offline</md-chip>
+  </md-chip-list>
+</div>
 <div class="docs-component-category-list">
   <a class="docs-component-category-list-item" *ngFor="let safeStatus of status?.SafeStatuss" [routerLink]="['/safe',status.ICNo,safeStatus.IdNo]">
-    <md-card class="docs-component-category-list-card">
+    <md-card class="docs-component-category-list-card" ng-disabled="">
       <md-card-title>Safe {{safeStatus.IdNo}}</md-card-title>
       <md-card-subtitle>
         <md-chip-list>

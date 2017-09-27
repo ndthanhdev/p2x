@@ -28,6 +28,11 @@ export function reducer(state: State = initialState, action: fromAction.Actions)
                 ...state,
                 kiosk: { ...state.kiosk, LatestStatus: action.payload }
             };
+        case fromAction.CHANGED_KIOSK:
+            return {
+                ...state,
+                kiosk: { ...state.kiosk, ...action.payload, LatestStatus: state.kiosk.LatestStatus }
+            }
         default:
             return state;
     }

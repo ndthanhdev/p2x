@@ -1,6 +1,6 @@
 import { GraphQLFieldConfig, GraphQLString, GraphQLList } from "graphql";
 import { withFilter } from "graphql-subscriptions";
-import { pubsub, EVENT_KIOSKS_CHANGED } from "../../pubsub";
+import { pubsub, EVENT_KIOSK_CHANGED } from "../../pubsub";
 import { kioskType } from "../../types/kiosk";
 import { KioskModel } from "../../../models/Kiosk";
 
@@ -15,5 +15,5 @@ export const kiosksChanged = <GraphQLFieldConfig<any, any>>{
             throw error;
         }
     },
-    subscribe: () => pubsub.asyncIterator(EVENT_KIOSKS_CHANGED)
+    subscribe: () => pubsub.asyncIterator(EVENT_KIOSK_CHANGED)
 };
