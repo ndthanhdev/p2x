@@ -104,7 +104,7 @@ namespace App
             _jwt = await Login(_iCNo, _config.Secret);
             AppLog.Info("Authenticated");
 
-            Subscribe(_jwt);
+            await Subscribe(_jwt);
 
             while (true)
             {
@@ -162,8 +162,9 @@ namespace App
             return response.Data;
         }
 
-        public void Subscribe(string jwt)
+        public async Task Subscribe(string jwt)
         {
+            AppLog.Info("Connecting to server...");
             var options = new IO.Options();
             options.Query = new Dictionary<string, string>();
             options.Query["token"] = jwt;
@@ -180,6 +181,9 @@ namespace App
                 AppLog.Info("Reconnecting to server...");
             });
 
+            // wait for connect to server
+            await Task.Delay(3000);
+
             //socket.On(eventName, async (rawData) =>
             // {
             //     await Task.Yield();
@@ -194,6 +198,10 @@ namespace App
 
         public void SendStatus(BoardStatus boardStatus)
         {
+            if (_socket.Io().ReadyState != Manager.ReadyStateEnum.OPEN)
+            {
+                throw new Exception("Socket isn't ready.");
+            }
             _socket.Emit("status", JsonConvert.SerializeObject(boardStatus));
         }
 

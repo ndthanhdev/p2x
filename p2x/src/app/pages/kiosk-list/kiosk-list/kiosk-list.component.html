@@ -1,8 +1,13 @@
 <div class="docs-component-category-list">
-  <a class="docs-component-category-list-item" *ngFor="let kiosk of kiosks$ | async"
-     [routerLink]="[ '/kiosk', kiosk.ICNo ]">
-    <md-card [ngClass]="{'kiosk-online': kiosk.IsOnline,'kiosk-offline': !kiosk.IsOnline}">
+  <a class="docs-component-category-list-item" *ngFor="let kiosk of kiosks$ | async" [routerLink]="[ '/kiosk', kiosk.ICNo ]">
+    <md-card>
       <md-card-title>{{kiosk.Name}}</md-card-title>
+      <md-card-subtitle>
+        <md-chip-list>
+          <md-chip color="primary" selected="true" *ngIf="kiosk.IsOnline">Online</md-chip>
+          <md-chip color="warn" selected="true" *ngIf="!kiosk.IsOnline">Offline</md-chip>
+        </md-chip-list>
+      </md-card-subtitle>
     </md-card>
   </a>
 </div>

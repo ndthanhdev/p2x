@@ -22,7 +22,7 @@ export function listen(server: Server) {
         socket.join(iCNo);
         socket.on("disconnect", async () => {
             await KioskModel.findOneAndUpdate(<IKiosk>{ ICNo: iCNo }, { $set: { IsOnline: false } }).exec();
-            pubsub.publish(EVENT_KIOSKS_CHANGED, undefined);            
+            pubsub.publish(EVENT_KIOSKS_CHANGED, undefined);
         });
         socket.on("status", async (arg: any) => {
             const status = <IStatus>JSON.parse(arg);
