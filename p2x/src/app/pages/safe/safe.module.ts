@@ -11,6 +11,11 @@ import { OverviewComponent } from './overview/overview.component';
 import { HistoryComponent } from './history/history.component';
 import { SharedModule } from "../../shared/shared.module";
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { reducer } from "./reducers";
+import { OverviewEffects } from './effects/overview';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -23,6 +28,9 @@ import { SharedModule } from "../../shared/shared.module";
     MdSortModule,
     SharedModule,
     MdButtonModule,
+
+    StoreModule.forFeature('safe', reducer),
+    EffectsModule.forFeature([OverviewEffects])
   ],
   declarations: [SafeComponent, OverviewComponent, HistoryComponent]
 })
