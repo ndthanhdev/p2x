@@ -15,6 +15,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from "./reducers";
 import { OverviewEffects } from './effects/overview';
+import { SafeEffects } from './effects/safe';
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import { OverviewEffects } from './effects/overview';
     MdButtonModule,
 
     StoreModule.forFeature('safe', reducer),
-    EffectsModule.forFeature([OverviewEffects])
+    EffectsModule.forFeature([SafeEffects, OverviewEffects])
   ],
   declarations: [SafeComponent, OverviewComponent, HistoryComponent]
 })
