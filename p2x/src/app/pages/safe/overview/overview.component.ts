@@ -8,6 +8,45 @@ import * as fromOverviewAction from "../actions/overview"
 import * as fromSafeAction from "../actions/safe";
 import { ISafeStatus } from '../../../models/ISafeStatus';
 import { Observable } from 'rxjs/Observable';
+import { IKiosk } from '../../../models/kiosk';
+import gql from 'graphql-tag';
+import { Apollo } from 'apollo-angular';
+import { IStatus } from '../../../models/Status';
+import * as Rx from "rxjs";
+
+const queryKioskChanged = gql`
+subscription kioskChanged($ICNo:String){
+  kioskChanged(ICNo:$ICNo){
+    _id
+    ICNo
+    Name
+    IsOnline
+    LatestStatus {
+      ICNo      
+      createdAt
+      SafeStatuss {
+        IdNo
+        Lock
+        Sensor
+      }
+    }
+  }
+}
+`;
+
+const qureyStatusAdded = gql`
+subscription statusAdded($ICNo:String){
+  statusAdded(ICNo:$ICNo){
+    ICNo
+    createdAt
+    SafeStatuss {
+      IdNo
+      Lock
+      Sensor
+    }
+  }
+}
+`;
 
 @Component({
   selector: 'p2x-overview',
@@ -16,36 +55,65 @@ import { Observable } from 'rxjs/Observable';
 })
 export class OverviewComponent implements OnInit, OnDestroy {
 
-  // safeStatus$ = this.store.select(fromReducer.getSafeStatus);
-  idNo: number;
-
   safeStatus: ISafeStatus;
+  isOnline: boolean;
 
-  kiosk$ = this.store.select(fromReducer.getKiosk);
+  safeKiosk$ = this.store.select(fromReducer.getSafeKiosk);
+  overviewKiosk$ = this.store.select(fromReducer.getOverviewKiosk);
+  overviewStatus$ = this.store.select(fromReducer.getOverviewSafeStatus)
 
+  kioskSub: Subscription;
   safeStatusSub: Subscription;
   routeSub: Subscription;
+  kioskChanegedSub: Subscription;
+  statushanegedSub: Subscription;
 
   constructor(private store: Store<fromReducer.State>,
     public _pageTitle: PageTitleService,
-    private _route: ActivatedRoute) { }
+    private _route: ActivatedRoute,
+    private apollo: Apollo) { }
 
   ngOnInit() {
     this.routeSub = this._route.parent.params.subscribe(params => {
       this.store.dispatch(new fromSafeAction.Load(params.kid));
-      this.idNo = params.sid;
-    });
-    this.safeStatusSub = this.kiosk$.subscribe(kiosk => {
-      if (kiosk == null || kiosk.LatestStatus == null)
-        return;
-      let safeStatus = kiosk.LatestStatus.SafeStatuss.filter(value => value.IdNo == this.idNo)[0];
-      this.safeStatus = { ...this.safeStatus, ...safeStatus };
+
+      this.kioskSub = Rx.Observable.merge(this.safeKiosk$, this.overviewKiosk$).subscribe(kiosk => {
+        this.safeStatus = this.extractSafeStatus(params.sid, kiosk);
+        if (kiosk) {
+          this.isOnline = kiosk.IsOnline;
+        }
+      });
+
+      this.safeStatusSub = this.overviewStatus$.subscribe(status => {
+        if (status == null)
+          return;
+
+        this.safeStatus = status.SafeStatuss
+          .filter(safeStatus => safeStatus.IdNo == params.sid)[0];
+      });
+
+      this.kioskChanegedSub = this.apollo.subscribe({ query: queryKioskChanged, variables: { ICNo: params.kid } })
+        .subscribe(({ kioskChanged }) => this.store.dispatch(new fromOverviewAction.KioskChanged(kioskChanged)));
+
+      this.statushanegedSub = this.apollo.subscribe({ query: qureyStatusAdded, variables: { ICNo: params.kid } })
+        .subscribe(({ statusAdded }) => this.store.dispatch(new fromOverviewAction.StatusChanged(<IStatus>statusAdded)));
+
     });
   }
 
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
+    this.kioskSub.unsubscribe();
     this.safeStatusSub.unsubscribe();
+    this.kioskChanegedSub.unsubscribe();
+    this.statushanegedSub.unsubscribe();
+
+  }
+
+  extractSafeStatus(idNo: number, kiosk: IKiosk): ISafeStatus {
+    if (kiosk == null || kiosk.LatestStatus == null)
+      return;
+    return kiosk.LatestStatus.SafeStatuss.filter(value => value.IdNo == idNo)[0];
   }
 
 }

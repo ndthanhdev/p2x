@@ -14,7 +14,6 @@ import { SharedModule } from "../../shared/shared.module";
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { reducer } from "./reducers";
-import { OverviewEffects } from './effects/overview';
 import { SafeEffects } from './effects/safe';
 
 @NgModule({
@@ -31,7 +30,7 @@ import { SafeEffects } from './effects/safe';
     MdButtonModule,
 
     StoreModule.forFeature('safe', reducer),
-    EffectsModule.forFeature([SafeEffects, OverviewEffects])
+    EffectsModule.forFeature([SafeEffects])
   ],
   declarations: [SafeComponent, OverviewComponent, HistoryComponent]
 })

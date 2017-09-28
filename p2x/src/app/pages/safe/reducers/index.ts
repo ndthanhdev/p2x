@@ -22,10 +22,11 @@ export const selectSafetate = createFeatureSelector<State>("safe");
 
 // Safe
 export const selectSafeSafetate = createSelector(selectSafetate, (sate: State) => sate.safe);
-export const getKiosk = createSelector(selectSafeSafetate, fromSafe.getKiosk);
+export const getSafeKiosk = createSelector(selectSafeSafetate, fromSafe.getKiosk);
 
 // Overview
 export const selectOverviewState = createSelector(
     selectSafetate,
     (sate: State) => sate.overview);
-export const getSafeStatus = createSelector(selectOverviewState, fromOverview.getSafeStatus);
+export const getOverviewKiosk = createSelector(selectOverviewState, fromOverview.getKiosk);
+export const getOverviewSafeStatus = createSelector(selectOverviewState, fromOverview.getSafeStatus);

@@ -14,7 +14,7 @@ import * as fromSafeAction from "../actions/safe";
 })
 export class SafeComponent implements OnInit, OnDestroy {
 
-  kiosk$ = this.store.select(fromReducer.getKiosk);
+  kiosk$ = this.store.select(fromReducer.getSafeKiosk);
 
   private routeSub: Subscription;
   private kioskSub: Subscription;

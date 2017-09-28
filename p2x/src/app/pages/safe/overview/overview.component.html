@@ -10,6 +10,9 @@
           <md-chip *ngIf="!safeStatus?.Sensor" color="primary" selected="true">Occupied</md-chip>
           <md-chip *ngIf="safeStatus?.Sensor" color="accent" selected="true">Empty</md-chip>
 
+          <md-chip *ngIf="isOnline" color="primary" selected="true">Online</md-chip>
+          <md-chip *ngIf="!isOnline" color="warn" selected="true">Offline</md-chip>
+
         </md-chip-list>
       </md-card-subtitle>
     </md-card-header>
