@@ -21,6 +21,7 @@ namespace App
         const int POWER_STATUS_FAIL = -1;
         const string LOG_ERROR_PREFIX = "[Error]";
         const int TIME_OUT = 5000;
+        const string EVENT_OPEN = "Open Lock";
 
         private readonly AppConfig _config;
         IHldMainBoard hldMainBoard;
@@ -182,6 +183,15 @@ namespace App
                 _socket.On(Socket.EVENT_RECONNECTING, () =>
                 {
                     AppLog.Info("Reconnecting to server...");
+                });
+                _socket.On(EVENT_OPEN, (payload) =>
+                {
+                    int idNo = Convert.ToInt32(payload);
+                    AppLog.Info("Received command open lock: {0}", idNo);
+                    lock (CommandsQueue)
+                    {
+                        CommandsQueue.Enqueue(idNo);
+                    }
                 });
 
                 // wait for connect to server

@@ -74,7 +74,7 @@ app.use("", express.static("frontend"));
 /**
  * Primary app routes.
  */
-app.get("api/test", testController.index);
+app.get("/api/test", testController.index);
 app.post("/api/login", kioskController.postLogin);
 
 /**
