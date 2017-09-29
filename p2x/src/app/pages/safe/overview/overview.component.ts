@@ -25,9 +25,9 @@ subscription kioskChanged($ICNo:String){
       ICNo      
       createdAt
       SafeStatuss {
-        IdNo
-        Lock
-        Sensor
+        No
+        IsLock
+        IsOccupied
       }
     }
   }
@@ -40,9 +40,9 @@ subscription statusAdded($ICNo:String){
     ICNo
     createdAt
     SafeStatuss {
-      IdNo
-      Lock
-      Sensor
+      No
+      IsLock
+      IsOccupied
     }
   }
 }
@@ -89,7 +89,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
           return;
 
         this.safeStatus = status.SafeStatuss
-          .filter(safeStatus => safeStatus.IdNo == params.sid)[0];
+          .filter(safeStatus => safeStatus.No == params.sid)[0];
       });
 
       this.kioskChanegedSub = this.apollo.subscribe({ query: queryKioskChanged, variables: { ICNo: params.kid } })
@@ -113,7 +113,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
   extractSafeStatus(idNo: number, kiosk: IKiosk): ISafeStatus {
     if (kiosk == null || kiosk.LatestStatus == null)
       return;
-    return kiosk.LatestStatus.SafeStatuss.filter(value => value.IdNo == idNo)[0];
+    return kiosk.LatestStatus.SafeStatuss.filter(value => value.No == idNo)[0];
   }
 
 }

@@ -2,11 +2,11 @@ import * as bcrypt from "bcrypt-nodejs";
 import * as mongoose from "mongoose";
 
 export interface ISafe {
-    idNo: number;
+    no: number;
     passcode: string;
 }
 
 export const SafeSchema: mongoose.Schema = new mongoose.Schema({
-    idNo: Number,
+    no: Number,
     passcode: String
 });

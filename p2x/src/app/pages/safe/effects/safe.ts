@@ -21,9 +21,9 @@ query load($ICNo:String){
           ICNo
           createdAt
           SafeStatuss {
-            IdNo
-            Lock
-            Sensor        
+            No
+            IsLock
+            IsOccupied        
           }
         }    
     }

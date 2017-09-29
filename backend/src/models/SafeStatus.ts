@@ -1,13 +1,13 @@
 import { Document, Schema } from "mongoose";
 
 export interface ISafeStatus {
-    IdNo: number;
-    Lock: boolean;
-    Sensor?: boolean;
+    No: number;
+    IsLock: boolean;
+    IsOccupied?: boolean;
 }
 
 export const SafeStatusSchema = new Schema({
-    IdNo: Number,
-    Lock: Boolean,
-    Sensor: Boolean
+    No: Number,
+    IsLock: Boolean,
+    IsOccupied: Boolean
 });

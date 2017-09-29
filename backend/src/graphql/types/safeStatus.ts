@@ -15,13 +15,13 @@ export const safeStatusType = new GraphQLObjectType({
         _id: {
             type: new GraphQLNonNull(GraphQLID)
         },
-        IdNo: {
+        No: {
             type: GraphQLInt
         },
-        Lock: {
+        IsLock: {
             type: GraphQLBoolean
         },
-        Sensor: {
+        IsOccupied: {
             type: GraphQLBoolean
         }
     })
@@ -30,13 +30,13 @@ export const safeStatusType = new GraphQLObjectType({
 export const safeStatusInputType = new GraphQLInputObjectType({
     name: "SafeStatusInput",
     fields: () => ({
-        IdNo: {
+        No: {
             type: GraphQLInt
         },
-        Lock: {
+        IsLock: {
             type: GraphQLBoolean
         },
-        Sensor: {
+        IsOccupied: {
             type: GraphQLBoolean
         }
     })

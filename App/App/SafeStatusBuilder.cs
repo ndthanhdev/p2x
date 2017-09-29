@@ -16,8 +16,8 @@ namespace App
                 safes[i] = new SafeStatus()
                 {
                     No = i,
-                    IsOpen = locks[i],
-                    IsOccupied = sensors == null ? 1 : sensors[i]
+                    IsOpen = locks[i] == 0,
+                    IsOccupied = sensors == null ? false : sensors[i] == 0
                 };
             };
 

@@ -10,8 +10,8 @@ namespace App
     public class SafeStatus : IEquatable<SafeStatus>
     {
         public int No { get; set; }
-        public int IsOpen { get; set; }
-        public int IsOccupied { get; set; }
+        public bool IsOpen { get; set; }
+        public bool IsOccupied { get; set; }
 
         public override bool Equals(object obj)
         {

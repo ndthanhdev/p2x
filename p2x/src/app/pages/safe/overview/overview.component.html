@@ -1,14 +1,14 @@
 <div class="mat-elevation-z8">
   <md-card>
     <md-card-header>
-      <md-card-title>Safe {{safeStatus?.IdNo}}</md-card-title>
+      <md-card-title>Safe {{safeStatus?.No}}</md-card-title>
       <md-card-subtitle>
         <md-chip-list>
-          <md-chip *ngIf="!safeStatus?.Lock" color="accent" selected="true">Open</md-chip>
-          <md-chip *ngIf="safeStatus?.Lock" color="primary" selected="true">closed</md-chip>
+          <md-chip *ngIf="!safeStatus?.IsLock" color="accent" selected="true">Open</md-chip>
+          <md-chip *ngIf="safeStatus?.IsLock" color="primary" selected="true">closed</md-chip>
 
-          <md-chip *ngIf="!safeStatus?.Sensor" color="primary" selected="true">Occupied</md-chip>
-          <md-chip *ngIf="safeStatus?.Sensor" color="accent" selected="true">Empty</md-chip>
+          <md-chip *ngIf="safeStatus?.IsOccupied" color="primary" selected="true">Occupied</md-chip>
+          <md-chip *ngIf="!safeStatus?.IsOccupied" color="accent" selected="true">Empty</md-chip>
 
           <md-chip *ngIf="isOnline" color="primary" selected="true">Online</md-chip>
           <md-chip *ngIf="!isOnline" color="warn" selected="true">Offline</md-chip>
