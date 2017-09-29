@@ -9,9 +9,9 @@ namespace App
 {
     public class SafeStatus : IEquatable<SafeStatus>
     {
-        public int IdNo { get; set; }
-        public int Lock { get; set; }
-        public int Sensor { get; set; }
+        public int No { get; set; }
+        public int IsOpen { get; set; }
+        public int IsOccupied { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -21,17 +21,17 @@ namespace App
         public bool Equals(SafeStatus other)
         {
             return other != null &&
-                   IdNo == other.IdNo &&
-                   Lock == other.Lock &&
-                   Sensor == other.Sensor;
+                   No == other.No &&
+                   IsOpen == other.IsOpen &&
+                   IsOccupied == other.IsOccupied;
         }
 
         public override int GetHashCode()
         {
             var hashCode = 2109148185;
-            hashCode = hashCode * -1521134295 + IdNo.GetHashCode();
-            hashCode = hashCode * -1521134295 + Lock.GetHashCode();
-            hashCode = hashCode * -1521134295 + Sensor.GetHashCode();
+            hashCode = hashCode * -1521134295 + No.GetHashCode();
+            hashCode = hashCode * -1521134295 + IsOpen.GetHashCode();
+            hashCode = hashCode * -1521134295 + IsOccupied.GetHashCode();
             return hashCode;
         }
 

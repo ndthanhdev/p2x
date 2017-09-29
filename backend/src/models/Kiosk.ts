@@ -1,13 +1,8 @@
 import * as bcrypt from "bcrypt-nodejs";
 import * as mongoose from "mongoose";
+import { ISafe, SafeSchema, } from "./Safe";
 
-export interface ISafe {
-    No: number;
-}
 
-const SafeSchema: mongoose.Schema = new mongoose.Schema({
-    No: Number
-});
 
 export interface IKiosk {
     ICNo: string;
@@ -15,7 +10,7 @@ export interface IKiosk {
     Secret: string;
     IsSensor: boolean;
     IsOnline: boolean;
-    // Safes: [ISafe];
+    Safes: [ISafe];
 
     compareSecret: (candidateSecret: string, cb: (err: any, isMatch: any) => {}) => void;
 }
@@ -29,8 +24,8 @@ const kioskSchema: mongoose.Schema = new mongoose.Schema({
     Name: String,
     Secret: String,
     IsSensor: Boolean,
-    IsOnline: { type: Boolean, default: false }
-    // Safes: [SafeSchema]
+    IsOnline: { type: Boolean, default: false },
+    Safes: [SafeSchema]
 });
 
 /**

@@ -15,9 +15,9 @@ namespace App
             {
                 safes[i] = new SafeStatus()
                 {
-                    IdNo = i,
-                    Lock = locks[i],
-                    Sensor = sensors == null ? 1 : sensors[i]
+                    No = i,
+                    IsOpen = locks[i],
+                    IsOccupied = sensors == null ? 1 : sensors[i]
                 };
             };
 
