@@ -12,5 +12,6 @@ export const forceOpenSafe: GraphQLFieldConfig<any, any> = {
     },
     resolve: async (source, args, context, info) => {
         // implement
+        return false;
     }
 };

@@ -3,7 +3,6 @@ import * as mongoose from "mongoose";
 import { ISafe, SafeSchema, } from "./Safe";
 
 
-
 export interface IKiosk {
     IC: string;
     Name: string;

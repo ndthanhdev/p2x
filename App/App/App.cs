@@ -48,7 +48,7 @@ namespace App
         private RestClient _client;
 
         // context
-        private string _iC = string.Empty;
+        private string _ic = string.Empty;
         private string _jwt = string.Empty;
         string version = string.Empty;
         private Socket _socket;
@@ -81,7 +81,7 @@ namespace App
                 }
                 finally
                 {
-                    _iC = string.Empty;
+                    _ic = string.Empty;
                     _jwt = string.Empty;
                     version = string.Empty;
                     _socket?.Close();
@@ -96,16 +96,16 @@ namespace App
             string errMsg = string.Empty;
             BoardStatus oldStatus = null, latestStatus;
 
-            if (!TestBoard(_config.PortName, ref _iC, ref version, ref errMsg))
+            if (!TestBoard(_config.PortName, ref _ic, ref version, ref errMsg))
             {
                 AppLog.Error("{0}. {1}", "Connect to board fail", errMsg);
                 await Task.Delay(ERROR_DELAY);
                 return;
             }
-            PrintBoardInfo(_iC, version);
+            PrintBoardInfo(_ic, version);
 
             AppLog.Info("Authenticating...");
-            _jwt = await Login(_iC, _config.Secret);
+            _jwt = await Login(_ic, _config.Secret);
             AppLog.Info("Authenticated");
 
             await Subscribe(_jwt);
@@ -375,7 +375,7 @@ namespace App
         {
             RestRequest restRequest = new RestRequest("status", Method.POST);
             restRequest.RequestFormat = DataFormat.Json;
-            restRequest.AddBody(new DTO.Status(status, _iC));
+            restRequest.AddBody(new DTO.Status(status, _ic));
             return restRequest;
         }
 

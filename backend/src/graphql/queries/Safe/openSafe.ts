@@ -1,4 +1,6 @@
-import { GraphQLFieldConfig, GraphQLInt, GraphQLString, GraphQLBoolean } from "graphql";
+import { GraphQLFieldConfig, GraphQLBoolean, GraphQLString, GraphQLInt } from "graphql";
+import { KioskModel, IKiosk } from "../../../models/Kiosk";
+import * as socket from "../../../socket";
 
 export const openSafe: GraphQLFieldConfig<any, any> = {
     type: GraphQLBoolean,
@@ -8,9 +10,29 @@ export const openSafe: GraphQLFieldConfig<any, any> = {
         },
         no: {
             type: GraphQLInt
+        },
+        passcode: {
+            type: GraphQLString
         }
     },
     resolve: async (source, args, context, info) => {
-        // implement
+        try {
+            const model = await KioskModel.findOne(<IKiosk>{ IC: args.ic }).exec();
+            if (!model) {
+                throw `Kiosk with IC ${args.ic}`;
+            }
+
+            const index = model.Safes.findIndex((value) => value.no === args.no);
+            if (index < 0) {
+                throw `There's not Safe ${args.no} on Kiosk ${args.ic}`;
+            }
+
+            if (await model.Safes[index].comparePasscode(args.passcode)) {
+                return socket.openSafe(args.ic, args.no);
+            }
+            return false;
+        } catch (error) {
+            throw error;
+        }
     }
 };
