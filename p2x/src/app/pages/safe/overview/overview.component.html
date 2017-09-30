@@ -17,16 +17,33 @@
       </md-card-subtitle>
     </md-card-header>
     <md-card-content>
-      <div class="d-inline-flex mw-100">
+      <div class="d-inline-flex w-100">
         <div class="safe-icon mr-5">
-          <p2x-svg-viewer [src]="'../../../../assets/open.svg'" [scaleToContainer]="true"></p2x-svg-viewer>
+          <p2x-svg-viewer *ngIf="isOnline" [src]="safeStatus.IsOpen?'../../../../assets/open.svg':'../../../../assets/closed.svg'"
+            [scaleToContainer]="true"></p2x-svg-viewer>
+          <p2x-svg-viewer *ngIf="!isOnline" src="../../../../assets/offline.svg" [scaleToContainer]="true"></p2x-svg-viewer>
         </div>
         <div class="w-100">
-          <md-form-field class="w-100">
-            <input mdInput placeholder="Passcode">
-          </md-form-field>
-          <button md-raised-button color="primary" class="mr-2 mb-2">Open</button>
-          <button md-raised-button color="accent">Generate Passcode</button>
+          <!-- Customer section -->
+          <section class="mb-2">
+            <md-form-field class="w-100">
+              <input mdInput placeholder="Passcode">
+            </md-form-field>
+            <button md-raised-button color="primary">Open</button>
+          </section>
+          <!-- Admin sections -->
+          <section class="mb-2">
+            <md-form-field class="w-100">
+              <input mdInput placeholder="Time">
+            </md-form-field>
+            <button md-raised-button color="accent">Generate Passcode</button>
+          </section>
+          <section class="mb-2">
+            <md-form-field class="w-100">
+              <input mdInput type="password" placeholder="Admin password">
+            </md-form-field>
+            <button md-raised-button color="warn">Force Open</button>
+          </section>
         </div>
       </div>
     </md-card-content>

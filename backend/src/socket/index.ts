@@ -36,4 +36,4 @@ export function listen(server: Server) {
     return io;
 }
 
-export { openSafe } from "./openSafe"
+export { openSafe } from "./openSafe";
