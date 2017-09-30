@@ -12,17 +12,17 @@ import "rxjs/add/operator/map";
 import { IKiosk } from '../../../models/kiosk';
 
 const load = gql`
-query load($ICNo:String){
-    Kiosk(ICNo:$ICNo){
-        ICNo
+query load($ic:String){
+    Kiosk(ic:$ic){
+        IC
         Name
         IsOnline
         LatestStatus{
-          ICNo
+          KioskIC
           createdAt
           SafeStatuss {
             No
-            IsLock
+            IsOpen
             IsOccupied        
           }
         }    
@@ -42,7 +42,7 @@ export class KioskEffects {
         .exhaustMap(payload => this.apollo.query({
             query: load,
             variables: {
-                ICNo: payload
+                ic: payload
             },
             fetchPolicy: 'network-only'
         }).concatMap(({ data }) => of(new fromActions.LoadSuccess(<IKiosk>data["Kiosk"])))

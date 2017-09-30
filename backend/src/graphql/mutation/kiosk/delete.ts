@@ -5,13 +5,13 @@ import { KioskModel, IKioskModel, IKiosk } from "../../../models/Kiosk";
 export const deleteKiosk: GraphQLFieldConfig<any, any> = {
     type: kioskType,
     args: {
-        ICNo: {
+        ic: {
             type: GraphQLString
         }
     },
     resolve: async (source, args, context, info) => {
         try {
-            const kiosk = await KioskModel.findOneAndRemove({ ICNo: args.ICNo }).exec();
+            const kiosk = await KioskModel.findOneAndRemove(<IKiosk>{ IC: args.ic }).exec();
             return kiosk;
         } catch (error) {
             throw error;

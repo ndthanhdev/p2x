@@ -2,12 +2,12 @@ import { Document, Schema } from "mongoose";
 
 export interface ISafeStatus {
     No: number;
-    IsLock: boolean;
+    IsOpen: boolean;
     IsOccupied?: boolean;
 }
 
 export const SafeStatusSchema = new Schema({
     No: Number,
-    IsLock: Boolean,
+    IsOpen: Boolean,
     IsOccupied: Boolean
 });

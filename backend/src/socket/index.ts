@@ -16,17 +16,18 @@ export function listen(server: Server) {
     }));
 
     io.on("connection", async (socket) => {
-        const iCNo = <string>(<any>socket).decoded_token.ICNo;
-        await KioskModel.findOneAndUpdate(<IKiosk>{ ICNo: iCNo }, { $set: { IsOnline: true } }).exec();
-        pubsub.publish(EVENT_KIOSK_CHANGED, iCNo);
-        socket.join(iCNo);
+        const ic = <string>(<any>socket).decoded_token.ic;
+        await KioskModel.findOneAndUpdate(<IKiosk>{ IC: ic }, { $set: { IsOnline: true } }).exec();
+        // TODO publish kiosk directly
+        pubsub.publish(EVENT_KIOSK_CHANGED, ic);
+        socket.join(ic);
         socket.on("disconnect", async () => {
-            await KioskModel.findOneAndUpdate(<IKiosk>{ ICNo: iCNo }, { $set: { IsOnline: false } }).exec();
-            pubsub.publish(EVENT_KIOSK_CHANGED, iCNo);
+            await KioskModel.findOneAndUpdate(<IKiosk>{ IC: ic }, { $set: { IsOnline: false } }).exec();
+            pubsub.publish(EVENT_KIOSK_CHANGED, ic);
         });
         socket.on("status", async (arg: any) => {
             const status = <IStatus>JSON.parse(arg);
-            status.ICNo = iCNo;
+            status.KioskIC = ic;
             const model = await StatusModel.create(status);
             pubsub.publish(EVENT_STATUS_ADDED, model);
         });

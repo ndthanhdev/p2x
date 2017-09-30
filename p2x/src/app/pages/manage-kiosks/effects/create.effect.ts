@@ -16,7 +16,7 @@ const createKiosk = gql`
 mutation createKiosk($kiosk:KioskInput){
     addKiosk(data:$kiosk){
       _id
-      ICNo
+      IC
       Name
     }
   }

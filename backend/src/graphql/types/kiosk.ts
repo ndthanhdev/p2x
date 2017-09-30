@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLNonNull, GraphQLID, GraphQLString, GraphQLInputObjectType, GraphQLBoolean } from "graphql";
 import { statusType } from "./status";
-import { StatusModel } from "../../models/Status";
+import { StatusModel, IStatus } from "../../models/Status";
 
 export const kioskType = new GraphQLObjectType({
     name: "Kiosk",
@@ -8,7 +8,7 @@ export const kioskType = new GraphQLObjectType({
         _id: {
             type: new GraphQLNonNull(GraphQLID)
         },
-        ICNo: {
+        IC: {
             type: GraphQLString
         },
         Name: {
@@ -21,7 +21,7 @@ export const kioskType = new GraphQLObjectType({
             type: statusType,
             resolve: async (source, args, context, info) => {
                 try {
-                    const status = await StatusModel.findOne({ ICNo: source.ICNo }, undefined, { sort: { createdAt: -1 } }).exec();
+                    const status = await StatusModel.findOne(<IStatus>{ KioskIC: source.IC }, undefined, { sort: { createdAt: -1 } }).exec();
                     if (!status) {
                         // throw new Error("Error getting status");
                         return [];
@@ -39,7 +39,7 @@ export const kioskType = new GraphQLObjectType({
 export const kioskInputType = new GraphQLInputObjectType({
     name: "KioskInput",
     fields: () => ({
-        ICNo: {
+        IC: {
             type: GraphQLString
         },
         Name: {

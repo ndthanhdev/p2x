@@ -8,12 +8,12 @@ namespace App.DTO
 {
     class Status : BoardStatus
     {
-        public string KioskICNo { get; set; }
-        public Status(BoardStatus boardStatus, string iCNo)
+        public string KioskIC { get; set; }
+        public Status(BoardStatus boardStatus, string iC)
         {
             this.PowerStatus = boardStatus.PowerStatus;
             this.SafeStatuss = boardStatus.SafeStatuss;
-            this.KioskICNo = iCNo;
+            this.KioskIC = iC;
         }
     }
 }

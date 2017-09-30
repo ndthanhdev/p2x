@@ -1,5 +1,5 @@
 export interface ISafeStatus {
     No: number;
-    IsLock: boolean;
+    IsOpen: boolean;
     IsOccupied?: boolean;
 }

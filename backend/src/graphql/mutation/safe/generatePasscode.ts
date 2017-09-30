@@ -1,16 +1,26 @@
 import { GraphQLFieldConfig, GraphQLInt, GraphQLString } from "graphql";
+import { KioskModel, IKiosk } from "../../../models/Kiosk";
 
 export const generatePasscode: GraphQLFieldConfig<any, any> = {
     type: GraphQLString,
     args: {
-        IcNo: {
+        ic: {
             type: GraphQLString
         },
-        No: {
+        no: {
             type: GraphQLInt
         }
     },
     resolve: async (source, args, context, info) => {
-        // implement
+        try {
+            const model = await KioskModel.findOne(<IKiosk>{ IC: args.ic }).exec();
+            if (!model) {
+                throw `Kiosk with IC ${args.ic}`;
+            }
+
+            return "ok";
+        } catch (error) {
+
+        }
     }
 };

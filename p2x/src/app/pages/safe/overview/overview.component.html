@@ -4,8 +4,8 @@
       <md-card-title>Safe {{safeStatus?.No}}</md-card-title>
       <md-card-subtitle>
         <md-chip-list>
-          <md-chip *ngIf="!safeStatus?.IsLock" color="accent" selected="true">Open</md-chip>
-          <md-chip *ngIf="safeStatus?.IsLock" color="primary" selected="true">closed</md-chip>
+          <md-chip *ngIf="safeStatus?.IsOpen" color="accent" selected="true">Open</md-chip>
+          <md-chip *ngIf="!safeStatus?.IsOpen" color="primary" selected="true">Closed</md-chip>
 
           <md-chip *ngIf="safeStatus?.IsOccupied" color="primary" selected="true">Occupied</md-chip>
           <md-chip *ngIf="!safeStatus?.IsOccupied" color="accent" selected="true">Empty</md-chip>

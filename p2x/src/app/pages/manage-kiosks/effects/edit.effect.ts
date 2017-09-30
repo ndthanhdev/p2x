@@ -11,10 +11,10 @@ import { IKiosk } from "../../../models/Kiosk";
 import { Router } from "@angular/router";
 
 const getKiosk = gql`
-query getKiosk($ICNo:String){
-    Kiosk(ICNo:$ICNo){
+query getKiosk($ic:String){
+    Kiosk(ic:$ic){
       _id
-      ICNo
+      IC
       Name
       IsOnline
     }
@@ -25,17 +25,17 @@ const updateKiosk = gql`
 mutation updateKiosk($kiosk:KioskInput){
     updateKiosk(data:$kiosk){
       _id
-      ICNo
+      IC
       Name
     }
   }
 `;
 
 const deleteKiosk = gql`
-mutation deleteKiosk($ICNo:String){
-    deleteKiosk(ICNo:$ICNo){
+mutation deleteKiosk($ic:String){
+    deleteKiosk(ic:$ic){
       _id
-      ICNo
+      IC
       Name
       IsOnline
     }
@@ -54,7 +54,7 @@ export class EditEffects {
         .exhaustMap(payload => this.apollo.query({
             query: getKiosk,
             variables: {
-                ICNo: payload
+                ic: payload
             },
             fetchPolicy: 'network-only'
         })
@@ -80,7 +80,7 @@ export class EditEffects {
         .exhaustMap(payload => this.apollo.mutate({
             mutation: deleteKiosk,
             variables: {
-                ICNo: payload
+                ic: payload
             }
         }).concatMap(({ data }) => {
             this.router.navigate(["/manage-kiosks"]);

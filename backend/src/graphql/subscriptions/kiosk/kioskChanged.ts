@@ -8,19 +8,19 @@ import { KioskModel, IKiosk } from "../../../models/Kiosk";
 export const kioskChanged = <GraphQLFieldConfig<any, any>>{
     type: kioskType,
     args: {
-        ICNo: {
+        ic: {
             type: GraphQLString
         }
     },
     resolve: async (source, args, context, info) => {
         try {
-            const kiosk = await KioskModel.findOne(<IKiosk>{ ICNo: args.ICNo }).exec();
+            const kiosk = await KioskModel.findOne(<IKiosk>{ IC: args.ic }).exec();
             return kiosk;
         } catch (error) {
             throw error;
         }
     },
     subscribe: withFilter(() => pubsub.asyncIterator(EVENT_KIOSK_CHANGED), (source, args, context, info) => {
-        return source === args.ICNo;
+        return source === args.ic;
     })
 };

@@ -11,7 +11,7 @@ import "express-validator";
  * Sign in using email and password.
  */
 export let postLogin = (req: Request, res: Response, next: NextFunction) => {
-    req.assert("ICNo", "ICNo can't blank").notEmpty();
+    req.assert("IC", "IC can't blank").notEmpty();
     req.assert("Secret", "Secret can't blank").notEmpty();
     const errors = req.validationErrors();
 
@@ -22,7 +22,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
             Errors: errors
         });
     }
-    KioskModel.findOne(<IKiosk>{ ICNo: req.body.ICNo }, (err, kiosk) => {
+    KioskModel.findOne(<IKiosk>{ IC: req.body.IC }, (err, kiosk) => {
         if (err) {
             //  Database error
             return next(err);
@@ -64,7 +64,7 @@ export let postLogin = (req: Request, res: Response, next: NextFunction) => {
 export function generateJwt(kisok: IKiosk): string {
     const jwtId: string = uuid.v1();
     const payload = {
-        ICNo: kisok.ICNo,
+        ic: kisok.IC,
     };
     const token = jwt.sign(payload, fromPasportConfig.JwtOptions.secretOrKey, {
         jwtid: jwtId,

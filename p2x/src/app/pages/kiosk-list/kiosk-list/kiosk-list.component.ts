@@ -11,7 +11,7 @@ const kiosksChanged = gql`
 subscription kiosksChanged {
   kiosksChanged{
     _id
-    ICNo
+    IC
     Name
     IsOnline
   }

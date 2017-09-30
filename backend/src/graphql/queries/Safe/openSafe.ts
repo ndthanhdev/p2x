@@ -3,10 +3,10 @@ import { GraphQLFieldConfig, GraphQLInt, GraphQLString, GraphQLBoolean } from "g
 export const openSafe: GraphQLFieldConfig<any, any> = {
     type: GraphQLBoolean,
     args: {
-        IcNo: {
+        ic: {
             type: GraphQLString
         },
-        No: {
+        no: {
             type: GraphQLInt
         }
     },

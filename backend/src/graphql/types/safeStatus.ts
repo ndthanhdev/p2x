@@ -18,7 +18,7 @@ export const safeStatusType = new GraphQLObjectType({
         No: {
             type: GraphQLInt
         },
-        IsLock: {
+        IsOpen: {
             type: GraphQLBoolean
         },
         IsOccupied: {
@@ -33,7 +33,7 @@ export const safeStatusInputType = new GraphQLInputObjectType({
         No: {
             type: GraphQLInt
         },
-        IsLock: {
+        IsOpen: {
             type: GraphQLBoolean
         },
         IsOccupied: {

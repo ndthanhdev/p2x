@@ -48,7 +48,7 @@ namespace App
         private RestClient _client;
 
         // context
-        private string _iCNo = string.Empty;
+        private string _iC = string.Empty;
         private string _jwt = string.Empty;
         string version = string.Empty;
         private Socket _socket;
@@ -81,7 +81,7 @@ namespace App
                 }
                 finally
                 {
-                    _iCNo = string.Empty;
+                    _iC = string.Empty;
                     _jwt = string.Empty;
                     version = string.Empty;
                     _socket?.Close();
@@ -96,16 +96,16 @@ namespace App
             string errMsg = string.Empty;
             BoardStatus oldStatus = null, latestStatus;
 
-            if (!TestBoard(_config.PortName, ref _iCNo, ref version, ref errMsg))
+            if (!TestBoard(_config.PortName, ref _iC, ref version, ref errMsg))
             {
                 AppLog.Error("{0}. {1}", "Connect to board fail", errMsg);
                 await Task.Delay(ERROR_DELAY);
                 return;
             }
-            PrintBoardInfo(_iCNo, version);
+            PrintBoardInfo(_iC, version);
 
             AppLog.Info("Authenticating...");
-            _jwt = await Login(_iCNo, _config.Secret);
+            _jwt = await Login(_iC, _config.Secret);
             AppLog.Info("Authenticated");
 
             await Subscribe(_jwt);
@@ -150,9 +150,9 @@ namespace App
             }
         }
 
-        public async Task<string> Login(string icNo, string secret)
+        public async Task<string> Login(string iC, string secret)
         {
-            var loginRequest = MakeLoginRequest(icNo, secret);
+            var loginRequest = MakeLoginRequest(iC, secret);
             var response = (await _client.ExecuteTaskAsync<DTO<string>>(loginRequest)).Data;
             if (response is null)
             {
@@ -215,7 +215,7 @@ namespace App
             _socket.Emit("status", JsonConvert.SerializeObject(boardStatus));
         }
 
-        public bool TestBoard(string portName, ref string iCNo, ref string version, ref string errMsg)
+        public bool TestBoard(string portName, ref string iC, ref string version, ref string errMsg)
         {
             try
             {
@@ -235,13 +235,13 @@ namespace App
                     return false;
                 }
 
-                iCNo = hldMainBoard.GetICCardData();
+                iC = hldMainBoard.GetICCardData();
                 version = hldMainBoard.GetVersion(ref errMsg);
                 if (!string.IsNullOrEmpty(errMsg))
                 {
                     return false;
                 }
-                else if (string.IsNullOrEmpty(iCNo))
+                else if (string.IsNullOrEmpty(iC))
                 {
                     errMsg = "IC No is empty";
                     return false;
@@ -260,9 +260,9 @@ namespace App
 
         }
 
-        public void PrintBoardInfo(string iCNo, string version)
+        public void PrintBoardInfo(string iC, string version)
         {
-            AppLog.Info("IC No: {0}", iCNo);
+            AppLog.Info("IC No: {0}", iC);
             AppLog.Info("Board Version: {0}", version);
         }
 
@@ -375,17 +375,17 @@ namespace App
         {
             RestRequest restRequest = new RestRequest("status", Method.POST);
             restRequest.RequestFormat = DataFormat.Json;
-            restRequest.AddBody(new DTO.Status(status, _iCNo));
+            restRequest.AddBody(new DTO.Status(status, _iC));
             return restRequest;
         }
 
-        private RestRequest MakeLoginRequest(string iCNo, string secret)
+        private RestRequest MakeLoginRequest(string iC, string secret)
         {
             RestRequest restRequest = new RestRequest("api/login", Method.POST);
             restRequest.RequestFormat = DataFormat.Json;
             restRequest.AddBody(new
             {
-                ICNo = iCNo,
+                IC = iC,
                 Secret = secret
             });
             return restRequest;

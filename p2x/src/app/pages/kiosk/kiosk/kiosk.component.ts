@@ -11,13 +11,13 @@ import { Apollo } from 'apollo-angular';
 import { IKiosk } from '../../../models/kiosk';
 
 const statusAdded = gql`
-subscription statusAdded($ICNo:String){
-  statusAdded(ICNo:$ICNo){
-    ICNo
+subscription statusAdded($ic:String){
+  statusAdded(ic:$ic){
+    KioskIC
     createdAt
     SafeStatuss {
       No
-      IsLock
+      IsOpen
       IsOccupied
     }
   }
@@ -25,14 +25,14 @@ subscription statusAdded($ICNo:String){
 `;
 
 const kioskChanged = gql`
-subscription kioskChanged($ICNo:String){
-  kioskChanged(ICNo:$ICNo){
+subscription kioskChanged($ic:String){
+  kioskChanged(ic:$ic){
     _id
-    ICNo
+    IC
     Name
     IsOnline
     LatestStatus {
-      ICNo
+      KioskIC
       createdAt
     }
   }
@@ -67,10 +67,10 @@ export class KioskComponent implements OnInit, OnDestroy {
     this._pageTitle.title = "Safe";
     this.routeSub = this._route.params.subscribe(params => {
 
-      this.statusAddedSub = this.apollo.subscribe({ query: statusAdded, variables: { ICNo: params.id } })
+      this.statusAddedSub = this.apollo.subscribe({ query: statusAdded, variables: { ic: params.id } })
         .subscribe(({ statusAdded }) => this.store.dispatch(new fromActions.AddedStatus(statusAdded)));
 
-      this.kioskChangedSub = this.apollo.subscribe({ query: kioskChanged, variables: { ICNo: params.id } })
+      this.kioskChangedSub = this.apollo.subscribe({ query: kioskChanged, variables: { ic: params.id } })
         .subscribe(({ kioskChanged }) => this.store.dispatch(new fromActions.ChangedKiosk(kioskChanged)));
 
       this.store.dispatch(new fromActions.Load(params.id));

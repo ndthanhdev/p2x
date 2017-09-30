@@ -15,18 +15,18 @@ import { IStatus } from '../../../models/Status';
 import * as Rx from "rxjs";
 
 const queryKioskChanged = gql`
-subscription kioskChanged($ICNo:String){
-  kioskChanged(ICNo:$ICNo){
+subscription kioskChanged($ic:String){
+  kioskChanged(ic:$ic){
     _id
-    ICNo
+    IC
     Name
     IsOnline
     LatestStatus {
-      ICNo      
+      KioskIC      
       createdAt
       SafeStatuss {
         No
-        IsLock
+        IsOpen
         IsOccupied
       }
     }
@@ -35,13 +35,13 @@ subscription kioskChanged($ICNo:String){
 `;
 
 const qureyStatusAdded = gql`
-subscription statusAdded($ICNo:String){
-  statusAdded(ICNo:$ICNo){
-    ICNo
+subscription statusAdded($ic:String){
+  statusAdded(ic:$ic){
+    KioskIC
     createdAt
     SafeStatuss {
       No
-      IsLock
+      IsOpen
       IsOccupied
     }
   }
@@ -92,10 +92,10 @@ export class OverviewComponent implements OnInit, OnDestroy {
           .filter(safeStatus => safeStatus.No == params.sid)[0];
       });
 
-      this.kioskChanegedSub = this.apollo.subscribe({ query: queryKioskChanged, variables: { ICNo: params.kid } })
+      this.kioskChanegedSub = this.apollo.subscribe({ query: queryKioskChanged, variables: { ic: params.kid } })
         .subscribe(({ kioskChanged }) => this.store.dispatch(new fromOverviewAction.KioskChanged(kioskChanged)));
 
-      this.statushanegedSub = this.apollo.subscribe({ query: qureyStatusAdded, variables: { ICNo: params.kid } })
+      this.statushanegedSub = this.apollo.subscribe({ query: qureyStatusAdded, variables: { ic: params.kid } })
         .subscribe(({ statusAdded }) => this.store.dispatch(new fromOverviewAction.StatusChanged(<IStatus>statusAdded)));
 
     });

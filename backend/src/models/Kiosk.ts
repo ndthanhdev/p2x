@@ -5,7 +5,7 @@ import { ISafe, SafeSchema, } from "./Safe";
 
 
 export interface IKiosk {
-    ICNo: string;
+    IC: string;
     Name: string;
     Secret: string;
     IsSensor: boolean;
@@ -20,7 +20,7 @@ export interface IKioskModel extends IKiosk, mongoose.Document {
 }
 
 const kioskSchema: mongoose.Schema = new mongoose.Schema({
-    ICNo: { type: String, unique: true },
+    IC: { type: String, unique: true },
     Name: String,
     Secret: String,
     IsSensor: Boolean,

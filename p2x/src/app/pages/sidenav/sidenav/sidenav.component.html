@@ -3,7 +3,7 @@
     <nav>
       <ul>
         <li *ngFor="let kiosk of kiosks$ | async">
-          <a [routerLink]="[ '/kiosk', kiosk.ICNo ]" routerLinkActive>
+          <a [routerLink]="[ '/kiosk', kiosk.IC ]" routerLinkActive>
             {{kiosk.Name}}
           </a>
         </li>

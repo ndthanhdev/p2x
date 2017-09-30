@@ -1,7 +1,7 @@
 import { ISafeStatus } from "./ISafeStatus";
 
 export interface IStatus {
-    ICNo: string;
+    KioskIC: string;
     createdAt: Date;
     SafeStatuss: ISafeStatus[];
 }

@@ -5,13 +5,13 @@ import { KioskModel, IKiosk } from "../../../models/Kiosk";
 export const Kiosk: GraphQLFieldConfig<any, any> = {
     type: kioskType,
     args: {
-        ICNo: {
+        ic: {
             type: GraphQLString
         }
     },
     resolve: async (source, args, context, info) => {
         try {
-            const kiosk = await KioskModel.findOne(<IKiosk>{ ICNo: args.ICNo }).exec();
+            const kiosk = await KioskModel.findOne(<IKiosk>{ IC: args.ic }).exec();
             return kiosk;
         } catch (error) {
             throw error;

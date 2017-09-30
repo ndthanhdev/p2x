@@ -5,13 +5,16 @@
   </md-chip-list>
 </div>
 <div class="docs-component-category-list">
-  <a class="docs-component-category-list-item" *ngFor="let safeStatus of status?.SafeStatuss" [routerLink]="['/safe',status.ICNo,safeStatus.No]">
+  <a class="docs-component-category-list-item" *ngFor="let safeStatus of status?.SafeStatuss" [routerLink]="['/safe',status.KioskIC,safeStatus.No]">
     <md-card class="docs-component-category-list-card" ng-disabled="">
       <md-card-title>Safe {{safeStatus.No}}</md-card-title>
       <md-card-subtitle>
         <md-chip-list>
-          <md-chip [color]="safeStatus.IsLock?'primary':'accent'" selected="true">{{safeStatus.IsLock?'Closed':'Open'}}</md-chip>
-          <md-chip [color]="safeStatus.IsOccupied?'primary':'accent'" selected="true">{{safeStatus.IsOccupied?'Occupied':'Empty'}}</md-chip>
+          <md-chip *ngIf="safeStatus?.IsOpen" color="accent" selected="true">Open</md-chip>
+          <md-chip *ngIf="!safeStatus?.IsOpen" color="primary" selected="true">Closed</md-chip>
+
+          <md-chip *ngIf="safeStatus?.IsOccupied" color="primary" selected="true">Occupied</md-chip>
+          <md-chip *ngIf="!safeStatus?.IsOccupied" color="accent" selected="true">Empty</md-chip>
         </md-chip-list>
       </md-card-subtitle>
     </md-card>

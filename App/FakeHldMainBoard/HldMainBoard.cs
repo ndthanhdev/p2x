@@ -26,7 +26,7 @@ namespace FakeHldMainBoard
 
         public string GetICCardData()
         {
-            return HldMainBoardStatus.Load(Path).ICNo;
+            return HldMainBoardStatus.Load(Path).IC;
         }
 
         public int[] GetLockAllStatus(int nSide, ref string strMsg)

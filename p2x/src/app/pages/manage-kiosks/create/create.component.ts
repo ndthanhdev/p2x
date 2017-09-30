@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PageTitleService } from '../../../services/page-title/page-title.service';
-import { KioskModel } from '../model/KioskModel';
 import { Store } from '@ngrx/store';
 import * as fromManageKiosks from "../reducer";
 import * as fromCreateActions from "../actions/create";
+import { IKiosk } from '../../../models/Kiosk';
 
 @Component({
   selector: 'p2x-create',
@@ -13,7 +13,11 @@ import * as fromCreateActions from "../actions/create";
 export class CreateComponent implements OnInit {
 
   pending$ = this.store.select(fromManageKiosks.getCreatePending);
-  model = new KioskModel("", "", "");
+  model = <IKiosk>{
+    IC: "",
+    Secret: "",
+    Name: ""
+  };
 
   constructor(public _pageTitle: PageTitleService, private store: Store<fromManageKiosks.State>) { }
 

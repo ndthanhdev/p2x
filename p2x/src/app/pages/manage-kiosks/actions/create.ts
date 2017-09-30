@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { KioskModel } from '../model/KioskModel';
+import { IKiosk } from '../../../models/Kiosk';
 
 export const CREATE = "[Manage Kiosk] Create";
 export const CREATE_SUCCESS = "[Manage Kiosk] Create Success";
@@ -11,7 +11,7 @@ export class Create implements Action {
     /**
      *
      */
-    constructor(public payload: KioskModel) {
+    constructor(public payload: IKiosk) {
     }
 }
 

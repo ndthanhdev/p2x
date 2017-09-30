@@ -5,7 +5,7 @@
   <a md-raised-button color="primary" class="docs-component-category-list-item d-flex flex-column justify-content-center" routerLink="/manage-kiosks/create">
     <md-icon class="md-24" aria-label="Example icon-button with a heart icon">add</md-icon>
   </a>
-  <a class="docs-component-category-list-item" *ngFor="let kiosk of kiosks$ | async" [routerLink]="[ '/manage-kiosks', kiosk.ICNo ]">
+  <a class="docs-component-category-list-item" *ngFor="let kiosk of kiosks$ | async" [routerLink]="[ '/manage-kiosks', kiosk.IC ]">
     <md-card class="docs-component-category-list-card">
       <md-card-title>{{kiosk.Name}}</md-card-title>
     </md-card>

@@ -18,7 +18,7 @@ export class EditComponent implements OnInit, OnDestroy {
   kiosk$ = this._store.select(fromReducers.getEditKiosk);
   kioskSub: Subscription;
 
-  ICNo: string = "";
+  IC: string = "";
   Secret: string = "";
   Name: string = "";
 
@@ -34,7 +34,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.pageTitle.title = 'Edit Kiosk';
     this.kioskSub = this.kiosk$.subscribe(kiosk => {
       if (kiosk) {
-        this.ICNo = kiosk.ICNo;
+        this.IC = kiosk.IC;
         this.Secret = kiosk.Secret;
         this.Name = kiosk.Name;
       }
@@ -51,13 +51,13 @@ export class EditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this._store.dispatch(new fromActions.Update(<IKiosk>{
-      ICNo: this.ICNo,
+      IC: this.IC,
       Secret: this.Secret,
       Name: this.Name
     }));
   }
 
   delete() {
-    this._store.dispatch(new fromActions.Delete(this.ICNo));
+    this._store.dispatch(new fromActions.Delete(this.IC));
   }
 }

@@ -13,7 +13,7 @@ const getKiosks = gql`
 query getKiosks{
     Kiosks{
       _id
-      ICNo
+      IC
       Name
       IsOnline
     }

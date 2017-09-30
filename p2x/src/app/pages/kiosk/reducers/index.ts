@@ -9,7 +9,7 @@ export interface State {
 
 export const initialState: State = {
     kiosk: {
-        ICNo: "",
+        IC: "",
         IsOnline: false,
         Name: "",
         LatestStatus: undefined

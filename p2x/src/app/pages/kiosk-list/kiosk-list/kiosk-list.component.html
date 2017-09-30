@@ -1,5 +1,5 @@
 <div class="docs-component-category-list">
-  <a class="docs-component-category-list-item" *ngFor="let kiosk of kiosks$ | async" [routerLink]="[ '/kiosk', kiosk.ICNo ]">
+  <a class="docs-component-category-list-item" *ngFor="let kiosk of kiosks$ | async" [routerLink]="[ '/kiosk', kiosk.IC ]">
     <md-card>
       <md-card-title>{{kiosk.Name}}</md-card-title>
       <md-card-subtitle>

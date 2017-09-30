@@ -14,7 +14,7 @@ namespace FakeHldMainBoard
         public bool OpenSerialPort { get; set; }
         public bool CloseSerialPort { get; set; }
         public int GetPowerStatus { get; set; }
-        public string ICNo { get; set; }
+        public string IC { get; set; }
         public int NRelay { get; set; }
         public int[] Locks { get; set; }
         public int[] Sensors { get; set; }

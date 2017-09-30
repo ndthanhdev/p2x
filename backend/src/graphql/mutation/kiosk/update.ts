@@ -11,7 +11,7 @@ export const updateKiosk: GraphQLFieldConfig<any, any> = {
     },
     resolve: async (source, args, context, info) => {
         try {
-            let kiosk = await KioskModel.findOne(<IKiosk>{ ICNo: args.data.ICNo });
+            let kiosk = await KioskModel.findOne(<IKiosk>{ IC: args.data.IC });
             if (!kiosk) {
                 return undefined;
             }

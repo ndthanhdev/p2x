@@ -1,7 +1,7 @@
 import { IStatus } from "./Status";
 
 export interface IKiosk {
-    ICNo: string;
+    IC: string;
     Secret?: string;
     Name?: string;
     IsOnline?: boolean;
