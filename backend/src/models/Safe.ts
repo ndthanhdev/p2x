@@ -5,6 +5,7 @@ import { compareHash } from "../utils";
 export interface ISafe {
     no: number;
     passcode: string;
+    expired: Date;
 
     comparePasscode(candidatePasscode: string): Promise<boolean>;
 
@@ -12,7 +13,8 @@ export interface ISafe {
 
 export const SafeSchema: mongoose.Schema = new mongoose.Schema({
     no: Number,
-    passcode: String
+    passcode: String,
+    expired: Date
 });
 
 // Safe has middleware
