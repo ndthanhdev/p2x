@@ -8,9 +8,6 @@ export const safeInputType = new GraphQLInputObjectType({
         },
         no: {
             type: GraphQLInt
-        },
-        expiredIn: {
-            type: GraphQLInt
         }
     })
 });

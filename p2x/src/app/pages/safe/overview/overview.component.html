@@ -19,9 +19,10 @@
     <md-card-content>
       <div class="d-inline-flex w-100">
         <div class="safe-icon mr-5">
-          <p2x-svg-viewer *ngIf="isOnline" [src]="safeStatus.IsOpen?'../../../../assets/open.svg':'../../../../assets/closed.svg'"
-            [scaleToContainer]="true"></p2x-svg-viewer>
+          <p2x-svg-viewer *ngIf="isOnline && safeStatus?.IsOpen" src="../../../../assets/open.svg" [scaleToContainer]="true"></p2x-svg-viewer>
+          <p2x-svg-viewer *ngIf="isOnline && !safeStatus?.IsOpen" src="../../../../assets/closed.svg" [scaleToContainer]="true"></p2x-svg-viewer>
           <p2x-svg-viewer *ngIf="!isOnline" src="../../../../assets/offline.svg" [scaleToContainer]="true"></p2x-svg-viewer>
+
         </div>
         <div class="w-100">
           <!-- Customer section -->
@@ -31,13 +32,7 @@
             </md-form-field>
             <button md-raised-button color="primary">Open</button>
           </section>
-          <!-- Admin sections -->
-          <section class="mb-2">
-            <md-form-field class="w-100">
-              <input mdInput type="number" placeholder="Expired in (hours)">
-            </md-form-field>
-            <button md-raised-button color="accent">Generate Passcode</button>
-          </section>
+          <!-- Admin sections -->          
           <section class="mb-2">
             <md-form-field class="w-100">
               <input mdInput type="password" placeholder="Admin password">

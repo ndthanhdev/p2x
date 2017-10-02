@@ -19,11 +19,10 @@ export function reducer(state = initialState, action: fromAction.Actions): State
             return { ...state, kiosk: action.payload };
         case fromAction.CHANGED_STATUS:
             return { ...state, safeStatus: action.payload };
-
         default:
             return state;
     }
 }
 
 export const getKiosk = (state: State) => state.kiosk;
-export const getSafeStatus= (state: State) => state.safeStatus;
+export const getSafeStatus = (state: State) => state.safeStatus;

@@ -1,6 +1,6 @@
 <div class="docs-component-viewer">
   <nav md-tab-nav-bar class="docs-component-viewer-tabbed-content">
-    <a md-tab-link class="docs-component-viewer-section-tab" *ngFor="let section of ['Overview', 'History']" [routerLink]="section.toLowerCase()"
+    <a md-tab-link class="docs-component-viewer-section-tab" *ngFor="let section of ['Overview', 'History', 'Manage']" [routerLink]="section.toLowerCase()"
       routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">{{section}}</a>
   </nav>
 
