@@ -18,11 +18,11 @@ export const generatePasscode: GraphQLFieldConfig<any, any> = {
             }
 
             if (args.data.no < 0) {
-                throw "no must greather or equal 0"
+                throw "no must greather or equal 0";
             }
 
             if (args.data.expiredIn < 1) {
-                throw "expiredIn must greather than 0"
+                throw "expiredIn must greather than 0";
             }
 
             const index = model.Safes.findIndex((value) => value.no === args.data.no);
