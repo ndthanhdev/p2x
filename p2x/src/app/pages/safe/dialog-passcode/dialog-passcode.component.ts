@@ -8,7 +8,7 @@ import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material';
 })
 export class DialogPasscodeComponent implements OnInit {
 
-  constructor(public dialogRef: MdDialogRef<DialogPasscodeComponent>,
+  constructor(
     @Inject(MD_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {

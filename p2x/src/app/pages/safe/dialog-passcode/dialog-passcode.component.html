@@ -1,4 +1,8 @@
-<md-form-field>
-  <input mdInput placeholder="Passcode" disabled value="{{data}}">
-</md-form-field>
-<button md-raised-button color="primary" (click)="dialogRef.close()">Close</button>
+<md-dialog-content>
+  <md-form-field>
+    <input mdInput placeholder="Passcode" disabled [ngModel]="data.passcode$ | async">
+  </md-form-field>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-raised-button color="primary" md-dialog-close>Close</button>
+</md-dialog-actions>
