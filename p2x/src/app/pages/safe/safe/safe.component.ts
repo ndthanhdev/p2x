@@ -27,10 +27,10 @@ export class SafeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.routeSub = this._route.params.subscribe(params => {
       this.store.dispatch(new fromSafeAction.Load(params.kid));
+      this._pageTitle.title = `Safe ${params.sid}`;
       this.kioskSub = this.kiosk$.subscribe(kiosk => {
         if (kiosk == null || kiosk.LatestStatus == null)
           return;
-        this._pageTitle.title = kiosk.Name;
       });
     });
   }

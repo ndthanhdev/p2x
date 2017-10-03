@@ -74,7 +74,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     private apollo: Apollo) { }
 
   ngOnInit() {
-    this.routeSub = this._route.parent.params.subscribe(params => {
+    this.routeSub = this._route.parent.parent.params.subscribe(params => {
       this.store.dispatch(new fromSafeAction.Load(params.kid));
 
       this.kioskSub = Rx.Observable.merge(this.safeKiosk$, this.overviewKiosk$).subscribe(kiosk => {

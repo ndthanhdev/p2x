@@ -7,7 +7,7 @@ import { ManageComponent } from './manage/manage.component';
 
 const routes: Routes = [
   {
-    path: ":kid/:sid", component: SafeComponent, children: [
+    path: "", component: SafeComponent, children: [
       { path: "", redirectTo: "overview", pathMatch: "full" },
       { path: "overview", component: OverviewComponent },
       { path: "history", component: HistoryComponent },

@@ -36,7 +36,7 @@ export class ManageComponent implements OnInit, OnDestroy, AfterViewInit {
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.routeSub = this._route.parent.params.subscribe(params => {
+    this.routeSub = this._route.parent.parent.params.subscribe(params => {
       this.kid = params.kid;
       this.sid = params.sid;
 
