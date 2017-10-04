@@ -34,6 +34,7 @@ export const selectOverviewState = createSelector(
     (sate: State) => sate.overview);
 export const getOverviewKiosk = createSelector(selectOverviewState, fromOverview.getKiosk);
 export const getOverviewSafeStatus = createSelector(selectOverviewState, fromOverview.getSafeStatus);
+export const getOverviewIsOpenSuccess = createSelector(selectOverviewState, fromOverview.getIsOpenSuccess);
 
 // Mange 
 export const selectMangeState = createSelector(

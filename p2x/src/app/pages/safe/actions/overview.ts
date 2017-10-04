@@ -34,6 +34,7 @@ export class OpenSafe implements Action {
 
 export class OpenSafeSucess implements Action {
     readonly type = OPEN_SAFE_SUCCESS;
+    constructor(public payload: boolean) { }
 }
 
 export class OpenSafeFailure implements Action {

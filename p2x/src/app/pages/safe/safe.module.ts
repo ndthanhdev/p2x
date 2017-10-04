@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MdTabsModule, MdCardModule, MdChipsModule, MdInputModule, MdTableModule, MdSortModule,
-  MdButtonModule, MdDialogModule
+  MdButtonModule, MdDialogModule, MdSnackBarModule
 } from "@angular/material";
 
 import { SafeRoutingModule } from './safe-routing.module';
@@ -19,6 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { ManageComponent } from './manage/manage.component';
 import { ManageEffects } from './effects/manage';
 import { DialogPasscodeComponent } from './dialog-passcode/dialog-passcode.component';
+import { OverviewEffects } from './effects/overview';
 
 @NgModule({
   imports: [
@@ -34,9 +35,10 @@ import { DialogPasscodeComponent } from './dialog-passcode/dialog-passcode.compo
     MdButtonModule,
     FormsModule,
     MdDialogModule,
+    MdSnackBarModule,
 
     StoreModule.forFeature('safe', reducer),
-    EffectsModule.forFeature([SafeEffects, ManageEffects])
+    EffectsModule.forFeature([SafeEffects, ManageEffects, OverviewEffects])
   ],
   declarations: [SafeComponent, OverviewComponent, HistoryComponent, ManageComponent, DialogPasscodeComponent],
   entryComponents: [DialogPasscodeComponent]

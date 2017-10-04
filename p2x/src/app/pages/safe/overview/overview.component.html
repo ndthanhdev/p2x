@@ -24,7 +24,7 @@
           <p2x-svg-viewer *ngIf="!isOnline" src="../../../../assets/offline.svg" [scaleToContainer]="true"></p2x-svg-viewer>
         </div>
         <div class="w-100">
-          <form class="mb-2" #openForm="ngForm">
+          <form class="mb-2" #openForm="ngForm" (ngSubmit)="openSafe(passcode)">
             <md-form-field class="w-75">
               <input mdInput type="number" placeholder="Passcode" name="passcode" [(ngModel)]="passcode" required>
             </md-form-field>

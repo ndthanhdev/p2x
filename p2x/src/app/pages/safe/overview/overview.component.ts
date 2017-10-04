@@ -13,6 +13,7 @@ import gql from 'graphql-tag';
 import { Apollo } from 'apollo-angular';
 import { IStatus } from '../../../models/Status';
 import * as Rx from "rxjs";
+import { MdSnackBar } from '@angular/material';
 
 const queryKioskChanged = gql`
 subscription kioskChanged($ic:String){
@@ -55,6 +56,10 @@ subscription statusAdded($ic:String){
 })
 export class OverviewComponent implements OnInit, OnDestroy {
 
+  // context
+  kid: string;
+  no: number;
+
   // models
   safeStatus: ISafeStatus;
   isOnline: boolean;
@@ -63,20 +68,27 @@ export class OverviewComponent implements OnInit, OnDestroy {
   safeKiosk$ = this.store.select(fromReducer.getSafeKiosk);
   overviewKiosk$ = this.store.select(fromReducer.getOverviewKiosk);
   overviewStatus$ = this.store.select(fromReducer.getOverviewSafeStatus)
+  isOpenSuccess$ = this.store.select(fromReducer.getOverviewIsOpenSuccess);
 
   kioskSub: Subscription;
   safeStatusSub: Subscription;
   routeSub: Subscription;
   kioskChanegedSub: Subscription;
   statushanegedSub: Subscription;
+  isOpenSuccessSub: Subscription;
+
 
   constructor(private store: Store<fromReducer.State>,
     public _pageTitle: PageTitleService,
     private _route: ActivatedRoute,
-    private apollo: Apollo) { }
+    private apollo: Apollo,
+    public snackBar: MdSnackBar) { }
 
   ngOnInit() {
     this.routeSub = this._route.parent.parent.params.subscribe(params => {
+      this.kid = params.kid;
+      this.no = params.sid;
+
       this.store.dispatch(new fromSafeAction.Load(params.kid));
 
       this.kioskSub = Rx.Observable.merge(this.safeKiosk$, this.overviewKiosk$).subscribe(kiosk => {
@@ -100,6 +112,15 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.statushanegedSub = this.apollo.subscribe({ query: qureyStatusAdded, variables: { ic: params.kid } })
         .subscribe(({ statusAdded }) => this.store.dispatch(new fromOverviewAction.StatusChanged(<IStatus>statusAdded)));
 
+      // skip initial value
+      this.isOpenSuccessSub = this.isOpenSuccess$.skip(1).subscribe(isOpenSuccess => {
+        if (isOpenSuccess != null) {
+          this.snackBar.open(`Open safe ${isOpenSuccess ? 'success' : 'failure'}.`, undefined, {
+            duration: 3000
+          });
+        }
+      });
+
     });
   }
 
@@ -109,13 +130,21 @@ export class OverviewComponent implements OnInit, OnDestroy {
     this.safeStatusSub.unsubscribe();
     this.kioskChanegedSub.unsubscribe();
     this.statushanegedSub.unsubscribe();
-
+    this.isOpenSuccessSub.unsubscribe();
   }
 
   extractSafeStatus(idNo: number, kiosk: IKiosk): ISafeStatus {
     if (kiosk == null || kiosk.LatestStatus == null)
       return;
     return kiosk.LatestStatus.SafeStatuss.filter(value => value.No == idNo)[0];
+  }
+
+  openSafe(passcode: string): void {
+    this.store.dispatch(new fromOverviewAction.OpenSafe({
+      ic: this.kid,
+      no: this.no,
+      passcode: passcode
+    }));
   }
 
 }
