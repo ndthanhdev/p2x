@@ -5,7 +5,7 @@
       <md-card-subtitle>Todo write description here</md-card-subtitle>
     </md-card-header>
     <md-form-field class="w-75">
-      <input mdInput placeholder="Expired in (integer)" type="number" required [(ngModel)]="expiredIn" name="expiredIn">
+      <input mdInput placeholder="Expired in (integer hours)" type="number" required [(ngModel)]="expiredIn" name="expiredIn">
     </md-form-field>
     <md-card-actions>
       <button md-raised-button type="submit" [disabled]="generateForm.invalid" color="accent">Generate Passcode</button>
@@ -13,15 +13,17 @@
   </md-card>
 </form>
 
-<md-card class="mat-elevation-z8">
-  <md-card-header>
-    <md-card-title>Force Open</md-card-title>
-    <md-card-subtitle>Todo write description here</md-card-subtitle>
-  </md-card-header>
-  <md-form-field class="w-75">
-    <input mdInput type="password" placeholder="Admin password">
-  </md-form-field>
-  <md-card-actions>
-    <button md-raised-button color="warn">Force Open</button>
-  </md-card-actions>
-</md-card>
+<form #forceOpenForm="ngForm" (ngSubmit)="generatePasscode()">
+  <md-card class="mat-elevation-z8">
+    <md-card-header>
+      <md-card-title>Force Open</md-card-title>
+      <md-card-subtitle>Todo write description here</md-card-subtitle>
+    </md-card-header>
+    <md-form-field class="w-75">
+      <input mdInput type="password" placeholder="Admin password" required [(ngModel)]="password" name="password">
+    </md-form-field>
+    <md-card-actions>
+      <button md-raised-button type="submit" [disabled]="forceOpenForm.invalid" color="warn">Force Open</button>
+    </md-card-actions>
+  </md-card>
+</form>

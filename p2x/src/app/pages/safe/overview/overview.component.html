@@ -22,23 +22,15 @@
           <p2x-svg-viewer *ngIf="isOnline && safeStatus?.IsOpen" src="../../../../assets/open.svg" [scaleToContainer]="true"></p2x-svg-viewer>
           <p2x-svg-viewer *ngIf="isOnline && !safeStatus?.IsOpen" src="../../../../assets/closed.svg" [scaleToContainer]="true"></p2x-svg-viewer>
           <p2x-svg-viewer *ngIf="!isOnline" src="../../../../assets/offline.svg" [scaleToContainer]="true"></p2x-svg-viewer>
-
         </div>
         <div class="w-100">
-          <!-- Customer section -->
-          <section class="mb-2">
-            <md-form-field class="w-100">
-              <input mdInput placeholder="Passcode">
+          <form class="mb-2" #openForm="ngForm">
+            <md-form-field class="w-75">
+              <input mdInput type="number" placeholder="Passcode" name="passcode" [(ngModel)]="passcode" required>
             </md-form-field>
-            <button md-raised-button color="primary">Open</button>
-          </section>
-          <!-- Admin sections -->          
-          <section class="mb-2">
-            <md-form-field class="w-100">
-              <input mdInput type="password" placeholder="Admin password">
-            </md-form-field>
-            <button md-raised-button color="warn">Force Open</button>
-          </section>
+            <br>
+            <button md-raised-button color="primary" [disabled]="openForm.invalid">Open</button>
+          </form>
         </div>
       </div>
     </md-card-content>

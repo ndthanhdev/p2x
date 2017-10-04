@@ -19,7 +19,7 @@ export const openSafe: GraphQLFieldConfig<any, any> = {
         try {
             const model = await KioskModel.findOne(<IKiosk>{ IC: args.ic }).exec();
             if (!model) {
-                throw `Kiosk with IC ${args.ic}`;
+                throw `Kiosk with IC ${args.ic} doesn't exit`;
             }
 
             const index = model.Safes.findIndex((value) => value.no === args.no);
@@ -27,10 +27,16 @@ export const openSafe: GraphQLFieldConfig<any, any> = {
                 throw `There's not Safe ${args.no} on Kiosk ${args.ic}`;
             }
 
-            if (await model.Safes[index].comparePasscode(args.passcode)) {
-                return socket.openSafe(args.ic, args.no);
+            if (!await model.Safes[index].comparePasscode(args.passcode)) {
+                throw "Passcode is incorrect";
             }
-            return false;
+
+            const now = new Date();
+            if (model.Safes[index].expired.getTime() < now.getTime()) {
+                throw "Passcode expired";
+            }
+
+            return socket.openSafe(args.ic, args.no);
         } catch (error) {
             throw error;
         }

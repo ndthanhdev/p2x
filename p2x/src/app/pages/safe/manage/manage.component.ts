@@ -26,6 +26,7 @@ export class ManageComponent implements OnInit, OnDestroy, AfterViewInit {
   // model
   expiredIn: number;
   passcode$ = this.store.select(fromReducer.getMangePasscode);
+  password: string;
 
   // sub
   routeSub: Subscription;
@@ -40,7 +41,7 @@ export class ManageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.kid = params.kid;
       this.sid = params.sid;
 
-    });    
+    });
   }
 
   ngOnDestroy(): void {

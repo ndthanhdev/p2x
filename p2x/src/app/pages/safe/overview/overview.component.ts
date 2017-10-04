@@ -55,8 +55,10 @@ subscription statusAdded($ic:String){
 })
 export class OverviewComponent implements OnInit, OnDestroy {
 
+  // models
   safeStatus: ISafeStatus;
   isOnline: boolean;
+  passcode: string;
 
   safeKiosk$ = this.store.select(fromReducer.getSafeKiosk);
   overviewKiosk$ = this.store.select(fromReducer.getOverviewKiosk);
