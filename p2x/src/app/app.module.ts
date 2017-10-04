@@ -14,13 +14,19 @@ import { ApolloModule } from 'apollo-angular';
 import { ApolloClient, createNetworkInterface } from "apollo-client"
 import { SubscriptionClient, addGraphQLSubscriptions, } from 'subscriptions-transport-ws';
 
-const GRAPHQL_ENDPOINT = 'ws://localhost:3000/subscriptions';
+// prod
+const GRAPHQL_ENDPOINT = `http://${location.host}/graphql`;
+const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://${location.host}/subscriptions`;
 
-const networkInterface  = createNetworkInterface({
-  uri: 'http://localhost:3000/graphql'
+// dev
+// const GRAPHQL_ENDPOINT = `http://localhost:3000/graphql`;
+// const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://localhost:3000/subscriptions`;
+
+const networkInterface = createNetworkInterface({
+  uri: GRAPHQL_ENDPOINT
 });
 
-const wsClient  = new SubscriptionClient(GRAPHQL_ENDPOINT, {
+const wsClient = new SubscriptionClient(GRAPHQL_SUBSCRIPTION_ENDPOINT, {
   reconnect: true,
 });
 

@@ -69,7 +69,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
-app.use("", express.static("frontend"));
+app.use("", express.static("dist"));
 
 /**
  * Primary app routes.

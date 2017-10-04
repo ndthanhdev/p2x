@@ -10,6 +10,9 @@ export const forceOpenSafe: GraphQLFieldConfig<any, any> = {
         },
         no: {
             type: GraphQLInt
+        },
+        code: {
+            type: GraphQLString
         }
     },
     resolve: async (source, args, context, info) => {

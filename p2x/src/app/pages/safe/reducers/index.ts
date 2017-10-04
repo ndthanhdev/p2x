@@ -41,3 +41,4 @@ export const selectMangeState = createSelector(
     selectSafetate,
     (sate: State) => sate.manage);
 export const getMangePasscode = createSelector(selectMangeState, fromManage.getPasscode);
+export const getMangeIsForceOpenSafeSuccess = createSelector(selectMangeState, fromManage.getIsForceOpenSafeSuccess);

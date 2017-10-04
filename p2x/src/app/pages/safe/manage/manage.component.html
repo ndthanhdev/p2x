@@ -13,16 +13,17 @@
   </md-card>
 </form>
 
-<form #forceOpenForm="ngForm" (ngSubmit)="generatePasscode()">
+<form #forceOpenForm="ngForm" (ngSubmit)="forceOpenSafe(code)">
   <md-card class="mat-elevation-z8">
     <md-card-header>
       <md-card-title>Force Open</md-card-title>
       <md-card-subtitle>Todo write description here</md-card-subtitle>
     </md-card-header>
     <md-form-field class="w-75">
-      <input mdInput type="password" placeholder="Admin password" required [(ngModel)]="password" name="password">
+      <input mdInput type="password" placeholder="Code" required [(ngModel)]="code" name="code">
     </md-form-field>
     <md-card-actions>
+      <button md-raised-button type="button" color="primary" (click)="sendCode()">Send Code</button>
       <button md-raised-button type="submit" [disabled]="forceOpenForm.invalid" color="warn">Force Open</button>
     </md-card-actions>
   </md-card>

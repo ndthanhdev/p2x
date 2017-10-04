@@ -16,6 +16,12 @@ mutation generate($ic:String,$no:Int,$expiredIn:Float){
 }
 `;
 
+const forceOpen = gql`
+query forceOpenSafe($ic:String,$no:Int, $code:String){
+    forceOpenSafe(ic:$ic,no:$no,code:$code)
+}
+`;
+
 
 @Injectable()
 export class ManageEffects {
@@ -35,4 +41,18 @@ export class ManageEffects {
             }
         }).concatMap(({ data }) => of(new fromActions.GeneratePasscodeSucess(data["generatePasscode"]))
             .catch(error => of(new fromActions.GeneratePasscodeFailure()))));
+
+    @Effect()
+    forceOpenSafe$ = this.actions$
+        .ofType(fromActions.FORCE_OPEN_SAFE)
+        .map((action: fromActions.ForceOpenSafe) => action.payload)
+        .exhaustMap(payload => this.apollo.query({
+            query: forceOpen,
+            variables: {
+                ic: payload.ic,
+                no: payload.no,
+                code: payload.code
+            }
+        }).concatMap(({ data }) => of(new fromActions.ForceOpenSafeSuccess(data["forceOpenSafe"]))
+            .catch(error => of(new fromActions.ForceOpenSafeFailure()))));
 }
