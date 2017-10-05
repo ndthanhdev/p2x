@@ -1,10 +1,11 @@
 import * as validator from "validator";
 
-import { GraphQLFieldConfig, GraphQLString } from "graphql";
+import { GraphQLFieldConfig, GraphQLString, GraphQLBoolean } from "graphql";
 import { AccountModel, IAccount } from "../../../models/Account";
+import otp from "../../../config/otp";
 
 export const login: GraphQLFieldConfig<any, any> = {
-    type: GraphQLString,
+    type: GraphQLBoolean,
     args: {
         email: {
             type: GraphQLString
@@ -27,13 +28,17 @@ export const login: GraphQLFieldConfig<any, any> = {
             const account = await AccountModel.findOne(<IAccount>{
                 email: args.email
             }).exec();
-            if (account == null) {
+            if (!account) {
                 throw "account doesn't exist";
             }
             if (!await account.comparePassword(args.password)) {
                 throw "password incorrect";
             }
-            return "token";
+            const secret = otp.generateSecret();
+            const token = otp.generate(secret);
+            console.log(secret);
+            console.log(token);
+            return true;
         } catch (error) {
 
         }

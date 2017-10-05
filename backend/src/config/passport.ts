@@ -12,7 +12,7 @@ export const JwtOptions: JwtStrategyOptions = {
 passport.use(new JwtStrategy(JwtOptions, async (jwt_payload, next) => {
     try {
         const account = await AccountModel.findById(jwt_payload._id).exec();
-        if (account.jti != jwt_payload.jti) {
+        if (account.jwtid != jwt_payload.jwtid) {
             //  TokenId do not match
             return next(undefined);
         }

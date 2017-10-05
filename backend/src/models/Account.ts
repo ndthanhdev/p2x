@@ -5,7 +5,8 @@ import { compareHash } from "../utils/crypt";
 export interface IAccount {
     email: string;
     password: string;
-    jti: string;
+    jwtid: string;
+    secret: string;
 
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
@@ -15,19 +16,20 @@ export interface IAccountModel extends IAccount, mongoose.Document { }
 const accountSchema = new mongoose.Schema({
     email: String,
     password: String,
-    jti: String
+    jwtid: String,
+    secret: String
 });
 
 // middlewares
 accountSchema.pre("save", hashPassword);
 function hashPassword(next: Function) {
-    const kiosk = this;
-    if (!kiosk.isModified("password")) { return next(); }
+    const account = this;
+    if (!account.isModified("password")) { return next(); }
     bcrypt.genSalt(10, (err, salt) => {
         if (err) { return next(err); }
-        bcrypt.hash(kiosk.password, salt, undefined, (err: mongoose.Error, hash) => {
+        bcrypt.hash(account.password, salt, undefined, (err: mongoose.Error, hash) => {
             if (err) { return next(err); }
-            kiosk.password = hash;
+            account.password = hash;
             next();
         });
     });

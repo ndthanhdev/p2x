@@ -11,10 +11,10 @@ dotenv.config({ path: "local.env" });
 
 console.log("seeding..");
 
-fromUtil.databse.connectDatabase(process.env.MONGODB_URI || process.env.MONGOLAB_URI).then(
+fromUtil.database.connectDatabase(process.env.MONGODB_URI || process.env.MONGOLAB_URI).then(
     async () => {
         await seedDatabase(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD);
-        await fromUtil.databse.disconnectDatabase();
+        await fromUtil.database.disconnectDatabase();
         console.log("seeded");
     }
 );

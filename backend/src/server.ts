@@ -8,7 +8,8 @@ import * as logger from "morgan";
 import * as errorHandler from "errorhandler";
 import * as dotenv from "dotenv";
 import * as cors from "cors";
-import * as fromUtils from "./utils";
+import * as database from "./utils/database";
+import * as preLauchTask from "./utils/preLauchTask";
 
 import { createServer } from "http";
 import mongoose = require("mongoose");
@@ -37,7 +38,6 @@ dotenv.config({ path: "local.env" });
 import * as testController from "./controllers/test";
 import * as kioskController from "./controllers/kiosk";
 import { execute, subscribe } from "graphql";
-import { KioskModel } from "./models/Kiosk";
 
 /**
  * Create Express server.
@@ -47,8 +47,8 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
-fromUtils.databse.connectDatabase(process.env.MONGODB_URI || process.env.MONGOLAB_URI)
-    .then(async () => await fromUtils.preLauchTask.makeAllKioskOffline());
+database.connectDatabase(process.env.MONGODB_URI || process.env.MONGOLAB_URI)
+    .then(async () => await preLauchTask.makeAllKioskOffline());
 mongoose.connection.on("error", () => {
     console.log("MongoDB connection error. Please make sure MongoDB is running.");
     process.exit();
@@ -95,11 +95,12 @@ const server = createServer(app);
 server.listen(app.get("port"), async () => {
     console.log(("  App is running at http://localhost:%d in %s mode"), app.get("port"), app.get("env"));
     // Set up the WebSocket for handling GraphQL subscriptions
-    new SubscriptionServer({
-        execute,
-        subscribe,
-        schema
-    }, {
+    new SubscriptionServer(
+        {
+            execute,
+            subscribe,
+            schema
+        }, {
             server: server,
             path: "/subscriptions",
         });
