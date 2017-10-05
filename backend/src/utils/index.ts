@@ -1,9 +1,8 @@
-import { KioskModel } from "../models/Kiosk";
-import * as bcrypt from "bcrypt-nodejs";
-import Bluebird = require("bluebird");
+import * as databse from "./database";
+export { databse };
 
-export const makeAllKioskOffline = async () => {
-    await KioskModel.update({}, { $set: { IsOnline: false } }, { multi: true }).exec();
-};
+import * as preLauchTask from "./preLauchTask";
+export { preLauchTask };
 
-export const compareHash = Bluebird.promisify(bcrypt.compare);
+import * as crypt from "./crypt";
+export { crypt };

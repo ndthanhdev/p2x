@@ -8,9 +8,10 @@ import * as logger from "morgan";
 import * as errorHandler from "errorhandler";
 import * as dotenv from "dotenv";
 import * as cors from "cors";
+import * as fromUtils from "./utils";
+
 import { createServer } from "http";
 import mongoose = require("mongoose");
-import * as Bluebird from "bluebird";
 import { graphiqlExpress, graphqlExpress } from "apollo-server-express";
 import expressValidator = require("express-validator");
 import { SubscriptionServer } from "subscriptions-transport-ws";
@@ -28,7 +29,7 @@ import { schema } from "./graphql/schema";
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.config({ path: ".env" });
+dotenv.config({ path: "local.env" });
 
 /**
  * Controllers (route handlers).
@@ -36,7 +37,6 @@ dotenv.config({ path: ".env" });
 import * as testController from "./controllers/test";
 import * as kioskController from "./controllers/kiosk";
 import { execute, subscribe } from "graphql";
-import { makeAllKioskOffline } from "./utils";
 import { KioskModel } from "./models/Kiosk";
 
 /**
@@ -47,16 +47,11 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.Promise = Bluebird;
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI);
+fromUtils.databse.connectDatabase(process.env.MONGODB_URI || process.env.MONGOLAB_URI)
+    .then(async () => await fromUtils.preLauchTask.makeAllKioskOffline());
 mongoose.connection.on("error", () => {
     console.log("MongoDB connection error. Please make sure MongoDB is running.");
     process.exit();
-});
-mongoose.connection.once("connected", async () => {
-    // Make all offline whenever sever start
-    await makeAllKioskOffline();
-
 });
 
 /**

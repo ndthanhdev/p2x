@@ -8,6 +8,7 @@
     "serve": "nodemon --watch \"src/**/*.ts\" --ignore \"src/**/*.spec.ts\" --exec \"ts-node\" --inspect src/server.ts",
     "build": "npm run tslint && npm run build-ts",
     "build-ts": "tsc",
+    "seed": "ts-node ./src/tasks/seedDatabase.ts",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "test": "jest --forceExit"
   },
@@ -53,7 +54,8 @@
     "socket.io": "^2.0.3",
     "socketio-jwt": "^4.5.0",
     "subscriptions-transport-ws": "^0.9.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "validator": "^9.0.0"
   },
   "devDependencies": {
     "@types/bcrypt-nodejs": "0.0.30",
@@ -74,6 +76,7 @@
     "@types/passport-jwt": "^2.0.24",
     "@types/supertest": "^2.0.3",
     "@types/uuid": "^3.4.2",
+    "@types/validator": "^6.3.0",
     "jest": "^21.0.2",
     "nodemon": "^1.12.0",
     "supertest": "^3.0.0",

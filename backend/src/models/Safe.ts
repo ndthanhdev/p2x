@@ -1,6 +1,6 @@
 import * as bcrypt from "bcrypt-nodejs";
 import * as mongoose from "mongoose";
-import { compareHash } from "../utils";
+import { compareHash } from "../utils/crypt";
 
 export interface ISafe {
     no: number;
