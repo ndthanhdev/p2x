@@ -1,4 +1,5 @@
 import * as validator from "validator";
+import { generateJwt } from "../../../utils/crypt";
 
 import { GraphQLFieldConfig, GraphQLString } from "graphql";
 import { AccountModel, IAccount } from "../../../models/Account";
@@ -38,9 +39,10 @@ export const loginStep2: GraphQLFieldConfig<any, any> = {
                 throw "password incorrect";
             }
 
-
-
-            return <boolean>otp.check(args.token, account.secret);;
+            if (<boolean>otp.check(args.token, account.secret)) {
+                throw "token is incorrect";
+            }
+            return await generateJwt(account);
         } catch (error) {
             throw error;
         }
