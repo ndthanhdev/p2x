@@ -4,7 +4,7 @@ import { GraphQLFieldConfig, GraphQLString, GraphQLBoolean } from "graphql";
 import { AccountModel, IAccount } from "../../../models/Account";
 import otp from "../../../config/otp";
 
-export const login: GraphQLFieldConfig<any, any> = {
+export const loginStep1: GraphQLFieldConfig<any, any> = {
     type: GraphQLBoolean,
     args: {
         email: {
@@ -34,13 +34,17 @@ export const login: GraphQLFieldConfig<any, any> = {
             if (!await account.comparePassword(args.password)) {
                 throw "password incorrect";
             }
-            const secret = otp.generateSecret();
-            const token = otp.generate(secret);
-            console.log(secret);
+
+            account.secret = otp.generateSecret();
+            await account.save();
+            const token = otp.generate(account.secret);
+
+            // send token to account email
             console.log(token);
+
             return true;
         } catch (error) {
-
+            throw error;
         }
 
     }
