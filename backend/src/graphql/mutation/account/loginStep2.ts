@@ -1,16 +1,19 @@
 import * as validator from "validator";
 
-import { GraphQLFieldConfig, GraphQLString, GraphQLBoolean } from "graphql";
+import { GraphQLFieldConfig, GraphQLString } from "graphql";
 import { AccountModel, IAccount } from "../../../models/Account";
 import otp from "../../../config/otp";
 
-export const loginStep1: GraphQLFieldConfig<any, any> = {
-    type: GraphQLBoolean,
+export const loginStep2: GraphQLFieldConfig<any, any> = {
+    type: GraphQLString,
     args: {
         email: {
             type: GraphQLString
         },
         password: {
+            type: GraphQLString
+        },
+        token: {
             type: GraphQLString
         }
     },
@@ -35,14 +38,9 @@ export const loginStep1: GraphQLFieldConfig<any, any> = {
                 throw "password incorrect";
             }
 
-            account.secret = otp.generateSecret();
-            await account.save();
-            const token = otp.generate(account.secret);
 
-            // send token to account email
-            console.log(token);
 
-            return true;
+            return <boolean>otp.check(args.token, account.secret);;
         } catch (error) {
             throw error;
         }
