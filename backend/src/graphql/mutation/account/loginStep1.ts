@@ -3,6 +3,7 @@ import * as validator from "validator";
 import { GraphQLFieldConfig, GraphQLString, GraphQLBoolean } from "graphql";
 import { AccountModel, IAccount } from "../../../models/Account";
 import otp from "../../../config/otp";
+import { sendTokenMail } from "../../../utils/mail";
 
 export const loginStep1: GraphQLFieldConfig<any, any> = {
     type: GraphQLBoolean,
@@ -40,7 +41,7 @@ export const loginStep1: GraphQLFieldConfig<any, any> = {
             const token = otp.generate(account.secret);
 
             // send token to account email
-            console.log(token);
+            await sendTokenMail(account.email, token);
 
             return true;
         } catch (error) {

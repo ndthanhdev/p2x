@@ -18,6 +18,12 @@ import expressValidator = require("express-validator");
 import { SubscriptionServer } from "subscriptions-transport-ws";
 
 /**
+ * Load environment variables from .env file, where API keys and passwords are configured.
+ */
+dotenv.config({ path: ".env" });
+
+
+/**
  * Websocket
  */
 import * as fromSocket from "./socket";
@@ -26,11 +32,6 @@ import * as fromSocket from "./socket";
  * Schema for GraphQL
  */
 import { schema } from "./graphql/schema";
-
-/**
- * Load environment variables from .env file, where API keys and passwords are configured.
- */
-dotenv.config({ path: "local.env" });
 
 /**
  * Controllers (route handlers).

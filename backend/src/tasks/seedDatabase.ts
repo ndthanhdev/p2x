@@ -22,9 +22,11 @@ database.connectDatabase(process.env.MONGODB_URI || process.env.MONGOLAB_URI).th
  * Seed admin account
  */
 const seedDatabase = async (adminEmail: string, password: string) => {
+    await AccountModel.remove(<IAccount>{ isAdmin: true });
     await AccountModel.remove(<IAccount>{ email: adminEmail });
     await AccountModel.create(<IAccount>{
         email: adminEmail,
-        password: password
+        password: password,
+        isAdmin: true
     });
 };

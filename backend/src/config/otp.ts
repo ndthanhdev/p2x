@@ -3,7 +3,7 @@ import * as crypto from "crypto";
 
 const otp = otplib.authenticator;
 (<any>otp).options = {
-    step: 30
+    step: 300
 };
 
 

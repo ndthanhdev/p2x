@@ -7,6 +7,7 @@ export interface IAccount {
     password: string;
     jwtid: string;
     secret: string;
+    isAdmin: boolean;
 
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
@@ -17,7 +18,8 @@ const accountSchema = new mongoose.Schema({
     email: String,
     password: String,
     jwtid: String,
-    secret: String
+    secret: String,
+    isAdmin: { type: Boolean, default: false }
 });
 
 // middlewares
