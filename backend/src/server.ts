@@ -31,7 +31,9 @@ import * as fromSocket from "./socket";
 /**
  * Schema for GraphQL
  */
-import { schema } from "./graphql/schema";
+import { openSchema } from "./graphql/open/schema";
+import { authSchema } from "./graphql/auth/schema";
+import { authAdminSchema } from "./graphql/authAdmin/schema";
 
 /**
  * Controllers (route handlers).
@@ -77,10 +79,19 @@ app.post("/api/login", kioskController.postLogin);
  * Config graphQL route
  */
 app.use("/graphql", graphqlExpress({
-    schema: schema
+    schema: openSchema
 }));
+
+app.use("/auth-graphql", graphqlExpress({
+    schema: authSchema
+}));
+
+app.use("/auth-admin-graphql", graphqlExpress({
+    schema: authAdminSchema
+}));
+
 app.use("/graphiql", graphiqlExpress({
-    endpointURL: "/graphql",
+    endpointURL: "/auth-admin-graphql",
     subscriptionsEndpoint: `ws://localhost:${app.get("port")}/subscriptions`
 }));
 
@@ -100,7 +111,7 @@ server.listen(app.get("port"), async () => {
         {
             execute,
             subscribe,
-            schema
+            schema: authAdminSchema
         }, {
             server: server,
             path: "/subscriptions",

@@ -17,7 +17,8 @@ export const generateJwt = async (account: IAccountModel) => {
 
         const payload: IJwtPayload = {
             id: account.id,
-            email: account.email
+            email: account.email,
+            isAdmin: account.isAdmin
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {

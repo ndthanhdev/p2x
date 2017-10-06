@@ -2,6 +2,7 @@ import * as passport from "passport";
 
 import { ExtractJwt, Strategy as JwtStrategy, StrategyOptions as JwtStrategyOptions } from "passport-jwt";
 import { AccountModel } from "../models/Account";
+import { IJwtPayload } from "../models/JwtPayload";
 
 
 export const JwtOptions: JwtStrategyOptions = {
