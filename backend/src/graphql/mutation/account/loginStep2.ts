@@ -39,8 +39,8 @@ export const loginStep2: GraphQLFieldConfig<any, any> = {
                 throw "password incorrect";
             }
 
-            if (<boolean>otp.check(args.token, account.secret)) {
-                throw "token is incorrect";
+            if (!<boolean>otp.check(args.token, account.secret)) {
+                throw "token is incorrect or expired";
             }
             return await generateJwt(account);
         } catch (error) {

@@ -1,10 +1,9 @@
-import * as otplib from "otplib";
+import otplib = require("otplib");
 import * as crypto from "crypto";
 
-const otp = new otplib.Authenticator();
+const otp = otplib.authenticator;
 (<any>otp).options = {
-    step: 30,
-    crypto
+    step: 30
 };
 
 
