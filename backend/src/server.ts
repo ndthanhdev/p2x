@@ -43,9 +43,9 @@ import * as testController from "./controllers/test";
 import * as kioskController from "./controllers/kiosk";
 
 /**
- * Middleware
+ * Auth
  */
-import { authMiddleware } from "./config/passport";
+import { authMiddleware, adminMiddleware } from "./config/passport";
 
 /**
  * Create Express server.
@@ -91,9 +91,9 @@ app.use("/authGraphql", [authMiddleware, graphqlExpress({
     schema: authSchema
 })]);
 
-app.use("/adminGraphql", graphqlExpress({
+app.use("/adminGraphql", [adminMiddleware, graphqlExpress({
     schema: adminSchema
-}));
+})]);
 
 app.use("/graphiql", graphiqlExpress({
     endpointURL: "/adminGraphql",

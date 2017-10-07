@@ -10,8 +10,25 @@ export const JwtOptions: JwtStrategyOptions = {
     secretOrKey: process.env.JWT_SECRET,
 };
 
-passport.use(new JwtStrategy(JwtOptions, async (jwt_payload:IJwtPayload, next) => {
+passport.use(new JwtStrategy(JwtOptions, async (jwt_payload: IJwtPayload, next) => {
     try {
+        const account = await AccountModel.findById(jwt_payload.id).exec();
+        if (account.jti != jwt_payload.jti) {
+            //  TokenId do not match
+            return next(undefined);
+        }
+        return next(undefined, account);
+    } catch (error) {
+        return next(error);
+    }
+}));
+
+passport.use("jwt-admin", new JwtStrategy(JwtOptions, async (jwt_payload: IJwtPayload, next) => {
+    try {
+        if (!jwt_payload.isAdmin) {
+            //  TokenId do not match
+            return next(undefined);
+        }
         const account = await AccountModel.findById(jwt_payload.id).exec();
         if (account.jti != jwt_payload.jti) {
             //  TokenId do not match
@@ -27,3 +44,4 @@ passport.use(new JwtStrategy(JwtOptions, async (jwt_payload:IJwtPayload, next) =
  * Login Required middleware.
  */
 export let authMiddleware = passport.authenticate("jwt", { session: false });
+export let adminMiddleware = passport.authenticate("jwt-admin", { session: false });
