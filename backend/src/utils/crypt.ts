@@ -11,8 +11,8 @@ export const compareHash = Bluebird.promisify(bcrypt.compare);
 export const generateJwt = async (account: IAccountModel) => {
     try {
 
-        const jwtid = uuid.v1();
-        account.jwtid = jwtid;
+        const jti = uuid.v1();
+        account.jti = jti;
         await account.save();
 
         const payload: IJwtPayload = {
@@ -22,7 +22,7 @@ export const generateJwt = async (account: IAccountModel) => {
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
-            jwtid: jwtid
+            jwtid: jti
         });
 
         return token;

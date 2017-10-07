@@ -16,6 +16,7 @@ import mongoose = require("mongoose");
 import { graphiqlExpress, graphqlExpress } from "apollo-server-express";
 import expressValidator = require("express-validator");
 import { SubscriptionServer } from "subscriptions-transport-ws";
+import { execute, subscribe } from "graphql";
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -33,14 +34,18 @@ import * as fromSocket from "./socket";
  */
 import { openSchema } from "./graphql/open/schema";
 import { authSchema } from "./graphql/auth/schema";
-import { authAdminSchema } from "./graphql/authAdmin/schema";
+import { adminSchema } from "./graphql/admin/schema";
 
 /**
  * Controllers (route handlers).
  */
 import * as testController from "./controllers/test";
 import * as kioskController from "./controllers/kiosk";
-import { execute, subscribe } from "graphql";
+
+/**
+ * Middleware
+ */
+import { authMiddleware } from "./config/passport";
 
 /**
  * Create Express server.
@@ -82,16 +87,16 @@ app.use("/graphql", graphqlExpress({
     schema: openSchema
 }));
 
-app.use("/auth-graphql", graphqlExpress({
+app.use("/authGraphql", [authMiddleware, graphqlExpress({
     schema: authSchema
-}));
+})]);
 
-app.use("/auth-admin-graphql", graphqlExpress({
-    schema: authAdminSchema
+app.use("/adminGraphql", graphqlExpress({
+    schema: adminSchema
 }));
 
 app.use("/graphiql", graphiqlExpress({
-    endpointURL: "/auth-admin-graphql",
+    endpointURL: "/adminGraphql",
     subscriptionsEndpoint: `ws://localhost:${app.get("port")}/subscriptions`
 }));
 
@@ -111,7 +116,7 @@ server.listen(app.get("port"), async () => {
         {
             execute,
             subscribe,
-            schema: authAdminSchema
+            schema: adminSchema
         }, {
             server: server,
             path: "/subscriptions",

@@ -10,10 +10,10 @@ export const JwtOptions: JwtStrategyOptions = {
     secretOrKey: process.env.JWT_SECRET,
 };
 
-passport.use(new JwtStrategy(JwtOptions, async (jwt_payload, next) => {
+passport.use(new JwtStrategy(JwtOptions, async (jwt_payload:IJwtPayload, next) => {
     try {
-        const account = await AccountModel.findById(jwt_payload._id).exec();
-        if (account.jwtid != jwt_payload.jwtid) {
+        const account = await AccountModel.findById(jwt_payload.id).exec();
+        if (account.jti != jwt_payload.jti) {
             //  TokenId do not match
             return next(undefined);
         }

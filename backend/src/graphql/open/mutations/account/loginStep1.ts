@@ -41,7 +41,7 @@ export const loginStep1: GraphQLFieldConfig<any, any> = {
             const token = otp.generate(account.secret);
 
             // send token to account email
-            await sendTokenMail(account.email, token);
+            sendTokenMail(account.email, token);
 
             return true;
         } catch (error) {

@@ -5,7 +5,7 @@ import { compareHash } from "../utils/crypt";
 export interface IAccount {
     email: string;
     password: string;
-    jwtid: string;
+    jti: string;
     secret: string;
     isAdmin: boolean;
 
@@ -17,7 +17,7 @@ export interface IAccountModel extends IAccount, mongoose.Document { }
 const accountSchema = new mongoose.Schema({
     email: String,
     password: String,
-    jwtid: String,
+    jti: String,
     secret: String,
     isAdmin: { type: Boolean, default: false }
 });

@@ -4,14 +4,14 @@ import { queries } from "./queries";
 import { mutations } from "./mutations";
 import { subscriptions } from "./subscriptions";
 
-export const authAdminSchema = new GraphQLSchema({
+export const adminSchema = new GraphQLSchema({
     query: new GraphQLObjectType({
         name: "query",
         fields: queries
     }),
     mutation: new GraphQLObjectType({
         name: "mutation",
-        fields: queries
+        fields: mutations
     }),
     subscription: new GraphQLObjectType({
         name: "subscription",

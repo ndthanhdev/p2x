@@ -11,7 +11,7 @@ export const authSchema = new GraphQLSchema({
     }),
     mutation: new GraphQLObjectType({
         name: "mutation",
-        fields: queries
+        fields: mutations
     }),
     subscription: new GraphQLObjectType({
         name: "subscription",
