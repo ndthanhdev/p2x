@@ -32,7 +32,7 @@ export class LoginStep1 implements Action {
 export class LoginStep1Success implements Action {
     readonly type = LOGIN_STEP_1_SUCCESS;
 
-    constructor(public payload: any) {
+    constructor(public payload: boolean) {
     }
 }
 export class LoginStep1Failure implements Action {
@@ -46,7 +46,7 @@ export class LoginStep2 implements Action {
 export class LoginStep2Success implements Action {
     readonly type = LOGIN_STEP_2_SUCCESS;
 
-    constructor(public payload: any) {
+    constructor(public payload: { jwt: string }) {
     }
 }
 export class LoginStep2Failure implements Action {
