@@ -7,20 +7,22 @@ import { SharedModule } from "./shared/shared.module";
 import { PageTitleService } from "./services/page-title/page-title.service";
 import { StoreModule } from '@ngrx/store';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
-import { reducers, CustomRouterStateSerializer } from './reducer/root';
+import { reducer } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { ApolloModule } from 'apollo-angular';
 import { ApolloClient, createNetworkInterface } from "apollo-client"
 import { SubscriptionClient, addGraphQLSubscriptions, } from 'subscriptions-transport-ws';
+import { AuthService } from './services/auth/auth.service';
+import { CustomRouterStateSerializer } from './reducers/router';
 
 // prod
-const GRAPHQL_ENDPOINT = `http://${location.host}/graphql`;
-const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://${location.host}/subscriptions`;
+// const GRAPHQL_ENDPOINT = `http://${location.host}/graphql`;
+// const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://${location.host}/subscriptions`;
 
 // dev
-// const GRAPHQL_ENDPOINT = `http://localhost:3000/graphql`;
-// const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://localhost:3000/subscriptions`;
+const GRAPHQL_ENDPOINT = `http://localhost:3000/graphql`;
+const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://localhost:3000/subscriptions`;
 
 const networkInterface = createNetworkInterface({
   uri: GRAPHQL_ENDPOINT
@@ -59,7 +61,7 @@ export function provideClient(): ApolloClient {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducer),
     StoreDevtoolsModule.instrument({
       maxAge: 10 //  Retains last 25 states
     }),
@@ -71,7 +73,8 @@ export function provideClient(): ApolloClient {
   ],
   providers: [
     PageTitleService,
-    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
