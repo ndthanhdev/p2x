@@ -13,41 +13,11 @@ const wsClient = new SubscriptionClient(environment.subscriptionEndpoint, {
     reconnect: true,
 });
 
-const networkInterface = createNetworkInterface({
-    uri: GRAPHQL_ENDPOINT
-});
-const authNetworkInterface = createNetworkInterface({
-    uri: GRAPHQL_AUTH_ENDPOINT
-});
-const adminNetworkInterface = createNetworkInterface({
-    uri: GRAPHQL_ADMIN_ENDPOINT
-});
-
-// Extend the network interface with the WebSocket
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-    networkInterface,
-    wsClient
-);
-const authNetworkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-    authNetworkInterface,
-    wsClient
-);
-const adminNetworkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-    adminNetworkInterface,
-    wsClient
-);
-
 // by default, this client will send queries to `/graphql` (relative to the URL of your app)
 // const client = new ApolloClient();
-const client = new ApolloClient({
-    networkInterface: networkInterfaceWithSubscriptions
-});
-const authClient = new ApolloClient({
-    networkInterface: authNetworkInterfaceWithSubscriptions
-});
-const adminClient = new ApolloClient({
-    networkInterface: adminNetworkInterfaceWithSubscriptions
-});
+const client = genereateApolloClient(GRAPHQL_ENDPOINT, wsClient);
+const authClient = genereateApolloClient(GRAPHQL_AUTH_ENDPOINT, wsClient, true);
+const adminClient = genereateApolloClient(GRAPHQL_ADMIN_ENDPOINT, wsClient, true);
 
 /**
  * provide ApolloClient
@@ -58,4 +28,32 @@ export function provideClient(): ClientMap {
         auth: authClient,
         admin: adminClient
     };
+}
+
+function genereateApolloClient(endPoint: string, subscriptionClient: SubscriptionClient, isAuthorization: boolean = false): ApolloClient {
+    const networkInterface = createNetworkInterface({
+        uri: endPoint
+    });
+    if (isAuthorization) {
+        networkInterface.use([{
+            applyMiddleware(req, next) {
+                if (!req.options.headers) {
+                    req.options.headers = {};  // Create the header object if needed.
+                }
+                // get the authentication token from local storage if it exists
+                req.options.headers.authorization = localStorage.getItem('token') || null;
+                next();
+            }
+        }]);
+    }
+
+    // Extend the network interface with the WebSocket
+    const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
+        networkInterface,
+        subscriptionClient
+    );
+    const client = new ApolloClient({
+        networkInterface: networkInterfaceWithSubscriptions
+    });
+    return client;
 }

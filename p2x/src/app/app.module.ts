@@ -11,7 +11,6 @@ import { reducer } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { ApolloModule } from 'apollo-angular';
-import { AuthService } from './services/auth/auth.service';
 import { CustomRouterStateSerializer } from './reducers/router';
 import { provideClient } from './utils/provideClient';
 
@@ -36,8 +35,7 @@ import { provideClient } from './utils/provideClient';
   ],
   providers: [
     PageTitleService,
-    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
-    AuthService
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
   ],
   bootstrap: [AppComponent]
 })
