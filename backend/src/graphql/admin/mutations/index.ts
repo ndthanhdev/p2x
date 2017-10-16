@@ -8,5 +8,4 @@ export const mutations: GraphQLFieldConfigMap<any, any> = {
     ...Kiosk,
     ...Account,
     ...authMutations
-
 };

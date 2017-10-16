@@ -13,7 +13,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { ApolloModule } from 'apollo-angular';
 import { CustomRouterStateSerializer } from './reducers/router';
 import { provideClient } from './utils/provideClient';
-
+import { AuthService } from "./services/auth/auth.service";
+import { JwtHelper } from "angular2-jwt";
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { provideClient } from './utils/provideClient';
   ],
   providers: [
     PageTitleService,
-    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer }
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
+    { provide: AuthService, useClass: AuthService, deps: [JwtHelper] }
   ],
   bootstrap: [AppComponent]
 })
