@@ -87,16 +87,16 @@ app.use("/graphql", graphqlExpress({
     schema: openSchema
 }));
 
-app.use("/authGraphql", [authMiddleware, graphqlExpress({
+app.use("/auth-graphql", [authMiddleware, graphqlExpress({
     schema: authSchema
 })]);
 
-app.use("/adminGraphql", [adminMiddleware, graphqlExpress({
+app.use("/admin-graphql", [adminMiddleware, graphqlExpress({
     schema: adminSchema
 })]);
 
 app.use("/graphiql", graphiqlExpress({
-    endpointURL: "/adminGraphql",
+    endpointURL: "/admin-graphql",
     subscriptionsEndpoint: `ws://localhost:${app.get("port")}/subscriptions`
 }));
 

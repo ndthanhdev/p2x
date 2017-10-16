@@ -15,7 +15,10 @@ export interface IAccount {
 export interface IAccountModel extends IAccount, mongoose.Document { }
 
 const accountSchema = new mongoose.Schema({
-    email: String,
+    email: {
+        type: String,
+        unique: true
+    },
     password: String,
     jti: String,
     secret: String,

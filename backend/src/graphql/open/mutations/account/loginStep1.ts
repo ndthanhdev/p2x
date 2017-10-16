@@ -4,35 +4,33 @@ import { GraphQLFieldConfig, GraphQLString, GraphQLBoolean } from "graphql";
 import { AccountModel, IAccount } from "../../../../models/Account";
 import otp from "../../../../config/otp";
 import { sendTokenMail } from "../../../../utils/mail";
+import { accountInputType } from "../../../types/account";
 
 export const loginStep1: GraphQLFieldConfig<any, any> = {
     type: GraphQLBoolean,
     args: {
-        email: {
-            type: GraphQLString
-        },
-        password: {
-            type: GraphQLString
+        data: {
+            type: accountInputType
         }
     },
     resolve: async (source, args, context, info) => {
         try {
-            if (!validator.isEmail(args.email)) {
+            if (!validator.isEmail(args.data.email)) {
                 throw "email invalid";
             }
-            args.email = validator.normalizeEmail(args.email);
+            args.data.email = validator.normalizeEmail(args.data.email);
 
-            if (validator.isEmpty(args.password)) {
+            if (validator.isEmpty(args.data.password)) {
                 throw "password invalid";
             }
 
             const account = await AccountModel.findOne(<IAccount>{
-                email: args.email
+                email: args.data.email
             }).exec();
             if (!account) {
                 throw "account doesn't exist";
             }
-            if (!await account.comparePassword(args.password)) {
+            if (!await account.comparePassword(args.data.password)) {
                 throw "password incorrect";
             }
 

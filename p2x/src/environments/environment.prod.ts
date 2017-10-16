@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  endPoint: `http://${location.host}`,
+  subscriptionEndpoint: `ws://${location.host}/subscriptions`
 };

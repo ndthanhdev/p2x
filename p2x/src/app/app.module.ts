@@ -11,48 +11,11 @@ import { reducer } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { ApolloModule } from 'apollo-angular';
-import { ApolloClient, createNetworkInterface } from "apollo-client"
-import { SubscriptionClient, addGraphQLSubscriptions, } from 'subscriptions-transport-ws';
 import { AuthService } from './services/auth/auth.service';
 import { CustomRouterStateSerializer } from './reducers/router';
+import { provideClient } from './utils/provideClient';
 
-// prod
-// const GRAPHQL_ENDPOINT = `http://${location.host}/graphql`;
-// const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://${location.host}/subscriptions`;
 
-// dev
-const GRAPHQL_ENDPOINT = `http://localhost:3000/graphql`;
-const GRAPHQL_SUBSCRIPTION_ENDPOINT = `ws://localhost:3000/subscriptions`;
-
-const networkInterface = createNetworkInterface({
-  uri: GRAPHQL_ENDPOINT
-});
-
-const wsClient = new SubscriptionClient(GRAPHQL_SUBSCRIPTION_ENDPOINT, {
-  reconnect: true,
-});
-
-// Extend the network interface with the WebSocket
-const networkInterfaceWithSubscriptions = addGraphQLSubscriptions(
-  networkInterface,
-  wsClient
-);
-
-// const client = new ApolloClient({
-//   networkInterface: createNetworkInterface({
-//     uri: 'http://localhost:3000/graphql'
-//   }),
-// });
-const client = new ApolloClient({
-  networkInterface: networkInterfaceWithSubscriptions
-});
-
-// by default, this client will send queries to `/graphql` (relative to the URL of your app)
-// const client = new ApolloClient();
-
-export function provideClient(): ApolloClient {
-  return client;
-}
 
 @NgModule({
   declarations: [
