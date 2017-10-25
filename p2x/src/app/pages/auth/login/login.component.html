@@ -1,3 +1,38 @@
-<p>
-  login works!
-</p>
+<div class="docs-primary-header">
+  <h1>{{pageTitle.title}}</h1>
+</div>
+<div class="container justify-content-center">
+  <form #login1Form="ngForm" (ngSubmit)="onSubmit()">
+    <md-card class="m-sm-5 m-xs-0">
+      <md-card-header>
+        <md-card-title>Login step 1</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-form-field class="w-100">
+          <input mdInput type="email" placeholder="Email" [(ngModel)]="email" name="Email" required>
+        </md-form-field>
+        <md-form-field class="w-100">
+          <input mdInput type="password" placeholder="Password" [(ngModel)]="password" name="Password" required>
+        </md-form-field>
+      </md-card-content>
+      <md-card-actions>
+        <button type="submit" [disabled]="(!login1Form.valid)" md-raised-button color="primary">Next</button>
+      </md-card-actions>
+    </md-card>
+  </form>
+  <form #login2Form="ngForm" (ngSubmit)="onSubmit()">
+    <md-card class="m-sm-5 m-xs-0">
+      <md-card-header>
+        <md-card-title>Login step 2</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <md-form-field class="w-100">
+          <input mdInput type="number" placeholder="Security Code" [(ngModel)]="code" name="Code" required>
+        </md-form-field>
+      </md-card-content>
+      <md-card-actions>
+        <button type="submit" [disabled]="(!login2Form.valid)" md-raised-button color="primary">Login</button>
+      </md-card-actions>
+    </md-card>
+  </form>
+</div>

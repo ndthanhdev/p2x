@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageTitleService } from '../../../services/page-title/page-title.service';
 
 @Component({
   selector: 'p2x-create-account',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateAccountComponent implements OnInit {
 
-  constructor() { }
+  email: string;
+  password: string;
+
+  constructor(public _pageTitle: PageTitleService) { }
 
   ngOnInit() {
+    this._pageTitle.title = 'Create Account';
   }
-
+  onSubmit() {
+  }
 }
